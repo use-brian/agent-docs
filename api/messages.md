@@ -55,7 +55,7 @@ Content-Type: application/json
 | `sessionId` | string | Echo of the session id (or the default if you did not pass one). |
 | `messageId` | string | Stable id of the stored assistant turn. |
 | `reply` | string | The assistant's reply text. |
-| `model` | string | Which model produced the reply (e.g. `gemini-3-flash-standard` for Standard, `gemini-3-flash-preview` for Pro, `gemini-3.5-flash` for Max, `gemini-3-pro-research` for Research). |
+| `model` | string | Which model produced the reply (e.g. `gemini-3-flash-standard` for Standard, `gemini-3-flash-preview` for Pro, `gemini-3.5-flash` for Max, `gemini-3-pro-research` for Research). Since the model registry, deployments may also serve metered pay-per-use models (e.g. `qwen3.7-plus`, `deepseek-v4-pro` via DashScope); those ids appear here verbatim, and the billing tier is recorded separately from the model id, so do not infer pricing from the model string. |
 
 ## Errors
 

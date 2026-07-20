@@ -39,7 +39,7 @@ Ingestion runs in four stages: Conversation (every channel feeds the same pipeli
 
 ## How the brain answers
 
-Every turn fans in identity, relevant memories, knowledge base, tools and connectors, and the recent session, then composes one prompt (system prompt + selected context + tool catalogue + your turn). The model runs at the Standard / Pro / Max tier set in the chat header. Background work (extraction, embedding, classifiers) always runs Standard. The reply streams back to your channel and the loop begins again at Extract.
+Every turn fans in identity, relevant memories, knowledge base, tools and connectors, and the recent session, then composes one prompt (system prompt + selected context + tool catalogue + your turn). The model runs at the Standard / Pro / Max tier set in the chat header, or at a metered pay-per-use model profile when the workspace picked one (metered picks always pass an estimate-and-confirm step and bill 5 credits plus actual model cost). Background work (extraction, embedding, classifiers) always runs Standard. The reply streams back to your channel and the loop begins again at Extract.
 
 ## Under the surface
 
