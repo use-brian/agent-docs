@@ -24,6 +24,7 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 | GitHub | |
 | Fathom | |
 | Shopify | Store reads (products, orders, customers, inventory) plus safe writes (draft orders, product updates, tags) behind approval. Connect per store via OAuth or a pasted Admin API access token (`shpat_...`); each store is its own connector instance. Order history is limited to roughly the last 60 days until Shopify grants the app extended access. |
+| Company Email (IMAP) | The user's own corporate mailbox over IMAP/SMTP - any provider, with Alibaba enterprise mail auto-detected from the address. Connect with the work email plus an app password (client security password); the credential is verified live before it is stored. Tools: `imapSearchMessages` (INBOX + Sent, threaded results), `imapGetMessage`, `imapSendMessage` (approval-gated, sends as the user), and `searchEmailArchive` (semantic recall over the opt-in full-mailbox archive). One mailbox per user; the archive is private to its owner. Distinct from Gmail (the user's Google account) and Assistant Email (the assistant's own address) - no lane substitutes for another. |
 | Workspace Files | First-party; no external account. |
 | Google Cloud Storage | Bring-your-own storage via a service-account key; exposes no assistant tools. |
 
