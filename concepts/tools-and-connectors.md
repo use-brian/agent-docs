@@ -48,6 +48,12 @@ Defaults by tool class, all overridable per assistant from the Tools tab:
 | Write | Send email, create event, write a page | Ask |
 | Destructive | Delete event, archive thread, drop a row | Ask |
 
+## Write grants
+
+Separate from per-tool policy, each assistant carries a write-grant list per connector. A write or destructive connector tool runs only if the assistant's owner granted that specific action (for example `githubCreateIssue`) in Studio -> Assistants -> Tools. Grants bind every caller of the assistant the same way: team members, scheduled tasks, assistant-to-assistant calls, and API calls all get the same decision. A fresh assistant has no grants, so its connector write actions are refused until granted. Read tools are unaffected.
+
+A refused write returns an "action not granted" tool error naming the connector and action. Surface it to the user; only the assistant's owner can grant the action in Studio.
+
 ## Scheduled tasks
 
 Tell your assistant when to run something: "every weekday at 9am, summarize the team's Slack" or "follow up with the Acme lead in two hours." sidanclaw schedules a cron job that runs on its own session, executes tools, and delivers the result via your preferred channel.
@@ -61,6 +67,7 @@ Scheduled tasks are timed jobs. They fire on a cron and run an assistant turn. W
 ## Notes for agents
 
 - A tool that is `Block` never runs, and write/destructive tools default to Ask, so a write action may pause for user confirmation before it executes. Do not assume a write succeeded until the confirmation resolves.
+- A connector write can also be refused with an "action not granted" error when the assistant lacks the write grant for that action. This is not a transient failure; retrying will not help. Tell the user which action needs granting in Studio -> Assistants -> Tools.
 - Connector tools only exist after the service is connected in Studio -> Connectors and enabled for the assistant in its Tools tab. Never reference a connector tool that has not been connected.
 - Workspace Files is first-party and needs no external account; every other connector requires OAuth or a personal access token.
 - "Every weekday at 9am..." style requests create a scheduled task (a cron job on the assistant), which is distinct from a workspace Task.
