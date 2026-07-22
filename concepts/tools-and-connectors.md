@@ -23,7 +23,7 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 | Google Docs, Sheets & Slides | |
 | GitHub | |
 | Fathom | |
-| Shopify | Store reads (products, orders, customers, inventory) plus safe writes (draft orders, product updates, tags) behind approval. Connect per store via OAuth or a pasted Admin API access token (`shpat_...`); each store is its own connector instance. Order history is limited to roughly the last 60 days until Shopify grants the app extended access. |
+| Shopify | Full store operator surface: 16 reads (products, orders, customers, inventory, collections, draft orders, discount/promo codes, abandoned checkouts, payouts, disputes, content, sales reports), 10 writes behind approval (create/update products, draft orders + invoices, tags, customer notes, inventory, fulfillment with tracking, promo codes, pages/posts), and 3 destructive verbs behind approval cards (cancel order, refund, complete draft). Optional ambient ingest: store events flow into the brain with a daily digest and can trigger workflows (OAuth-connected stores only). Connect per store via OAuth or a pasted Admin API access token (`shpat_...`); each store is its own connector instance. Order history is limited to roughly the last 60 days until Shopify grants the app extended access; customer PII fields may be null until the protected-data review clears. |
 | Company Email (IMAP) | The user's own corporate mailbox over IMAP/SMTP - any provider, with Alibaba enterprise mail auto-detected from the address. Connect with the work email plus an app password (client security password); the credential is verified live before it is stored. Tools: `imapSearchMessages` (INBOX + Sent, threaded results), `imapGetMessage`, `imapSendMessage` (approval-gated, sends as the user), and `searchEmailArchive` (semantic recall over the opt-in full-mailbox archive). One mailbox per user; the archive is private to its owner. Distinct from Gmail (the user's Google account) and Assistant Email (the assistant's own address) - no lane substitutes for another. |
 | Workspace Files | First-party; no external account. |
 | Google Cloud Storage | Bring-your-own storage via a service-account key; exposes no assistant tools. |
@@ -50,6 +50,12 @@ Defaults by tool class, all overridable per assistant from the Tools tab:
 | Write | Send email, create event, write a page | Ask |
 | Destructive | Delete event, archive thread, drop a row | Ask |
 
+## Write grants
+
+Separate from per-tool policy, each assistant carries a write-grant list per connector. A write or destructive connector tool runs only if the assistant's owner granted that specific action (for example `githubCreateIssue`) in Studio -> Assistants -> Tools. Grants bind every caller of the assistant the same way: team members, scheduled tasks, assistant-to-assistant calls, and API calls all get the same decision. A fresh assistant has no grants, so its connector write actions are refused until granted. Read tools are unaffected.
+
+A refused write returns an "action not granted" tool error naming the connector and action. Surface it to the user; only the assistant's owner can grant the action in Studio.
+
 ## Scheduled tasks
 
 Tell your assistant when to run something: "every weekday at 9am, summarize the team's Slack" or "follow up with the Acme lead in two hours." sidanclaw schedules a cron job that runs on its own session, executes tools, and delivers the result via your preferred channel.
@@ -63,6 +69,7 @@ Scheduled tasks are timed jobs. They fire on a cron and run an assistant turn. W
 ## Notes for agents
 
 - A tool that is `Block` never runs, and write/destructive tools default to Ask, so a write action may pause for user confirmation before it executes. Do not assume a write succeeded until the confirmation resolves.
+- A connector write can also be refused with an "action not granted" error when the assistant lacks the write grant for that action. This is not a transient failure; retrying will not help. Tell the user which action needs granting in Studio -> Assistants -> Tools.
 - Connector tools only exist after the service is connected in Studio -> Connectors and enabled for the assistant in its Tools tab. Never reference a connector tool that has not been connected.
 - Workspace Files is first-party and needs no external account; every other connector requires OAuth or a personal access token.
 - "Every weekday at 9am..." style requests create a scheduled task (a cron job on the assistant), which is distinct from a workspace Task.
