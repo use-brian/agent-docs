@@ -23,6 +23,7 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 | Google Docs, Sheets & Slides | |
 | GitHub | |
 | Fathom | |
+| Shopify | Store reads (products, orders, customers, inventory) plus safe writes (draft orders, product updates, tags) behind approval. Connect per store via OAuth or a pasted Admin API access token (`shpat_...`); each store is its own connector instance. Order history is limited to roughly the last 60 days until Shopify grants the app extended access. |
 | Workspace Files | First-party; no external account. |
 | Google Cloud Storage | Bring-your-own storage via a service-account key; exposes no assistant tools. |
 
