@@ -41,6 +41,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 - [api/messages.md](api/messages.md): the messages endpoint, fields, errors, examples, followup tag
 - [api/identity.md](api/identity.md): anonymous vs identified end users, memory tiers
 - [api/connector-identity.md](api/connector-identity.md): trusted identity headers for your MCP server
+- [api/ingest-append-contract.md](api/ingest-append-contract.md): `ub.ingest.append.v1` — the idempotent endpoint an external service implements to receive a connector's normalized event stream (outbox-relayed, ack-gated cursor)
 
 ### MCP
 
