@@ -31,6 +31,18 @@ pnpm dev                    # api + canvas sidecar + web app, opens your browser
 
 There is no step three.
 
+## Production single-machine deployment
+
+For a systemd-managed installation with PostgreSQL, encrypted secrets, and a
+locally managed Cloudflare Tunnel, use the
+[`deploy-brian`](https://github.com/use-brian/deploy-brian) deployment kit.
+It provides one-shot targets for Debian 12/13 and Ubuntu 25.04/25.10. Configure
+the tunnel and DNS first, then clone the kit on the server, fill the target's
+`client.conf` and owner-only `private/` inputs, and run its `install.sh`.
+
+Ubuntu 25.04 is supported as a transition path only because it is end-of-life;
+use a maintained Debian release or Ubuntu LTS for a durable production host.
+
 ## Storage
 
 The store defaults to an embedded PGLite database under `~/.sidanclaw/`: nothing to install or run besides Node. Point `DATABASE_URL` at a local Postgres if you prefer a container.
