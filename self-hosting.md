@@ -1,13 +1,16 @@
 ---
 title: Self-Hosting
-description: Run the open-source sidanclaw core locally with one model key, plus what the hosted product adds.
+description: Run the open-source Use Brian core locally with ChatGPT sign-in or your own model credential, plus what the hosted product adds.
 tags: [operations, open-source]
 canonical: https://sidan.ai/docs/open-source
 ---
 
 > Human-readable version: https://sidan.ai/docs/open-source
 
-The sidanclaw core is open source: the brain, the agent, workflows, channels, and the doc surface. Run it on your own machine with one model key, or let sidan.ai run it hosted.
+The Use Brian core is open source: the brain, the agent, workflows, channels,
+content planning, and the doc surface. Run it on your own machine with an
+eligible ChatGPT subscription or your own model credential, or let the hosted
+service operate it for you.
 
 ## License
 
@@ -17,16 +20,17 @@ AGPLv3, OSI- and FSF-approved open source with a network-copyleft clause: run a 
 
 - Node 22+
 - pnpm 10+
-- A free Gemini API key (`aistudio.google.com/apikey`)
+- Either an eligible ChatGPT subscription or one supported model credential.
+  The launcher offers ChatGPT sign-in first; a free Gemini API key
+  (`aistudio.google.com/apikey`), Vertex AI, and DashScope are also supported.
 
 ## Quickstart
 
 ```bash
-git clone https://github.com/sidanclaw/sidanclaw.git
-cd sidanclaw
-export GEMINI_API_KEY=...   # or let the launcher prompt you; persisted under ~/.sidanclaw/
+git clone https://github.com/use-brian/use-brian.git
+cd use-brian
 pnpm install
-pnpm dev                    # api + canvas sidecar + web app, opens your browser
+pnpm dev                    # choose ChatGPT or an API-key backend; opens your browser
 ```
 
 There is no step three.
@@ -45,11 +49,41 @@ use a maintained Debian release or Ubuntu LTS for a durable production host.
 
 ## Storage
 
-The store defaults to an embedded PGLite database under `~/.sidanclaw/`: nothing to install or run besides Node. Point `DATABASE_URL` at a local Postgres if you prefer a container.
+The store defaults to an embedded PGLite database under `~/.usebrian/`: nothing
+to install or run besides Node. Point `DATABASE_URL` at a local Postgres if you
+prefer a container.
 
 ## Local-first guarantee
 
-Zero external services, one model key. The brain, the store, and the canvas all run on your machine. The only outbound call sidanclaw makes is to the Gemini API with your own key. Nothing else about your work leaves the machine.
+The brain, the store, and the canvas all run on your machine. Model requests go
+only to the backend you configure. Connectors and upgraded search providers make
+outbound calls only when you opt into them; your local database and files are
+not moved to a Brian-hosted service.
+
+## Model backends
+
+| Backend | Status | Authentication |
+|---|---|---|
+| Gemini via Google AI Studio | Supported | `GEMINI_API_KEY` |
+| Gemini via Vertex AI | Supported | GCP workload or service-account credentials |
+| Qwen / DeepSeek via DashScope | Supported | `DASHSCOPE_API_KEY` |
+| Claude Haiku outage fallback | Optional fallback | `ANTHROPIC_API_KEY` |
+| ChatGPT / Codex subscription | Beta, OSS only | Sign in with ChatGPT; no API key |
+
+ChatGPT-plan access uses Codex-managed OAuth and the live model catalog for the
+authenticated account. It does not treat a ChatGPT token as an OpenAI API key.
+Brian remains the agent harness and owns memory, context, tool policy,
+confirmations, execution, and persistence. ChatGPT/Codex quota and plan limits
+remain OpenAI's authority.
+
+## Local Support Mode
+
+The OSS edition includes an opt-in Support Mode under **Settings → Privacy**.
+An owner can capture one hour, 24 hours, or seven days of bounded, sanitized
+local diagnostics, preview the categories, and download a JSON support capsule.
+Nothing uploads automatically. Conversation and tool content are excluded unless
+the user explicitly enables them for the selected readable session. Stopping,
+expiry, or a successful download hard-deletes the capture rows.
 
 ## Tool governance defaults
 
@@ -65,7 +99,8 @@ A fresh install reads and drafts freely but cannot send an email or delete an ev
 
 ## Optional connector keys
 
-The one Gemini key is the floor. Each key below is optional; nothing turns on by itself. Set them in `.env` or under `~/.sidanclaw/`.
+One configured model backend is the floor. Each key below is optional; nothing
+turns on by itself. Set them in `.env` or under `~/.usebrian/`.
 
 | Capability | Key(s) | What you get |
 |---|---|---|
@@ -79,7 +114,8 @@ The one Gemini key is the floor. Each key below is optional; nothing turns on by
 | Fathom connector | `FATHOM_CLIENT_ID` / `FATHOM_CLIENT_SECRET` | Fathom via your own OAuth app |
 | GitHub connector | Personal Access Token (entered in the UI) | GitHub, no env key needed |
 
-Connector client id / secret can also live in `~/.sidanclaw/connectors.config.json`. Every key is documented in `.env.example`.
+Connector client id / secret can also live in
+`~/.usebrian/connectors.config.json`. Every key is documented in `.env.example`.
 
 ## What the hosted product adds
 
@@ -87,6 +123,7 @@ Connector client id / secret can also live in `~/.sidanclaw/connectors.config.js
 |---|---|
 | Agent engine, brain, memory, knowledge | Managed database, upgrades, backups |
 | Channels, workflows, doc surface | Plans, credits, team billing |
+| Content planning, approval inbox, manual ready-to-post queue | Provider OAuth, automatic publishing/deletion, inbound ingest, platform insights |
 | MCP server and public API | Monitoring, abuse protection, support |
 
 The hosted product also gives every new workspace a 30-day Pro trial. See [Pricing and credits](operations/pricing-and-credits.md).
@@ -95,7 +132,13 @@ The hosted product also gives every new workspace a 30-day Pro trial. See [Prici
 
 - A self-hosted instance exposes the same [Brain MCP server](mcp/brain-mcp.md) and public API as hosted; the difference is who operates the database and billing.
 - On a local install, writes and destructive actions are gated by default. An agent may hit an ask-first or blocked policy until the user enables the tool.
-- The only guaranteed outbound dependency is Gemini. Connector-backed tools are absent until the user adds that connector's key.
+- The configured model backend is the only required outbound dependency.
+  Connector-backed tools are absent until the user adds that connector's key.
+- ChatGPT sign-in is an OSS Beta. If authorization expires or the account no
+  longer exposes a selected model, Brian removes unavailable models from menus
+  and asks the user to reconnect or select another backend.
+- Support Mode never uploads automatically; sharing its downloaded capsule is a
+  separate user action.
 
 ## Related
 
