@@ -14,7 +14,7 @@ service operate it for you.
 
 ## License
 
-AGPLv3, OSI- and FSF-approved open source with a network-copyleft clause: run a modified sidanclaw as a hosted service and you publish your changes. A commercial license is available for orgs that cannot accept AGPL. Every contributor signs a CLA.
+AGPLv3, OSI- and FSF-approved open source with a network-copyleft clause: run a modified Use Brian core as a hosted service and you publish your changes. A commercial license is available for orgs that cannot accept AGPL. Every contributor signs a CLA.
 
 ## Prerequisites
 
@@ -23,6 +23,10 @@ AGPLv3, OSI- and FSF-approved open source with a network-copyleft clause: run a 
 - Either an eligible ChatGPT subscription or one supported model credential.
   The launcher offers ChatGPT sign-in first; a free Gemini API key
   (`aistudio.google.com/apikey`), Vertex AI, and DashScope are also supported.
+- `ffmpeg` (which also supplies `ffprobe`). Every recording path shells out to
+  it before transcription runs, so without it uploaded recordings and voice
+  notes sent through Slack, Discord, or Telegram fail at runtime rather than at
+  install time. The `deploy-brian` kit installs it for you.
 
 ## Quickstart
 
