@@ -1,6 +1,6 @@
 ---
 title: Custom Home Apps
-description: Build a static web app that renders full-page inside a sidanclaw workspace and reads the brain through a scoped bridge token. Manifest schema, bundle format, sandbox limits, the postMessage bridge, and the consent model.
+description: Build a static web app that renders full-page inside a sidanclaw workspace and reads the brain through a scoped bridge token. Manifest schema, bundle format, sandbox limits, the postMessage bridge, the consent model, and zip import/export.
 tags: [apps, mcp, brain]
 canonical: https://sidan.ai/docs/apps/custom-home-apps
 ---
@@ -15,12 +15,13 @@ that resolves to the same MCP tool surface an API key gets.
 This is the page for an agent **building** one. If you are connecting yourself
 to a brain over MCP instead, read [mcp/brain-mcp.md](../mcp/brain-mcp.md).
 
-Two authoring paths, one artifact format:
+Three ways in, one artifact format:
 
 | Path | How | Best when |
 |---|---|---|
 | GitHub repo | Template repo, imported and re-synced every 15 min | The app is versioned, reviewed, or shared between workspaces |
 | Assistant-written | The workspace assistant writes it via `writeHomeApp` | Iterating conversationally; no repo wanted |
+| Zip upload | Studio: Mini apps, "Import bundle" | Installing an app someone exported; no repo, no sync |
 
 Template: `https://github.com/use-brian/brian-app-template`.
 Validator: `npx @use-brian/brian-app lint` — the same code the importer runs.
@@ -188,6 +189,25 @@ A GitHub-kind app re-syncs every 15 minutes, or on demand from Studio. There
 are no webhooks: PAT-only connectors cannot register them. Credentials resolve
 through the workspace's GitHub connector, so revoking the connector revokes the
 sync.
+
+## Import and export
+
+The exported bundle is the unit of sharing. Every app has an Export action in
+Studio that downloads the stored bundle as a zip (manifest included); any
+workspace can install that zip through "Import bundle". No central gallery.
+
+Import notes for a bundle author:
+
+- Zipping the folder or its contents both work: a single shared top-level
+  directory is stripped on import.
+- Archive junk (`__MACOSX/`, `.DS_Store`) and repo furniture (`README.md`,
+  `LICENSE`, CI config) are skipped silently, never errors.
+- Binary assets (`png`, `woff`, ...) round-trip byte-exact.
+- The imported app lands at `needs_consent` like every other arrival: an
+  owner or admin must approve its scopes before it renders.
+- Re-importing a zip whose manifest `name` matches an existing zip-imported
+  app updates that app in place. It never overwrites a GitHub-synced or
+  assistant-written app of the same name.
 
 An unchanged branch HEAD is a no-op. A sync that fails records its reason
 against the app and does not disturb the previous working bundle.
