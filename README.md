@@ -17,6 +17,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 | Embed an assistant in an app (REST) | [api/overview.md](api/overview.md), [api/messages.md](api/messages.md) |
 | Understand memory vs knowledge base | [concepts/memory-and-knowledge.md](concepts/memory-and-knowledge.md) |
 | Explain pricing or credit errors (429) | [operations/pricing-and-credits.md](operations/pricing-and-credits.md) |
+| Build an app that runs inside a user's workspace | [concepts/custom-home-apps.md](concepts/custom-home-apps.md) |
 | Self-host the open-source core | [self-hosting.md](self-hosting.md) |
 
 ## Index
@@ -33,6 +34,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 - [concepts/tools-and-connectors.md](concepts/tools-and-connectors.md): connectors, per-tool allow/ask/block policy, scheduled tasks
 - [concepts/workflows.md](concepts/workflows.md): step types, triggers, approvals, permission grants, cost
 - [concepts/doc-pages.md](concepts/doc-pages.md): the page surface chat assembles over workspace data
+- [concepts/custom-home-apps.md](concepts/custom-home-apps.md): build a static web app that renders inside a workspace and reads the brain through a scoped bridge; manifest, bundle, sandbox, consent
 
 ### Public API (REST)
 
