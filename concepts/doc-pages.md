@@ -2,12 +2,12 @@
 title: Doc
 description: A Notion-style page surface where chat assembles renderable, brain-bound views over workspace primitives.
 tags: [concepts, doc]
-canonical: https://sidan.ai/docs/doc
+canonical: https://usebrian.ai/docs/doc
 ---
 
-> Human-readable version: https://sidan.ai/docs/doc
+> Human-readable version: https://usebrian.ai/docs/doc
 
-Doc is a Notion-style page surface where chat assembles renderable views over your workspace primitives. It is the inbound counterpart to the outbound Feed surface: Doc marshals tasks, CRM rows, files, deals, and research findings into pages you can drag, save, and revisit. The whole app lives at `app.sidan.ai` under a separate deployable.
+Doc is a Notion-style page surface where chat assembles renderable views over your workspace primitives. It is the inbound counterpart to the outbound Feed surface: Doc marshals tasks, CRM rows, files, deals, and research findings into pages you can drag, save, and revisit. The whole app lives at `app.usebrian.ai` under a separate deployable.
 
 ## Chat is the page author
 

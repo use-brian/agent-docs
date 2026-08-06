@@ -2,10 +2,10 @@
 title: Workflows
 description: Workspace-scoped DAGs that fuse the brain with action via assistant_call, tool_call, wait, and branch steps.
 tags: [concepts, workflows]
-canonical: https://sidan.ai/docs/workflows
+canonical: https://usebrian.ai/docs/workflows
 ---
 
-> Human-readable version: https://sidan.ai/docs/workflows
+> Human-readable version: https://usebrian.ai/docs/workflows
 
 A workflow is a workspace-scoped DAG that fuses the brain with action. Author it in chat ("when a Threads draft is approved, post it, wait 24 hours, then ask the brand specialist to summarize engagement") or in the web builder (the Workflow tab in the app). The runtime knows about assistants, memory, and tools, so an `assistant_call` step inherits the workspace's brain at the moment it runs.
 

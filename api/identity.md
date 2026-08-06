@@ -2,12 +2,12 @@
 title: Identity & memory
 description: How the public API decides whether a visitor is anonymous (Tier 2) or remembered (Tier 1), and how email bridges a shadow user to a future OAuth signup.
 tags: [api, identity]
-canonical: https://sidan.ai/docs/api/identity
+canonical: https://usebrian.ai/docs/api/identity
 ---
 
-> Human-readable version: https://sidan.ai/docs/api/identity
+> Human-readable version: https://usebrian.ai/docs/api/identity
 
-How sidanclaw decides whether a visitor is anonymous or remembered. The choice is yours: opt in explicitly when you have a stable user identity, opt out when visitors are ephemeral.
+How Use Brian decides whether a visitor is anonymous or remembered. The choice is yours: opt in explicitly when you have a stable user identity, opt out when visitors are ephemeral.
 
 ## Two tiers
 
@@ -21,7 +21,7 @@ Triggered when you pass `identified: true` OR `externalUserEmail`. The assistant
 
 ## What email adds on top
 
-Email is the only cross-provider identity bridge. If you pass `externalUserEmail` and the same human later signs up to sidanclaw via Google OAuth with that email, their shadow user automatically promotes. They keep their memory across the API and direct sidanclaw use. Without email, memory is durable but does not follow the human across services.
+Email is the only cross-provider identity bridge. If you pass `externalUserEmail` and the same human later signs up to Use Brian via Google OAuth with that email, their shadow user automatically promotes. They keep their memory across the API and direct Use Brian use. Without email, memory is durable but does not follow the human across services.
 
 ## Resolution table
 

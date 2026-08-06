@@ -1,13 +1,13 @@
 ---
 title: Assistants
-description: An assistant is the unit of identity in sidanclaw; it owns memory, channels, tools, scheduled tasks, and a system prompt.
+description: An assistant is the unit of identity in Use Brian; it owns memory, channels, tools, scheduled tasks, and a system prompt.
 tags: [concepts, assistants]
-canonical: https://sidan.ai/docs/assistants
+canonical: https://usebrian.ai/docs/assistants
 ---
 
-> Human-readable version: https://sidan.ai/docs/assistants
+> Human-readable version: https://usebrian.ai/docs/assistants
 
-An assistant is the unit of identity in sidanclaw. It owns memory, channel connections, tools, scheduled tasks, and a system prompt. A workspace can have many assistants. Each is a separate persona with its own context.
+An assistant is the unit of identity in Use Brian. It owns memory, channel connections, tools, scheduled tasks, and a system prompt. A workspace can have many assistants. Each is a separate persona with its own context.
 
 ## Core identity
 

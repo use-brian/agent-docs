@@ -2,10 +2,10 @@
 title: Authentication
 description: Public-API keys use the sk_live_<keyId>_<secret> format, a Bearer header, and a create/list/revoke/rotate lifecycle.
 tags: [api, authentication]
-canonical: https://sidan.ai/docs/api/authentication
+canonical: https://usebrian.ai/docs/api/authentication
 ---
 
-> Human-readable version: https://sidan.ai/docs/api/authentication
+> Human-readable version: https://usebrian.ai/docs/api/authentication
 
 Every public-API request authenticates with a per-assistant API key. Keys are issued from the web UI, scoped to one assistant, and revocable.
 

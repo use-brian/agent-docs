@@ -1,13 +1,13 @@
 ---
 title: Privacy and Data
-description: What hosted sidanclaw stores, the controls a user has, retention windows, and the third parties involved.
+description: What hosted Use Brian stores, the controls a user has, retention windows, and the third parties involved.
 tags: [operations, privacy]
-canonical: https://sidan.ai/docs/privacy
+canonical: https://usebrian.ai/docs/privacy
 ---
 
-> Human-readable version: https://sidan.ai/docs/privacy
+> Human-readable version: https://usebrian.ai/docs/privacy
 
-sidanclaw is a shared brain for a team. Its value depends on remembering the business, so it stores data. This page states what, and what controls exist. sidanclaw does not train on customer data and does not sell data.
+Use Brian is a shared brain for a team. Its value depends on remembering the business, so it stores data. This page states what, and what controls exist. Use Brian does not train on customer data and does not sell data.
 
 ## What is stored
 
@@ -24,7 +24,7 @@ sidanclaw is a shared brain for a team. Its value depends on remembering the bus
 | Zone | Contents | Control |
 |---|---|---|
 | You | Browser localStorage (UI prefs), channel app installs | 100% yours |
-| sidanclaw database | Account, sessions, memory, knowledge base, encrypted channel credentials. Workspace-scoped, exportable, deletable | Settings: Privacy |
+| Use Brian database | Account, sessions, memory, knowledge base, encrypted channel credentials. Workspace-scoped, exportable, deletable | Settings: Privacy |
 | Google Gemini | Inference only: system prompt, selected context, the current turn. No retention beyond the response | API contract |
 
 ## User controls
@@ -58,11 +58,11 @@ Model-training on customer data is forbidden in both the Gemini and Claude contr
 
 ## Data export
 
-An export tool is on the roadmap. The database schema is documented; a self-host deployment has direct access to its own data. Hosted users can contact sidanclaw for a one-off export.
+An export tool is on the roadmap. The database schema is documented; a self-host deployment has direct access to its own data. Hosted users can contact Use Brian for a one-off export.
 
 ## Notes for agents
 
-- Anything an agent writes over MCP lands in the sidanclaw database zone: exportable and deletable by the user, and covered by the same "no training, no selling" guarantee.
+- Anything an agent writes over MCP lands in the Use Brian database zone: exportable and deletable by the user, and covered by the same "no training, no selling" guarantee.
 - A memory an agent saves is user-controllable: the user can delete it from Settings or by asking the assistant to forget it.
 - Inference of any given turn may route to Gemini or, on a retryable error, to Claude Haiku. Neither provider retains or trains on the content.
 - Unidentified API/channel sessions are pruned after 30 days; do not assume long-lived state for an anonymous caller.

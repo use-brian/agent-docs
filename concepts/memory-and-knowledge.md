@@ -2,10 +2,10 @@
 title: Memory & knowledge
 description: Memory holds per-(user, assistant) facts about you; the knowledge base holds per-workspace facts the assistant can look up.
 tags: [concepts, memory]
-canonical: https://sidan.ai/docs/memory
+canonical: https://usebrian.ai/docs/memory
 ---
 
-> Human-readable version: https://sidan.ai/docs/memory
+> Human-readable version: https://usebrian.ai/docs/memory
 
 Two systems handle long-term context. Memory holds facts about you. The knowledge base holds facts about the world that the assistant should be able to look up.
 

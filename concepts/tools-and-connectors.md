@@ -2,10 +2,10 @@
 title: Tools & connectors
 description: Connectors expose third-party APIs as per-tool-governed capabilities; scheduled tasks let the assistant run jobs on its own.
 tags: [concepts, tools]
-canonical: https://sidan.ai/docs/tools
+canonical: https://usebrian.ai/docs/tools
 ---
 
-> Human-readable version: https://sidan.ai/docs/tools
+> Human-readable version: https://usebrian.ai/docs/tools
 
 Tools give your assistant the ability to do things, not just talk. Connectors expose third-party APIs (Google Calendar, Gmail, Notion, GitHub, and more). Scheduled tasks let the assistant run jobs on its own.
 
@@ -58,7 +58,7 @@ A refused write returns an "action not granted" tool error naming the connector 
 
 ## Scheduled tasks
 
-Tell your assistant when to run something: "every weekday at 9am, summarize the team's Slack" or "follow up with the Acme lead in two hours." sidanclaw schedules a cron job that runs on its own session, executes tools, and delivers the result via your preferred channel.
+Tell your assistant when to run something: "every weekday at 9am, summarize the team's Slack" or "follow up with the Acme lead in two hours." Use Brian schedules a cron job that runs on its own session, executes tools, and delivers the result via your preferred channel.
 
 Where to see them: scheduled work lives on the Workflow surface. Each scheduled workflow shows its cadence and last run; pause, edit, or delete it there. Jobs survive restarts.
 

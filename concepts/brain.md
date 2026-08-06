@@ -2,10 +2,10 @@
 title: Brain (entities & episodes)
 description: The structured graph of entities, edges, and immutable episodes beneath memory and the knowledge base.
 tags: [concepts, brain]
-canonical: https://sidan.ai/docs/brain
+canonical: https://usebrian.ai/docs/brain
 ---
 
-> Human-readable version: https://sidan.ai/docs/brain
+> Human-readable version: https://usebrian.ai/docs/brain
 
 Memory and the knowledge base are the two surfaces you see in chat. Underneath sits the brain: a structured graph of entities, edges, and immutable episodes that grows every time you or a connector feeds it a new signal.
 

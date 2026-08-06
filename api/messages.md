@@ -2,17 +2,17 @@
 title: Send messages
 description: POST /api/v1/assistants/{assistantId}/messages runs one assistant turn; request/response fields, error table, code samples, and the followup tag contract.
 tags: [api, messages]
-canonical: https://sidan.ai/docs/api/messages
+canonical: https://usebrian.ai/docs/api/messages
 ---
 
-> Human-readable version: https://sidan.ai/docs/api/messages
+> Human-readable version: https://usebrian.ai/docs/api/messages
 
 `POST /api/v1/assistants/{assistantId}/messages` runs one assistant turn and returns the reply.
 
 ## Endpoint
 
 ```
-POST https://api.sidan.ai/api/v1/assistants/{assistantId}/messages
+POST https://api.usebrian.ai/api/v1/assistants/{assistantId}/messages
 Authorization: Bearer sk_live_...
 Content-Type: application/json
 ```
@@ -32,7 +32,7 @@ Content-Type: application/json
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `externalUserId` | string | Yes | Stable id for the end user in your system. Opaque to sidanclaw, so namespace it however you want (e.g. `user:42`, `wallet:addr1q...`). |
+| `externalUserId` | string | Yes | Stable id for the end user in your system. Opaque to Use Brian, so namespace it however you want (e.g. `user:42`, `wallet:addr1q...`). |
 | `externalUserName` | string | No | Display name for the visitor. Shown in the assistant's member list. |
 | `externalUserEmail` | string | No | Email for the visitor. Implies `identified=true` and enables auto-merge if the same human later signs up via OAuth. |
 | `identified` | boolean | No | Opt into Tier 1 (memory on) without an email. See [Identity & memory](identity.md). |
@@ -74,7 +74,7 @@ Error responses use the shape `{ "error": "<slug>", "detail": "..." }`.
 ## Example: curl
 
 ```bash
-curl -X POST "https://api.sidan.ai/api/v1/assistants/<ASSISTANT_ID>/messages" \
+curl -X POST "https://api.usebrian.ai/api/v1/assistants/<ASSISTANT_ID>/messages" \
   -H "Authorization: Bearer sk_live_..." \
   -H "Content-Type: application/json" \
   -d '{
@@ -90,11 +90,11 @@ curl -X POST "https://api.sidan.ai/api/v1/assistants/<ASSISTANT_ID>/messages" \
 
 ```javascript
 const reply = await fetch(
-  `https://api.sidan.ai/api/v1/assistants/${assistantId}/messages`,
+  `https://api.usebrian.ai/api/v1/assistants/${assistantId}/messages`,
   {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${process.env.SIDANCLAW_API_KEY}`,
+      Authorization: `Bearer ${process.env.USEBRIAN_API_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -116,9 +116,9 @@ import os
 import requests
 
 resp = requests.post(
-    f"https://api.sidan.ai/api/v1/assistants/{assistant_id}/messages",
+    f"https://api.usebrian.ai/api/v1/assistants/{assistant_id}/messages",
     headers={
-        "Authorization": f"Bearer {os.environ['SIDANCLAW_API_KEY']}",
+        "Authorization": f"Bearer {os.environ['USEBRIAN_API_KEY']}",
         "Content-Type": "application/json",
     },
     json={
@@ -143,7 +143,7 @@ Synchronous endpoint. Typical response time is 3-15 s; allow at least 30 s of ti
 
 ## Follow-up suggestions: the `<followup>` tag
 
-When enabled for a client, the assistant may append a machine-readable block of 2-4 short follow-up questions at the very end of `reply`. Today the public API does NOT inject the instruction that produces this tag, so v1 API consumers will not normally see it. Clients that build on top of sidanclaw (the web chat at sidan.ai, embeds, custom UIs) do. The format is documented so any client can render the suggestions as chips or strip the tag from the displayed body, deterministically.
+When enabled for a client, the assistant may append a machine-readable block of 2-4 short follow-up questions at the very end of `reply`. Today the public API does NOT inject the instruction that produces this tag, so v1 API consumers will not normally see it. Clients that build on top of Use Brian (the web chat at usebrian.ai, embeds, custom UIs) do. The format is documented so any client can render the suggestions as chips or strip the tag from the displayed body, deterministically.
 
 ### Tag shape
 
@@ -171,10 +171,10 @@ Always handle the partial-tag case during streaming or truncated text: if you fi
 
 ### Reference parser
 
-Match `/<followup>\s*(\[[\s\S]*?\])\s*<\/followup>/` against `reply`, then `JSON.parse` the captured group and filter to non-empty strings (max 4). The display text is `reply.slice(0, indexOf('<followup')).trimEnd()`. The same logic ships in `@sidanclaw/shared` as `parseFollowUps(text)`.
+Match `/<followup>\s*(\[[\s\S]*?\])\s*<\/followup>/` against `reply`, then `JSON.parse` the captured group and filter to non-empty strings (max 4). The display text is `reply.slice(0, indexOf('<followup')).trimEnd()`. The same logic ships in `@use-brian/shared` as `parseFollowUps(text)`.
 
 ```javascript
-// Reference parser. Matches the @sidanclaw/shared parseFollowUps() helper.
+// Reference parser. Matches the @use-brian/shared parseFollowUps() helper.
 const TAG = /<followup>\s*(\[[\s\S]*?\])\s*<\/followup>/;
 
 function parseFollowUps(reply) {

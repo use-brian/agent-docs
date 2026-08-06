@@ -2,12 +2,12 @@
 title: CRM
 description: First-party contacts, companies, and deals that the brain reads and writes the same way it reads memories.
 tags: [concepts, crm]
-canonical: https://sidan.ai/docs/crm
+canonical: https://usebrian.ai/docs/crm
 ---
 
-> Human-readable version: https://sidan.ai/docs/crm
+> Human-readable version: https://usebrian.ai/docs/crm
 
-CRM in sidanclaw is people, companies, and deals: the durable graph of who the team talks to, where the relationship stands, and what it is worth. It is first-party, so the brain reads and writes contacts the same way it reads memories: same brain graph, no translation layer. Attio and HubSpot are sync targets, not the primary surface.
+CRM in Use Brian is people, companies, and deals: the durable graph of who the team talks to, where the relationship stands, and what it is worth. It is first-party, so the brain reads and writes contacts the same way it reads memories: same brain graph, no translation layer. Attio and HubSpot are sync targets, not the primary surface.
 
 ## Entity-backed, not a separate store
 

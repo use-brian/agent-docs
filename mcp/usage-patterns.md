@@ -1,6 +1,6 @@
 ---
 title: Brain MCP Usage Patterns
-description: Practical patterns for an agent reading and writing a sidanclaw brain over MCP.
+description: Practical patterns for an agent reading and writing a Use Brian brain over MCP.
 tags: [mcp, patterns]
 ---
 

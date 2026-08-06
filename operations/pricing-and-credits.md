@@ -1,17 +1,17 @@
 ---
 title: Pricing and Credits
-description: Plans, the per-message tier menu, credit rates, overage, and safety caps for hosted sidanclaw.
+description: Plans, the per-message tier menu, credit rates, overage, and safety caps for hosted Use Brian.
 tags: [operations, pricing]
-canonical: https://sidan.ai/docs/pricing
+canonical: https://usebrian.ai/docs/pricing
 ---
 
-> Human-readable version: https://sidan.ai/docs/pricing
+> Human-readable version: https://usebrian.ai/docs/pricing
 
-Hosted sidanclaw runs on credits. Billing is monthly and scoped to a workspace, not a user. One credit is roughly one Pro chat message; the tier menu lets a message spend fewer or more credits.
+Hosted Use Brian runs on credits. Billing is monthly and scoped to a workspace, not a user. One credit is roughly one Pro chat message; the tier menu lets a message spend fewer or more credits.
 
 ## Plan ladder
 
-Every new workspace starts with a 30-day Pro trial. After that, hosted sidanclaw needs a paid plan (or self-host the open-source version). Plans differ only in monthly credit allocation. There is no free plan and no per-seat fee.
+Every new workspace starts with a 30-day Pro trial. After that, hosted Use Brian needs a paid plan (or self-host the open-source version). Plans differ only in monthly credit allocation. There is no free plan and no per-seat fee.
 
 | Plan | Price | Credits / month | For |
 |---|---|---|---|

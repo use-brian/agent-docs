@@ -1,19 +1,19 @@
 ---
 title: Brain MCP Server
-description: Connect an MCP client to a sidanclaw workspace brain to read and write memory, tasks, CRM, files, and knowledge.
+description: Connect an MCP client to a Use Brian workspace brain to read and write memory, tasks, CRM, files, and knowledge.
 tags: [mcp, brain]
-canonical: https://sidan.ai/docs/api/brain-mcp
+canonical: https://usebrian.ai/docs/api/brain-mcp
 ---
 
-> Human-readable version: https://sidan.ai/docs/api/brain-mcp
+> Human-readable version: https://usebrian.ai/docs/api/brain-mcp
 
-A sidanclaw workspace brain is exposed as one MCP server over Streamable HTTP. An MCP client (Claude Code, Claude Desktop, ChatGPT connectors, or any custom client) authenticates with a workspace-scoped credential and receives the brain as tools: read and write memory, tasks, CRM, files, and knowledge. This is the page for an agent connecting itself to a user's brain.
+A Use Brian workspace brain is exposed as one MCP server over Streamable HTTP. An MCP client (Claude Code, Claude Desktop, ChatGPT connectors, or any custom client) authenticates with a workspace-scoped credential and receives the brain as tools: read and write memory, tasks, CRM, files, and knowledge. This is the page for an agent connecting itself to a user's brain.
 
 ## Endpoint
 
 | Field | Value |
 |---|---|
-| Method + URL | `POST https://api.sidan.ai/api/brain/mcp` |
+| Method + URL | `POST https://api.usebrian.ai/api/brain/mcp` |
 | Transport | Streamable HTTP MCP |
 | Protocol | `initialize`, `tools/list`, `tools/call` |
 | Scope | One credential = one workspace |
@@ -33,7 +33,7 @@ Send the credential as `Authorization: Bearer <token>`. Two credential formats a
 | Header | `Authorization: Bearer sk_brain_...` |
 | Best for | Claude Code, scripts, servers |
 
-The plaintext key is shown once at creation. sidanclaw stores a hash and a prefix only.
+The plaintext key is shown once at creation. Use Brian stores a hash and a prefix only.
 
 ### OAuth 2.1
 
@@ -69,7 +69,7 @@ Reads are clearance-filtered to the credential's ceiling: a credential never ret
 One command. Replace the key with your own:
 
 ```
-claude mcp add sidanclaw --transport http https://api.sidan.ai/api/brain/mcp --header "Authorization: Bearer sk_brain_..."
+claude mcp add Use Brian --transport http https://api.usebrian.ai/api/brain/mcp --header "Authorization: Bearer sk_brain_..."
 ```
 
 ## Read tools

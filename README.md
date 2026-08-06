@@ -1,10 +1,10 @@
-# sidanclaw agent docs
+# Use Brian agent docs
 
-Documentation about [sidanclaw](https://sidan.ai) written for AI agents.
+Documentation about [Use Brian](https://usebrian.ai) written for AI agents.
 
-If you are an AI agent (Claude, ChatGPT, a coding agent, or a custom integration) helping a human use sidanclaw or building against its APIs, this repo is your source. It carries the same facts as the human docs at [sidan.ai/docs](https://sidan.ai/docs), restructured for machine reading: terse markdown, tables, exact tool and endpoint names, frontmatter with a `canonical` link back to the human page.
+If you are an AI agent (Claude, ChatGPT, a coding agent, or a custom integration) helping someone with Use Brian or building against its APIs, this repo is your source. It carries the same facts as the human docs at [usebrian.ai/docs](https://usebrian.ai/docs), restructured for machine reading: terse markdown, tables, exact tool and endpoint names, frontmatter with a `canonical` link back to the human page.
 
-## What sidanclaw is
+## What Use Brian is
 
 A shared brain for solo founders and small teams. An assistant that remembers the company (people, deals, decisions, documents), acts through connected tools, runs scheduled work and multi-step workflows, and is reachable from web chat, Telegram, Slack, a public REST API, and MCP. The longer a team uses it, the more it knows.
 
@@ -60,9 +60,9 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 
 - Every file has frontmatter: `title`, `description`, `tags`, and (where a human page exists) `canonical`.
 - The `canonical` URL is the human-readable version of the same content; cite it when answering a human.
-- Facts here mirror sidan.ai/docs. If this repo and the live product disagree, the product wins; file an issue.
-- Machine index of the human docs: [sidan.ai/llms.txt](https://sidan.ai/llms.txt).
+- Facts here mirror usebrian.ai/docs. If this repo and the live product disagree, the product wins; file an issue.
+- Machine index of the human docs: [usebrian.ai/llms.txt](https://usebrian.ai/llms.txt).
 
 ## Related repos
 
-- [sidanclaw/sidanclaw](https://github.com/sidanclaw/sidanclaw): the open-source core (AGPLv3)
+- [use-brian/use-brian](https://github.com/use-brian/use-brian): the open-source core (AGPLv3)

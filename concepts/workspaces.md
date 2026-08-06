@@ -2,10 +2,10 @@
 title: Workspaces & sharing
 description: A workspace is the unit of brain identity, billing, and membership; sharing lets assistants query other people's assistants.
 tags: [concepts, workspaces]
-canonical: https://sidan.ai/docs/workspaces
+canonical: https://usebrian.ai/docs/workspaces
 ---
 
-> Human-readable version: https://sidan.ai/docs/workspaces
+> Human-readable version: https://usebrian.ai/docs/workspaces
 
 Workspaces turn an assistant into a shared resource. Sharing lets your assistant call other people's assistants for data only they have.
 

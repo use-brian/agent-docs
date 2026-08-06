@@ -1,11 +1,11 @@
 ---
 title: Custom Home Apps
-description: Build a static web app that renders full-page inside a sidanclaw workspace and reads the brain through a scoped bridge token. Manifest schema, bundle format, sandbox limits, the postMessage bridge, the consent model, and zip import/export.
+description: Build a static web app that renders full-page inside a Use Brian workspace and reads the brain through a scoped bridge token. Manifest schema, bundle format, sandbox limits, the postMessage bridge, the consent model, and zip import/export.
 tags: [apps, mcp, brain]
-canonical: https://sidan.ai/docs/apps/custom-home-apps
+canonical: https://usebrian.ai/docs/apps/custom-home-apps
 ---
 
-> Human-readable version: https://sidan.ai/docs/apps/custom-home-apps
+> Human-readable version: https://usebrian.ai/docs/apps/custom-home-apps
 
 A **custom Home app** is a static web app a workspace installs. It renders
 full-page in a slot on the workspace's Home strip, runs sandboxed in the

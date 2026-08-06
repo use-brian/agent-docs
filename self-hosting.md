@@ -2,10 +2,10 @@
 title: Self-Hosting
 description: Run the open-source Use Brian core locally with ChatGPT sign-in or your own model credential, plus what the hosted product adds.
 tags: [operations, open-source]
-canonical: https://sidan.ai/docs/open-source
+canonical: https://usebrian.ai/docs/open-source
 ---
 
-> Human-readable version: https://sidan.ai/docs/open-source
+> Human-readable version: https://usebrian.ai/docs/open-source
 
 The Use Brian core is open source: the brain, the agent, workflows, channels,
 content planning, and the doc surface. Run it on your own machine with an

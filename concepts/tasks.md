@@ -2,10 +2,10 @@
 title: Tasks
 description: The brain's universal verb; a workspace-scoped, schema-frozen primitive for every commitment the assistant tracks.
 tags: [concepts, tasks]
-canonical: https://sidan.ai/docs/tasks
+canonical: https://usebrian.ai/docs/tasks
 ---
 
-> Human-readable version: https://sidan.ai/docs/tasks
+> Human-readable version: https://usebrian.ai/docs/tasks
 
 Tasks are the universal verb of the brain: every commitment, follow-up, and unit of work the assistant should keep track of. They live in the same database as memories and CRM rows, so the assistant reads, writes, and reasons over them without crossing a service boundary.
 
