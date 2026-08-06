@@ -20,7 +20,9 @@ To connect a new row to an existing entity, you need that entity's UUID. Call `g
 |---|---|
 | Raw notes, a document, a mixed dump | `ingestToBrain` with `decompose: true` (default) |
 | One already-distilled atomic fact | `saveMemory` |
-| Task-shaped content (a commitment, follow-up) | `saveTask`, or `ingestToBrain` (it routes tasks for you) |
+| Task-shaped content (a commitment, follow-up) | `saveTask` to create the task now; `ingestToBrain` only files it as a suggestion |
+
+The two task paths are not interchangeable. `saveTask` creates the row. Tasks that `ingestToBrain` extracts from your content are held for human review as suggestions and do not exist as tasks until someone accepts them, so do not treat a successful `ingestToBrain` call as proof a task was created. See [Tasks](../concepts/tasks.md).
 
 `ingestToBrain` with `decompose: true` runs the full extraction pipeline and builds an entity + edge graph. `saveMemory` and `ingestToBrain` with `decompose: false` skip extraction: they store text flat. Never hand task-shaped content to `saveMemory` (unstructured, cannot be filtered, assigned, or closed).
 
