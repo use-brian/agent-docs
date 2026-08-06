@@ -86,6 +86,7 @@ Available on both `read` and `read_write` credentials.
 | `listContacts` / `listCompanies` / `listDeals` | CRM filters | Compact CRM projection |
 | `fileRead` | file `id` or path | Full content + metadata of one workspace file |
 | `fileSearch` | title / summary / tag / name query | Compact file projection |
+| `getBrand` | optional `slug` (omit = the workspace default brand); optional `include_draft` | The workspace's brand record: naming and legal usage, strategy, messaging and voice, color tokens, typography, logo variants bound by workspace file id, applications, claims, rights, governance, sources. Returns the APPROVED record by default; `include_draft: true` returns unapproved changes, which are a proposal. Present only on deployments with the brand surface wired |
 | `readPage` / `listPages` / `listPageTemplates` | page `id` or title; list filters; template catalog | Read doc pages. Present only on deployments with the doc surface wired |
 | `searchKnowledge` | `query` | Deprecated alias for `searchBrain` with `scope: 'kb_chunk'`. Prefer `searchBrain` |
 
@@ -104,6 +105,7 @@ Available only on `read_write` credentials.
 | `fileWrite` / `fileAppend` / `fileSetMeta` / `fileDelete` | Create or overwrite a file with authored text, append text, patch metadata, delete a file |
 | `saveFileToBrain` | Promote a previously uploaded cached file (a `fileId`) into the brain, preserving the original bytes |
 | `saveFileBytes` | Persist a file from raw bytes supplied as base64, preserving the exact bytes. Size-capped; larger files use the HTTP upload route |
+| `saveBrandDraft` | Propose a change to the workspace's brand record. Writes the DRAFT only. It does not take effect until a workspace owner or admin approves it in Studio, which creates a new approved version. Each field group you pass replaces that group whole, so call `getBrand` first and send the complete group back when adding to a list. Bind assets by workspace file id (upload with `saveFileBytes` first), never by path |
 | `createPage` / `editPage` / `deletePage` / `createPageFromTemplate` | Author doc pages: create, edit, delete, or seed from a template. Present only on deployments with the doc surface wired |
 
 `ingestToBrain` (default `decompose: true`) is the path for raw notes and documents: it derives entities and edges. `saveMemory` is for a single fact you have already distilled. Do not route task-shaped content through `saveMemory`: use `saveTask` or `ingestToBrain`.
@@ -111,6 +113,7 @@ Available only on `read_write` credentials.
 ## Notes for agents
 
 - One credential reaches exactly one workspace. To span workspaces, obtain one credential per workspace.
+- **There is no tool that approves a brand, and there will not be one.** `saveBrandDraft` writes a draft; a human with an owner or admin role approves it in the app. If you are delivering a brand system into a client's workspace, push the draft, upload the master assets with `saveFileBytes`, bind them by file id, and then tell the client to approve. Do not report the brand as changed before they do.
 - Call `tools/list` after `initialize` and select from what is returned. If a write tool is absent, the credential is `read`-scoped; if file tools are absent, the deployment has no file storage; if the page tools are absent, the deployment has no doc surface.
 - An empty read result may be a clearance filter, not an empty brain: the credential only sees rows at or below its tier.
 - Every write is audited exactly like a chat write. Assume no action is invisible to the workspace owner.
