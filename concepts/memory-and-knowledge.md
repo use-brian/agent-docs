@@ -31,7 +31,13 @@ The KB is per-workspace, not per-user. Use it for facts the assistant should kno
 
 ### Sensitivity tiers
 
-Each KB entry is tagged `public`, `internal`, or `confidential`. The assistant's clearance gates what it can read across every channel, including the public API. To expose only public KB to API consumers, set the assistant's clearance to public; for an internal integration, use an assistant with the matching clearance.
+Each KB entry is tagged `public`, `internal`, or `confidential`. A synced entry takes its tier from an explicit `sensitivity:` frontmatter key when one is present; otherwise it gets the source's configured default (Studio -> Knowledge -> Clearance; `internal` unless changed). Explicit frontmatter always wins, so if you author markdown in a synced KB repo, stamp `sensitivity:` yourself whenever the source default is not what you mean. Changing a source's default re-syncs the whole source and re-stamps only the entries without an explicit tier.
+
+The assistant's clearance gates what it can read across every channel, including the public API. To expose only public KB to API consumers, set the assistant's clearance to public; for an internal integration, use an assistant with the matching clearance.
+
+### Self-maintaining sources
+
+A synced source can run a maintenance agent (Studio -> Knowledge -> Self-maintain) that watches for drift and proposes KB updates. It is suggestion-first: every proposed write parks in the Approvals inbox, and nothing lands in the KB without a human approving it.
 
 ## How knowledge enters the brain
 

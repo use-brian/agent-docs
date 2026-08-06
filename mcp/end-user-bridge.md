@@ -95,6 +95,15 @@ Per request: send `externalUserId` always, `claims` whenever the user is authent
 - Holding the API key in the browser.
 - Prompt-only scoping.
 
+## What the workspace accrues
+
+An identified end-user turn accrues into the workspace brain, behind a per-user wall:
+
+- The user is materialized as a **CRM contact** the workspace team can see, paired to the `externalUserId` your backend attests.
+- Everything the turn writes is stamped into a per-user compartment. One end user's turns can never read what another end user's turns wrote, and cannot read their own contact row either: accrual is write-only from the end-user side.
+
+The stored pairing is identity bookkeeping, never authority. It is not read back on later turns, so absent claims still mean gates closed.
+
 ## Not available yet
 
 - **A signed principal assertion.** Per-connector bearer auth already proves the request is Use Brian for a bridge serving one workspace; a signature is only needed once one bridge serves many.

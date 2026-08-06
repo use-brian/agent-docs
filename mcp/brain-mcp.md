@@ -64,6 +64,8 @@ Hand a `read` credential to a low-trust integration; use `read_write` for your o
 
 Reads are clearance-filtered to the credential's ceiling: a credential never returns rows above its tier. Writes act with the workspace's default authority and carry the same permissions and audit trail as a chat turn. There is no separate, unaudited write path.
 
+The doc-page tools follow the same rule inside teamspaces: a page that lives in a teamspace resolves by the credential's clearance against the teamspace's sensitivity (and the page's own clearance), never by any human account's teamspace membership. A page you expect that does not resolve usually means the clearance ceiling, not a missing page.
+
 ## Connect Claude Code
 
 One command. Replace the key with your own:

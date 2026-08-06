@@ -11,7 +11,7 @@ Tools give your assistant the ability to do things, not just talk. Connectors ex
 
 ## Connectors (MCP)
 
-Connect a service from Studio -> Connectors. Each connector exposes a set of tools (for example Google Calendar exposes `googleCalendarCreateEvent`, `googleCalendarListEvents`, etc.). After connecting, you decide which tools each assistant can use from the assistant's Tools tab. Workspace Files is first-party (no external account); most of the rest authenticate via OAuth or a personal access token.
+Connect a service from Studio -> Connectors. Each connector exposes a set of tools (for example Google Calendar exposes `googleCalendarCreateEvent`, `googleCalendarListEvents`, etc.). After connecting, you decide which tools each assistant can use from the assistant's Tools tab. Workspace Files, Office, and Computer Use are first-party built-in primitives (no external account); most of the rest authenticate via OAuth or a personal access token.
 
 ### Official built-in connectors
 
@@ -25,8 +25,16 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 | Fathom | |
 | Shopify | Full store operator surface: 16 reads (products, orders, customers, inventory, collections, draft orders, discount/promo codes, abandoned checkouts, payouts, disputes, content, sales reports), 10 writes behind approval (create/update products, draft orders + invoices, tags, customer notes, inventory, fulfillment with tracking, promo codes, pages/posts), and 3 destructive verbs behind approval cards (cancel order, refund, complete draft). Optional ambient ingest: store events flow into the brain with a daily digest and can trigger workflows (OAuth-connected stores only). Connect per store via OAuth or a pasted Admin API access token (`shpat_...`); each store is its own connector instance. Order history is limited to roughly the last 60 days until Shopify grants the app extended access; customer PII fields may be null until the protected-data review clears. |
 | Company Email (IMAP) | The user's own corporate mailbox over IMAP/SMTP - any provider, with Alibaba enterprise mail auto-detected from the address. Connect with the work email plus an app password (client security password); the credential is verified live before it is stored. Tools: `imapSearchMessages` (INBOX + Sent, threaded results), `imapGetMessage`, `imapSendMessage` (approval-gated, sends as the user), `imapSaveAttachment` (save one email attachment into the workspace as a file, then deliver it with `sendFile`; on request only, 45 MB max, which is exactly the messaging-channel document limit), `syncMailboxNow` (pull new mail into the searchable archive on demand), and `searchEmailArchive` (semantic recall over the opt-in full-mailbox archive). Multiple mailboxes can be connected; every tool takes an optional `account` (the mailbox email) and defaults to the primary (first-connected) one. Each archive is private to its owner. Distinct from Gmail (the user's Google account) and Assistant Email (the assistant's own address) - no lane substitutes for another. |
-| Workspace Files | First-party; no external account. |
+| Workspace Files | Built-in primitive; no external account. |
+| Office | Built-in primitive; create, read, and revise Brian-native Documents and Presentations in the workspace. |
+| Computer Use | Built-in primitive; a controlled browser (the user's own Chrome via the Use Brian extension for account-sensitive sites, or a cloud browser for public ones). Sends require approval. |
 | Google Cloud Storage | Bring-your-own storage via a service-account key; exposes no assistant tools. |
+
+### Built-in primitives and their off switch
+
+Workspace Files, Office, and Computer Use are built-in primitives: first-party connectors with no external account, no OAuth, and no credential. They are on by default for every assistant, and each can be switched off per assistant from the assistant's Tools tab. Studio -> Connectors shows them under a neutral "Built-in" pill with no on/off control there, because the switch is per-assistant.
+
+Switching a primitive off removes its tools from that assistant entirely: the tools are absent from the toolset, not present-but-blocked, and the prompt text advertising the capability goes with them. The switch holds on every path - chat, messaging channels, the public API, scheduled work, and assistant-to-assistant calls. Per-tool allow/ask/block policy still governs whatever tools remain when the primitive is on.
 
 ## Per-tool policy
 
@@ -71,7 +79,8 @@ Scheduled tasks are timed jobs. They fire on a cron and run an assistant turn. W
 - A tool that is `Block` never runs, and write/destructive tools default to Ask, so a write action may pause for user confirmation before it executes. Do not assume a write succeeded until the confirmation resolves.
 - A connector write can also be refused with an "action not granted" error when the assistant lacks the write grant for that action. This is not a transient failure; retrying will not help. Tell the user which action needs granting in Studio -> Assistants -> Tools.
 - Connector tools only exist after the service is connected in Studio -> Connectors and enabled for the assistant in its Tools tab. Never reference a connector tool that has not been connected.
-- Workspace Files is first-party and needs no external account; every other connector requires OAuth or a personal access token.
+- Workspace Files, Office, and Computer Use are built-in primitives and need no external account; every other tool-exposing connector requires OAuth or a personal access token.
+- If a file, office, or browser tool you expect is missing, the primitive may be switched off for that assistant. That is a configuration state, not a product limitation: the owner re-enables it on the assistant's Tools tab.
 - "Every weekday at 9am..." style requests create a scheduled task (a cron job on the assistant), which is distinct from a workspace Task.
 
 ## Related

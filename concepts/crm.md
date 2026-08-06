@@ -38,6 +38,10 @@ Every assistant with the `crm` capability gets the full CRUD surface plus `advan
 
 `saveContact` / `getContact` / `listContacts` / `updateContact` · `saveCompany` / `getCompany` / `listCompanies` / `updateCompany` · `saveDeal` / `getDeal` / `listDeals` / `updateDeal` / `advanceDealStage`
 
+## Accrued client contacts
+
+Identified end users arriving through the public API accrue a contact automatically: the first identified turn materializes a person entity paired to the integration's `externalUserId`, visible to the workspace team like any other contact. The client side is write-only: an end user can never read the contact that describes them, nor anything another end user's turns wrote (every client turn's writes are walled into a per-client compartment). See [Identity & memory](../api/identity.md).
+
 ## Relationships across the brain
 
 Every CRM row is an entity in the underlying graph. Save a memory about a contact, link a task to a deal, or open an explicit edge via the universal `links` param: the entity rollup (`getEntity`) returns the contact, every memory anchored to it, and the deals it is attached to in one call.

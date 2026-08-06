@@ -35,6 +35,22 @@ Email is the only cross-provider identity bridge. If you pass `externalUserEmail
 
 API requests honour the assistant's clearance, the same setting that gates knowledge-base reads on every other channel. To expose only public KB to third-party consumers, point the API key at an assistant whose clearance is set to public; for an internal-only integration, use an assistant with internal clearance. The visible setting on the assistant detail page is the single source of truth, the same for Tier 1 and Tier 2 visitors.
 
+## Client accrual: what the workspace keeps
+
+An identified (Tier 1) turn leaves two things in the workspace brain:
+
+- **A contact record.** The visitor is materialized as a CRM contact (a person entity) the workspace team can see, paired to your `externalUserId` (and `externalUserEmail` when sent). This is how what each customer taught the brain becomes visible to the owning team.
+- **Client-walled writes.** Everything the turn writes (memories, CRM rows, tasks, knowledge) is stamped into a per-client compartment derived from `externalUserId`. No client can read another client's rows, and a client cannot read even its own contact record: accrual is write-only from the client's side. Workspace members read it all normally.
+
+Anonymous (Tier 2) turns accrue no contact, but anything they do cause to be written still lands behind the same per-client wall.
+
+Two rules follow:
+
+- **Pairing is identity, never authority.** The stored id/email pairing is bookkeeping. It is never read back to grant a later turn anything: claims are per-request, and a request without claims is anonymous regardless of history.
+- **Drift is recorded, not fatal.** If the same `externalUserId` later arrives with a different attested email than the stored pairing, the turn still runs and the disagreement is logged for the owner. A mismatch *within* one request (between `claims.email` and `externalUserEmail`) is still rejected at the wire.
+
+One carve-out: a turn whose attested email matches an existing Use Brian account resolves to that real member. A teammate arriving through your integration is treated as a teammate, not accrued as a client.
+
 ## Do not blanket Tier 1
 
 Setting `identified: true` on every request is a budget footgun: random per-pageview ids would each become a Tier 1 user with consolidation cost. Pass `identified: true` only when you have a real, stable user identity. Anonymous browser sessions should default to Tier 2.
@@ -45,6 +61,7 @@ Setting `identified: true` on every request is a budget footgun: random per-page
 - Pick your `externalUserId` to be durable per human (logged-in user id, wallet address, internal uuid). Memory is keyed to `(visitor, assistant)`, so a per-pageview id fragments memory and costs the owner.
 - Pass `externalUserEmail` only when you actually have the person's email and want cross-service continuity. It is the one signal that survives a future OAuth signup and merges identities.
 - Knowledge-base visibility is a property of the assistant you key against, not the request. Choose a public-clearance assistant for external embeds and an internal-clearance assistant for private integrations.
+- Identified turns accrue a team-visible contact and compartment every write per client. Do not expect to read the accrued contact back on the end user's behalf: accrual is write-only from the client side, by design.
 
 ## Related
 
