@@ -15,6 +15,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 | Connect yourself (an agent) to a user's brain over MCP | [mcp/brain-mcp.md](mcp/brain-mcp.md) |
 | Use the brain MCP tools well | [mcp/usage-patterns.md](mcp/usage-patterns.md) |
 | Embed an assistant in an app (REST) | [api/overview.md](api/overview.md), [api/messages.md](api/messages.md) |
+| Serve your own end users, each scoped to their own data | [mcp/end-user-bridge.md](mcp/end-user-bridge.md) |
 | Understand memory vs knowledge base | [concepts/memory-and-knowledge.md](concepts/memory-and-knowledge.md) |
 | Explain pricing or credit errors (429) | [operations/pricing-and-credits.md](operations/pricing-and-credits.md) |
 | Build an app that runs inside a user's workspace | [concepts/custom-home-apps.md](concepts/custom-home-apps.md) |
@@ -49,6 +50,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 
 - [mcp/brain-mcp.md](mcp/brain-mcp.md): the brain as an MCP server; auth, scopes, full tool table
 - [mcp/usage-patterns.md](mcp/usage-patterns.md): how to read and write the brain well
+- [mcp/end-user-bridge.md](mcp/end-user-bridge.md): host an MCP server that serves *your* end users, one at a time — the identity headers, self-scoped tool signatures, and the conformance checklist that makes a cross-customer request inexpressible
 
 ### Operations
 

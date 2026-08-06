@@ -25,6 +25,12 @@ Content-Type: application/json
   "externalUserName": "Alice",
   "externalUserEmail": "alice@example.com",
   "identified": true,
+  "claims": {
+    "email": "alice@example.com",
+    "orgId": "acme-corp",
+    "roles": ["admin"]
+  },
+  "endUserContext": "plan: pro\nopen orders: #4471",
   "sessionId": "thread-789",
   "message": "How does the proposal vote work?"
 }
@@ -34,10 +40,31 @@ Content-Type: application/json
 |---|---|---|---|
 | `externalUserId` | string | Yes | Stable id for the end user in your system. Opaque to Use Brian, so namespace it however you want (e.g. `user:42`, `wallet:addr1q...`). |
 | `externalUserName` | string | No | Display name for the visitor. Shown in the assistant's member list. |
-| `externalUserEmail` | string | No | Email for the visitor. Implies `identified=true` and enables auto-merge if the same human later signs up via OAuth. |
+| `externalUserEmail` | string | No | Email for the visitor. Alias of `claims.email`. Implies `identified=true` and enables auto-merge if the same human later signs up via OAuth. |
 | `identified` | boolean | No | Opt into Tier 1 (memory on) without an email. See [Identity & memory](identity.md). |
+| `claims` | object | No | Turn-scoped identity your backend attests for this request: `email`, `orgId`, `roles`. See [End-user claims](#end-user-claims). |
+| `endUserContext` | string | No | Free-form account context for this turn (plan tier, open orders, ticket state). Max 4,000 characters. Passed to the model verbatim, labelled as attested by you and unverified. Never stored. |
 | `sessionId` | string | No | Conversation key. Reuse to continue a thread; pass a new value to start fresh. Defaults to `externalUserId` (one thread per user). |
 | `message` | string | Yes | The user's text. Max 16,000 characters. |
+
+The body is strict: an unknown top-level field, or an unknown field inside `claims`, returns `400 invalid_input`.
+
+## End-user claims
+
+Use these when you are exposing one assistant to **your own end users** and each conversation must stay private to that person.
+
+Use Brian never authenticates your users. Your backend does that and attests the result on each request, so a claim is exactly as trustworthy as the API key. Keep the key server-side: a browser-held key would let any visitor attest any identity.
+
+| Field | Type | What it does |
+|---|---|---|
+| `claims.email` | string | The same field as `externalUserEmail`, with the same effect (implies Tier 1). Send one or the other; sending both with **different** values returns `400 invalid_input`. |
+| `claims.orgId` | string | Your tenant id for this user. Forwarded to your MCP connector as `X-UseBrian-Actor-Org`. No other effect today. |
+| `claims.roles` | string[] | Up to 16 role labels. Visible to the model for tone and routing, and **never** sent to your connector as a header. |
+
+Two rules matter when you integrate:
+
+- **`externalUserId` identifies; `claims` authorize.** `externalUserId` is the permanent index key and becomes the user's durable identity in Use Brian. Claims are scoped to the single request and are never stored as authority. Send claims on **every** authenticated request, and omit them when the visitor is logged out: Use Brian does not carry a previous session's claims forward, so a returning logged-out visitor is treated as anonymous and the assistant is told to withhold account specifics.
+- **Roles are advisory, not permission.** Do not implement access control by sending a role and expecting Use Brian or your connector to honour it. Authorize inside your own MCP server, keyed on `X-UseBrian-Actor-Id`. See [Connector identity](connector-identity.md).
 
 ## Response (200)
 

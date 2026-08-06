@@ -15,9 +15,10 @@ Sent on the discovery calls and on every tool call, once the connector owner has
 
 | Header | Value |
 |---|---|
-| `X-UseBrian-Actor-Channel` | The channel the message came from: `web`, `whatsapp`, `telegram`, or `slack`. |
-| `X-UseBrian-Actor-Id` | The channel-native id of the sender: email on web, phone on WhatsApp, `@handle` on Telegram, user id on Slack. |
+| `X-UseBrian-Actor-Channel` | The channel the message came from: `web`, `whatsapp`, `telegram`, `slack`, or `api`. |
+| `X-UseBrian-Actor-Id` | The channel-native id of the sender: email on web, phone on WhatsApp, `@handle` on Telegram, user id on Slack. On the `api` channel it is the `externalUserId` your own backend sent. |
 | `X-UseBrian-Actor-Email` | The sender's email when known, even on a channel turn. May be absent. |
+| `X-UseBrian-Actor-Org` | The `claims.orgId` your backend attested on this request. `api` channel only, and only when you sent one. |
 | `X-UseBrian-User-Id` | The stable Use Brian user id. Use this as the durable key; the channel-native id above can change. |
 
 ```
@@ -26,6 +27,18 @@ X-UseBrian-Actor-Id: @alice
 X-UseBrian-Actor-Email: alice@example.com
 X-UseBrian-User-Id: 7c2a9f04-...-e91
 ```
+
+On the `api` channel, when you are serving your own end users:
+
+```
+X-UseBrian-Actor-Channel: api
+X-UseBrian-Actor-Id: user:42
+X-UseBrian-Actor-Email: alice@example.com
+X-UseBrian-Actor-Org: acme-corp
+X-UseBrian-User-Id: 7c2a9f04-...-e91
+```
+
+Note what is absent: `claims.roles` never becomes a header. Identity is forwarded, authorization is derived. Resolve what this actor may do from your own records keyed on `X-UseBrian-Actor-Id`, never from a role label travelling in the request.
 
 ## When the headers are sent
 
