@@ -22,7 +22,7 @@ Workflows are built from four step types. Sequential by default; `branch` steps 
 
 ## Parallel fan-out
 
-A step's `nextStepId` accepts an array of step ids (distinct, max 5). When the step completes, every listed step starts in parallel. A downstream step that several branches point at is the implicit join: it runs once, after every branch that can still reach it has settled, and can read each branch's `storeOutputAs` var via `{{vars.<name>}}` (give parallel siblings distinct names; same-name writes are last-settled-wins).
+A step's `nextStepId` accepts an array of step ids (distinct, max 5). When the step completes, every listed step starts in parallel. The definition's `startStepId` accepts the same scalar-or-array shape: an array is a trigger-level fan-out, starting every listed entry step in parallel the moment the trigger fires, under the same rules below. A downstream step that several branches point at is the implicit join: it runs once, after every branch that can still reach it has settled, and can read each branch's `storeOutputAs` var via `{{vars.<name>}}` (give parallel siblings distinct names; same-name writes are last-settled-wins).
 
 Rules an authoring agent must respect:
 
