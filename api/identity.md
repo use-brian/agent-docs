@@ -31,9 +31,24 @@ Email is the only cross-provider identity bridge. If you pass `externalUserEmail
 | `identified: true` (no email) | Tier 1 | Yes | No |
 | `externalUserEmail` (with or without `identified`) | Tier 1 | Yes | Yes |
 
+## Key audience
+
+Beyond the per-request tier, every API key declares an **audience** at creation, immutably. One key is never both.
+
+### External keys (default)
+
+Serve your own end-customers. The tier table above applies, plus one key-level choice for the anonymous lane: **anonymous visitor context**.
+
+- **Limited** (default): anonymous turns read only public-sensitivity knowledge - the behavior external keys always had.
+- **Full assistant context**: anonymous turns get everything the assistant itself can read - team memory, files, brand, skills - read-only, exactly like a public chat link. The workspace owner opts into this at key creation; the assistant's clearance becomes the exposure ceiling for anyone holding the key. Identified (Tier 1) turns are unaffected: per-customer conversations stay on the limited context plus that customer's own memory.
+
+### Internal keys
+
+Act as a real workspace member - for internal tools, scripts, and automations, not customer traffic. Each request may name the member it acts as with `actorEmail`; omitted, the turn acts as the key's creator. The named actor must be a member of the assistant's workspace, or the request fails with `403 actor_not_member`. Internal turns get the member's full workspace context (their memory, team memory, files, brand) with reads capped at the lower of the member's and the assistant's clearance, and they write memory as that member. The external identity fields (`identified`, `claims`, `externalUserEmail`) return `400` on an internal key, and `actorEmail` returns `400` on an external key: attribution is a property of the key, never a per-request escalation.
+
 ## Knowledge base access
 
-API requests honour the assistant's clearance, the same setting that gates knowledge-base reads on every other channel. To expose only public KB to third-party consumers, point the API key at an assistant whose clearance is set to public; for an internal-only integration, use an assistant with internal clearance. The visible setting on the assistant detail page is the single source of truth, the same for Tier 1 and Tier 2 visitors.
+API requests honour the assistant's clearance, the same setting that gates knowledge-base reads on every other channel. To expose only public KB to third-party consumers, point the API key at an assistant whose clearance is set to public; for an internal-only integration, use an assistant with internal clearance. The visible setting on the assistant detail page is the single source of truth, the same for Tier 1 and Tier 2 visitors. External keys created with full anonymous context read at the assistant's clearance on anonymous turns, as described under [Key audience](#key-audience).
 
 ## Client accrual: what the workspace keeps
 

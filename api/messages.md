@@ -44,6 +44,7 @@ Content-Type: application/json
 | `identified` | boolean | No | Opt into Tier 1 (memory on) without an email. See [Identity & memory](identity.md). |
 | `claims` | object | No | Turn-scoped identity your backend attests for this request: `email`, `orgId`, `roles`. See [End-user claims](#end-user-claims). |
 | `endUserContext` | string | No | Free-form account context for this turn (plan tier, open orders, ticket state). Max 4,000 characters. Passed to the model verbatim, labelled as attested by you and unverified. Never stored. |
+| `actorEmail` | string | No | Internal-audience keys only: the workspace member this turn acts as. Omitted, the turn acts as the key's creator. Returns `400` on an external-audience key and `403 actor_not_member` if the email does not resolve to a workspace member. See [Key audience](identity.md#key-audience). |
 | `sessionId` | string | No | Conversation key. Reuse to continue a thread; pass a new value to start fresh. Defaults to `externalUserId` (one thread per user). |
 | `message` | string | Yes | The user's text. Max 16,000 characters. |
 
@@ -84,6 +85,23 @@ Two rules matter when you integrate:
 | `reply` | string | The assistant's reply text. |
 | `model` | string | Which model produced the reply (e.g. `gemini-3-flash-standard` for Standard, `gemini-3-flash-preview` for Pro, `gemini-3.5-flash` for Max, `gemini-3-pro-research` for Research). Since the model registry, deployments may also serve metered pay-per-use models (e.g. `qwen3.7-plus`, `deepseek-v4-pro` via DashScope); those ids appear here verbatim, and the billing tier is recorded separately from the model id, so do not infer pricing from the model string. |
 
+## Which model answers
+
+You do not choose the model per request. Every turn on this endpoint runs on the
+assistant's **API model tier**, which the workspace owner sets in the app at
+Assistant, API, Model tier. The same tier governs the assistant's public chat
+link (`/c/<token>`), because both share one pipeline and bill the same
+workspace.
+
+That tier is independent of the tier the assistant uses on its own messaging
+channels, so an owner can serve API traffic on Standard while their Telegram
+bot runs on Max, or the reverse. If replies change quality without a change on
+your side, that setting is the first thing to check.
+
+The workspace plan still clamps the tier: a plan that does not include Pro or
+Max resolves down before the call. Always read the concrete model from the
+response's `model` field rather than assuming a tier.
+
 ## Errors
 
 Error responses use the shape `{ "error": "<slug>", "detail": "..." }`.
@@ -93,6 +111,7 @@ Error responses use the shape `{ "error": "<slug>", "detail": "..." }`.
 | 400 | `invalid_input` | Body missing required field, malformed email, or message too long. |
 | 401 | `invalid_api_key` | Authorization header missing, malformed, hash mismatch, or the key does not match the assistant in the URL. |
 | 403 | `key_revoked` | Key exists but has been revoked. |
+| 403 | `actor_not_member` | Internal-audience keys only: the attributed actor (or the key's creator) is not a member of the assistant's workspace. |
 | 404 | `assistant_not_found` | Key valid but the assistant no longer exists. |
 | 429 | `budget_exhausted` | The workspace has no active plan (trial ended or plan lapsed). The owner must pick a plan, or self-host. |
 | 502 | `upstream_failed` | LLM provider error after retries. Treat as transient. |
