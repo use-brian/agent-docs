@@ -86,7 +86,7 @@ Available on both `read` and `read_write` credentials.
 | `getMemory` / `getTask` / `getContact` / `getCompany` / `getDeal` | record `id` | Full record |
 | `listTasks` | assignee / status / due range / tag / parent filters | Compact task projection |
 | `listContacts` / `listCompanies` / `listDeals` | CRM filters | Compact CRM projection |
-| `fileRead` | file `id` or path | Full content + metadata of one workspace file |
+| `fileRead` | file `id` or path | Text content + metadata of one workspace file. **Text only** — on an image, PDF, or other binary it returns an error rather than a lossy decode, so do not use it to inspect a stored image. Nothing returns raw bytes: bytes leave the brain by being delivered (attached to an email, sent to a chat channel), never by entering a tool result |
 | `fileSearch` | title / summary / tag / name query | Compact file projection |
 | `getBrand` | optional `slug` (omit = the workspace default brand); optional `include_draft` | The workspace's brand record: naming and legal usage, strategy, messaging and voice, color tokens, typography, logo variants bound by workspace file id, applications, claims, rights, governance, sources. Returns the APPROVED record by default; `include_draft: true` returns unapproved changes, which are a proposal. Present only on deployments with the brand surface wired |
 | `readPage` / `listPages` / `listPageTemplates` | page `id` or title; list filters; template catalog | Read doc pages. Present only on deployments with the doc surface wired |
