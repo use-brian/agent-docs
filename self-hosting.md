@@ -48,6 +48,16 @@ It provides one-shot targets for Debian 12/13 and Ubuntu 25.04/25.10. Configure
 the tunnel and DNS first, then clone the kit on the server, fill the target's
 `client.conf` and owner-only `private/` inputs, and run its `install.sh`.
 
+Production uses three explicit public origins on that tunnel: `APP_HOST` sends
+all application traffic directly to Next.js, `API_HOST` sends API and provider
+webhook traffic directly to the backend, and `DOCSYNC_HOST` sends collaboration
+WebSockets directly to document sync. Protect only `APP_HOST` with interactive
+Cloudflare Access; `API_HOST` and `DOCSYNC_HOST` use Brian/provider
+authentication and must remain reachable by non-browser clients. Public sharing
+under `APP_HOST/share/*` and `APP_HOST/api/public/*` uses specific Access Bypass
+applications. The deployment kit's `shared/cloudflare.md` is the complete DNS,
+ingress, Access, and verification contract.
+
 Ubuntu 25.04 is supported as a transition path only because it is end-of-life;
 use a maintained Debian release or Ubuntu LTS for a durable production host.
 
