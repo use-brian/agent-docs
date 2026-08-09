@@ -51,6 +51,17 @@ the tunnel and DNS first, then clone the kit on the server, fill the target's
 Ubuntu 25.04 is supported as a transition path only because it is end-of-life;
 use a maintained Debian release or Ubuntu LTS for a durable production host.
 
+### Optional My Browser relay
+
+The Debian and Ubuntu targets can run the single-instance browser relay needed
+for **My Browser**, which lets an assistant use a paired Chrome extension on the
+operator's workstation. Set `BROWSER_RELAY_HOST` in `client.conf`, add
+`BROWSER_RELAY_SECRET` to the encrypted SOPS secrets, and create a DNS route for
+that hostname through the deployment's Cloudflare Tunnel. The relay listens on
+loopback `:8092`; only the tunnel publishes it. Do not put the relay hostname
+behind interactive Cloudflare Access because the extension connects directly
+to `/ext`. If `BROWSER_RELAY_HOST` is omitted, the relay remains disabled.
+
 ## Storage
 
 The store defaults to an embedded PGLite database under `~/.usebrian/`: nothing
