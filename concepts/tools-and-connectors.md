@@ -41,7 +41,7 @@ The Shopify connector exposes two purpose-built audience tools for campaign prep
 
 Both tools always add `email_subscription_status = 'SUBSCRIBED'`. Product-buyer audiences use Shopify's lifetime `products_purchased` predicate without a date constraint, so the tools do not need `read_all_orders`. They accept only the typed audience definition and never accept raw ShopifyQL.
 
-The Shopify mini app's Campaign tab uses these tools to prepare a restock campaign package. It also creates the time-limited discount code and drafts editable copy. Shopify Messaging remains the final testing, scheduling, compliance, and send surface; the connector does not send a Shopify Messaging campaign through the Admin API.
+The Shopify mini app's Campaign tab uses these tools to prepare a restock campaign package. It also creates the time-limited discount code, drafts editable copy, and lets the merchant choose a featured product photo while reviewing a live message preview. `shopifyListProducts` and `shopifyGetProduct` return `featured_image_url` and `featured_image_alt` when Shopify has a featured image. The prepared package carries the image URL for the merchant to add manually in Shopify Messaging. Shopify Messaging remains the final testing, scheduling, compliance, and send surface; the connector does not attach the image or send a Shopify Messaging campaign through the Admin API.
 
 ### Built-in primitives and their off switch
 
