@@ -23,12 +23,25 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 | Google Drive, Docs, Sheets & Slides | Connect with Brian for Google-enforced per-file access, or bring an Internal Google Workspace OAuth app for `drive.readonly`. BYO connections choose Entire Drive or up to 50 recursive root folders per Brian workspace. Folder scoping is enforced by Brian, not by Google OAuth. Brian builds a metadata-only search catalog in the background and deep-enriches a file version only after a useful content read. |
 | GitHub | |
 | Fathom | |
-| Shopify | Full store operator surface: 16 reads (products, orders, customers, inventory, collections, draft orders, discount/promo codes, abandoned checkouts, payouts, disputes, content, sales reports), 10 writes behind approval (create/update products, draft orders + invoices, tags, customer notes, inventory, fulfillment with tracking, promo codes, pages/posts), and 3 destructive verbs behind approval cards (cancel order, refund, complete draft). Optional ambient ingest: store events flow into the brain with a daily digest and can trigger workflows (OAuth-connected stores only). Connect per store via OAuth or a pasted Admin API access token (`shpat_...`); each store is its own connector instance. Order history is limited to roughly the last 60 days until Shopify grants the app extended access; customer PII fields may be null until the protected-data review clears. |
+| Shopify | Full store operator surface: 22 reads, 17 writes behind approval, and 4 destructive verbs behind approval cards. This includes typed, privacy-preserving customer-segment preview and creation for campaigns. Optional ambient ingest: store events flow into the brain with a daily digest and can trigger workflows (OAuth-connected stores only). Connect per store via OAuth or a pasted Admin API access token (`shpat_...`); each store is its own connector instance. Order history is limited to roughly the last 60 days until Shopify grants the app extended access; customer PII fields may be null until the protected-data review clears. |
 | Company Email (IMAP) | The user's own corporate mailbox over IMAP/SMTP - any provider, with Alibaba enterprise mail auto-detected from the address. Connect with the work email plus an app password (client security password); the credential is verified live before it is stored. Tools: `imapSearchMessages` (INBOX + Sent, threaded results), `imapGetMessage`, `imapSendMessage` (approval-gated, sends as the user), `imapSaveAttachment` (save one email attachment into the workspace as a file, then deliver it with `sendFile`; on request only, 45 MB max, which is exactly the messaging-channel document limit), `syncMailboxNow` (pull new mail into the searchable archive on demand), and `searchEmailArchive` (semantic recall over the opt-in full-mailbox archive). Multiple mailboxes can be connected; every tool takes an optional `account` (the mailbox email) and defaults to the primary (first-connected) one. Each archive is private to its owner. Distinct from Gmail (the user's Google account) and Assistant Email (the assistant's own address) - no lane substitutes for another. |
 | Workspace Files | Built-in primitive; no external account. |
 | Office | Built-in primitive; create, read, and revise Brian-native Documents and Presentations in the workspace. |
 | Computer Use | Built-in primitive; a controlled browser (the user's own Chrome via the Use Brian extension for account-sensitive sites, or a cloud browser for public ones). Sends require approval. |
 | Google Cloud Storage | Bring-your-own storage via a service-account key; exposes no assistant tools. |
+
+### Shopify campaign audiences
+
+The Shopify connector exposes two purpose-built audience tools for campaign preparation:
+
+| Tool | Class | Behavior |
+|---|---|---|
+| `shopifyPreviewCustomerSegment` | Read | Accepts `all_subscribers` or `product_buyers` plus up to 500 product IDs. Returns the generated Shopify segment query and aggregate `total_count`, never customer records or email addresses. |
+| `shopifyCreateCustomerSegment` | Write | Creates or reuses an exact matching saved segment and returns its ID, name, canonical query, reuse status, and Shopify Admin URL. Requires the connector action grant and approval according to the assistant's tool policy. |
+
+Both tools always add `email_subscription_status = 'SUBSCRIBED'`. Product-buyer audiences use Shopify's lifetime `products_purchased` predicate without a date constraint, so the tools do not need `read_all_orders`. They accept only the typed audience definition and never accept raw ShopifyQL.
+
+The Shopify mini app's Campaign tab uses these tools to prepare a restock campaign package. It also creates the time-limited discount code, drafts editable copy, and lets the merchant choose a featured product photo while reviewing a live message preview. `shopifyListProducts` and `shopifyGetProduct` return `featured_image_url` and `featured_image_alt` when Shopify has a featured image. The prepared package carries the image URL for the merchant to add manually in Shopify Messaging. Shopify Messaging remains the final testing, scheduling, compliance, and send surface; the connector does not attach the image or send a Shopify Messaging campaign through the Admin API.
 
 ### Built-in primitives and their off switch
 
