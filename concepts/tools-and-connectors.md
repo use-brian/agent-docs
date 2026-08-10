@@ -18,7 +18,7 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 | Connector | Notes |
 |---|---|
 | Google Calendar | Also exposes Google Tasks tools. |
-| Gmail | Send and read email. |
+| Gmail | **Send only** - one tool, `gmailSendMessage` (approval-gated, sends as the connected Google account or a verified "Send mail as" alias, and can attach workspace files as real MIME parts). It **cannot read, list, or search mail**: the OAuth grant requests `gmail.send` and nothing else, so no per-assistant tool grant unlocks reading. To read a mailbox use Company Email (IMAP) or Assistant Email below. |
 | Notion | |
 | Google Docs, Sheets & Slides | |
 | GitHub | |
