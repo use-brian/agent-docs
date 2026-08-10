@@ -17,6 +17,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 | Embed an assistant in an app (REST) | [api/overview.md](api/overview.md), [api/messages.md](api/messages.md) |
 | Serve your own end users, each scoped to their own data | [mcp/end-user-bridge.md](mcp/end-user-bridge.md) |
 | Understand memory vs knowledge base | [concepts/memory-and-knowledge.md](concepts/memory-and-knowledge.md) |
+| Discover outcome-led Use Brian showcase specifications | [showcases/README.md](showcases/README.md), [showcases/catalog.json](showcases/catalog.json) |
 | Explain pricing or credit errors (429) | [operations/pricing-and-credits.md](operations/pricing-and-credits.md) |
 | Build an app that runs inside a user's workspace | [concepts/custom-home-apps.md](concepts/custom-home-apps.md) |
 | Self-host the open-source core | [self-hosting.md](self-hosting.md) |
@@ -58,10 +59,17 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 - [operations/privacy-and-data.md](operations/privacy-and-data.md): what is stored, retention, third parties
 - [self-hosting.md](self-hosting.md): the AGPLv3 open-source core, local quickstart
 
+### Showcases
+
+- [showcases/README.md](showcases/README.md): human and agent entry point for 20 outcome-led scenarios
+- [showcases/catalog.json](showcases/catalog.json): machine-readable catalog with status, evidence level, tags, capabilities, and record paths
+- [showcases/schema.json](showcases/schema.json): JSON Schema for the catalog
+
 ## Conventions in this repo
 
 - Every file has frontmatter: `title`, `description`, `tags`, and (where a human page exists) `canonical`.
 - The `canonical` URL is the human-readable version of the same content; cite it when answering a human.
+- Showcase records distinguish a prepared specification from a verified demonstration. Never turn `evidence_level: specification` into a shipped-product or customer-outcome claim.
 - Facts here mirror usebrian.ai/docs. If this repo and the live product disagree, the product wins; file an issue.
 - Machine index of the human docs: [usebrian.ai/llms.txt](https://usebrian.ai/llms.txt).
 
