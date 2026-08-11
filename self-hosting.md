@@ -92,6 +92,7 @@ not moved to a Brian-hosted service.
 | Gemini via Google AI Studio | Supported | `GEMINI_API_KEY` |
 | Gemini via Vertex AI | Supported | GCP workload or service-account credentials |
 | Qwen / DeepSeek via DashScope | Supported | `DASHSCOPE_API_KEY` |
+| Custom OpenAI-compatible endpoint | Supported | Optional bearer key entered in Settings |
 | Claude Haiku outage fallback | Optional fallback | `ANTHROPIC_API_KEY` |
 | ChatGPT / Codex subscription | Beta, OSS only | Sign in with ChatGPT; no API key |
 
@@ -100,6 +101,14 @@ authenticated account. It does not treat a ChatGPT token as an OpenAI API key.
 Brian remains the agent harness and owns memory, context, tool policy,
 confirmations, execution, and persistence. ChatGPT/Codex quota and plan limits
 remain OpenAI's authority.
+
+For a custom OpenAI-compatible backend, add the endpoint connection once in
+**Settings -> Models**. Then create verified model profiles on that connection
+and optionally assign separate profiles to Brian's Standard, Pro, Max, and
+Research tiers. Each profile has its own wire model id and explicit context and
+output limits. An unassigned tier keeps the deployment's normal model routing;
+Brian never silently falls back from an explicitly selected or tier-assigned
+custom profile after an upstream failure.
 
 ## Local Support Mode
 
