@@ -1,13 +1,13 @@
 ---
 title: Send messages
-description: POST /api/v1/assistants/{assistantId}/messages runs one assistant turn; request/response fields, error table, code samples, and the followup tag contract.
+description: POST /api/v1/assistants/{assistantId}/messages runs one assistant turn with JSON or live SSE delivery; request fields, event contract, errors, and examples.
 tags: [api, messages]
 canonical: https://usebrian.ai/docs/api/messages
 ---
 
 > Human-readable version: https://usebrian.ai/docs/api/messages
 
-`POST /api/v1/assistants/{assistantId}/messages` runs one assistant turn and returns the reply.
+`POST /api/v1/assistants/{assistantId}/messages` runs one assistant turn. JSON is the default response; an explicit `Accept: text/event-stream` streams the live reply.
 
 ## Endpoint
 
@@ -15,6 +15,7 @@ canonical: https://usebrian.ai/docs/api/messages
 POST https://api.usebrian.ai/api/v1/assistants/{assistantId}/messages
 Authorization: Bearer sk_live_...
 Content-Type: application/json
+Accept: text/event-stream  # optional
 ```
 
 ## Request
@@ -84,6 +85,31 @@ Two rules matter when you integrate:
 | `messageId` | string | Stable id of the stored assistant turn. |
 | `reply` | string | The assistant's reply text. |
 | `model` | string | Which model produced the reply (e.g. `gemini-3-flash-standard` for Standard, `gemini-3-flash-preview` for Pro, `gemini-3.5-flash` for Max, `gemini-3-pro-research` for Research). Since the model registry, deployments may also serve metered pay-per-use models (e.g. `qwen3.7-plus`, `deepseek-v4-pro` via DashScope); those ids appear here verbatim, and the billing tier is recorded separately from the model id, so do not infer pricing from the model string. |
+
+## Streaming with SSE
+
+Send `Accept: text/event-stream` to the same POST endpoint. The request body, authentication, identity, session, retry/edit, tool, persistence, and billing semantics are unchanged. The response emits real query-loop deltas as the model produces them:
+
+```text
+event: session
+data: {"sessionId":"thread-789"}
+
+event: text_delta
+data: {"text":"Proposals reach "}
+
+event: text_delta
+data: {"text":"a vote after..."}
+
+event: turn_complete
+data: {"sessionId":"thread-789","messageId":"9f1e7c2a-...","model":"gemini-3-flash-preview"}
+
+event: done
+data: {}
+```
+
+Authentication, validation, assistant, and budget failures found before streaming starts retain their normal non-2xx JSON response. If the provider fails after the SSE response opens, the stream emits `error` with the ordinary error slug and optional detail, then `done`, then closes. A client must not treat EOF without both `turn_complete` and `done` as a successful turn.
+
+Use `fetch()` and a `ReadableStream` reader for POST-returning SSE. Browser `EventSource` cannot send this POST body or the bearer header. Preserve the response's `Cache-Control: no-cache, no-transform`; proxies that transform or compress SSE may buffer it into one final chunk.
 
 ## Which model answers
 
@@ -185,7 +211,7 @@ Not implemented in v1. Retrying a failed request may produce a duplicate assista
 
 ## Latency
 
-Synchronous endpoint. Typical response time is 3-15 s; allow at least 30 s of timeout in your backend. Streaming (SSE) is on the roadmap if your UX needs sub-second token latency.
+JSON mode returns when the turn completes, typically in 3-15 seconds. SSE mode delivers `text_delta` events as soon as the model produces visible text. Allow at least 30 seconds for either connection and longer for tool-using turns.
 
 ## Follow-up suggestions: the `<followup>` tag
 

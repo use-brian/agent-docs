@@ -1,13 +1,13 @@
 ---
 title: Public API Overview
-description: Server-to-server JSON API for embedding a Use Brian assistant; API-key auth, consumer-supplied identity, one assistant turn per request.
+description: Server-to-server API for embedding a Use Brian assistant with JSON or live SSE delivery, API-key auth, and consumer-supplied identity.
 tags: [api, overview]
 canonical: https://usebrian.ai/docs/api
 ---
 
 > Human-readable version: https://usebrian.ai/docs/api
 
-The public API lets a third-party service embed a Use Brian assistant. Authentication is by API key, calls are server-to-server JSON, and identity is consumer-supplied. One request runs one assistant turn: the model thinks, optionally searches the knowledge base, and returns a reply.
+The public API lets a third-party service embed a Use Brian assistant. Authentication is by API key, requests are server-to-server JSON, and identity is consumer-supplied. One request runs one assistant turn. The response is completed JSON by default or real SSE when requested.
 
 ## Endpoint
 
@@ -17,7 +17,7 @@ Authorization: Bearer sk_live_...
 Content-Type: application/json
 ```
 
-One endpoint, one auth header, JSON in / JSON out. Each request runs exactly one assistant turn.
+One endpoint, one auth header, and one JSON request. Each request runs exactly one assistant turn. Choose completed JSON or live SSE with the `Accept` header.
 
 ## When to use
 
@@ -28,14 +28,14 @@ One endpoint, one auth header, JSON in / JSON out. Each request runs exactly one
 ## When not to use
 
 - Your users are signing up for Use Brian anyway. The web chat is more featureful.
-- You need streaming output today. v1 is synchronous JSON only; SSE is on the roadmap.
+- You need a browser-direct API key. Calls must still pass through your backend so the secret is not exposed.
 - You need the assistant to call write-tools (Calendar, Gmail). The API path deliberately does not expose write-tools, because there is no human in the loop to approve confirmations.
 
 ## Request flow
 
 1. Your backend receives a user message.
 2. `POST /api/v1/assistants/{id}/messages` with the message plus your stable user id.
-3. Use Brian resolves the user, runs the assistant turn, and returns the reply (3-15 s typical).
+3. Use Brian resolves the user, runs the assistant turn, and returns completed JSON or streams SSE deltas.
 4. Your frontend shows the reply.
 
 ## Setup
@@ -48,7 +48,7 @@ One endpoint, one auth header, JSON in / JSON out. Each request runs exactly one
 
 - Base URL is `https://api.usebrian.ai`. The `{assistantId}` path segment is a UUID the owner copies from the assistant detail, API tab.
 - Read-only tool surface: every tool that requires a confirmation (send, create, delete) is stripped, because there is no human in the loop to approve it. Read-only tools stay available (web search, web fetch, knowledge-base search, read-only connector reads). Do not expect the assistant to send email, create calendar events, or take other confirmable actions here.
-- No streaming in v1: the call blocks until the turn finishes, then returns one JSON body. Budget for it (see the latency note on the messages page).
+- JSON is the default. Send `Accept: text/event-stream` for live `text_delta`, `turn_complete`, and `done` events. Consume the POST response with `fetch()` rather than browser `EventSource`.
 - One turn per request. Multi-turn context is carried by reusing `sessionId`, not by the endpoint holding state.
 
 ## Related
