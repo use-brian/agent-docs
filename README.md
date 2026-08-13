@@ -32,7 +32,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 - [concepts/tasks.md](concepts/tasks.md): durable commitments; statuses and tools
 - [concepts/crm.md](concepts/crm.md): contacts, companies, deals; stages and tools
 - [concepts/workspaces.md](concepts/workspaces.md): membership, roles, sharing, askAssistant
-- [concepts/channels.md](concepts/channels.md): web, Telegram, Slack; BYO bots and group behavior
+- [concepts/channels.md](concepts/channels.md): web, messaging bots, and assistant-owned email inboxes
 - [concepts/tools-and-connectors.md](concepts/tools-and-connectors.md): connectors, per-tool allow/ask/block policy, scheduled tasks
 - [concepts/workflows.md](concepts/workflows.md): step types, triggers, approvals, permission grants, cost
 - [concepts/doc-pages.md](concepts/doc-pages.md): the page surface chat assembles over workspace data
