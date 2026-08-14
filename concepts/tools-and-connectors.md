@@ -17,7 +17,7 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 
 | Connector | Notes |
 |---|---|
-| Google Calendar | Also exposes Google Tasks tools. |
+| Google Calendar | Also exposes Google Tasks tools. Use `googleCalendarListEventColors` before marking an event, then pass an exact returned `eventLabelId` (preferred named label) or legacy `colorId` to create/update. The connector can apply or clear existing labels and colours, but it does not create or edit calendar label definitions. |
 | Gmail | **Send only** - one tool, `gmailSendMessage` (approval-gated, sends as the connected Google account or a verified "Send mail as" alias, and can attach workspace files as real MIME parts). It **cannot read, list, or search mail**: the OAuth grant requests `gmail.send` and nothing else, so no per-assistant tool grant unlocks reading. To read a mailbox use Company Email (IMAP) or Assistant Email below. |
 | Notion | |
 | Google Drive, Docs, Sheets & Slides | Connect with Brian for Google-enforced per-file access, or bring an Internal Google Workspace OAuth app for `drive.readonly`. BYO connections choose Entire Drive or up to 50 recursive root folders per Brian workspace. Folder scoping is enforced by Brian, not by Google OAuth. Brian builds a metadata-only search catalog in the background and deep-enriches a file version only after a useful content read. |
