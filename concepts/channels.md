@@ -62,11 +62,19 @@ Studio -> Channels -> Email creates an address owned by the assistant, such as
 email Channel, not an assistant-level connector. The inbox detail is its single
 configuration home:
 
-- **Handled by** is required. That assistant answers allowed senders and can
-  search the inbox. Reassigning the handler moves mailbox access immediately.
-- Allowed senders controls which outside contacts may start a conversation.
-  Workspace members are always allowed; other mail is filed into the brain and
-  waits for review instead of receiving an automatic reply.
+- **Handled by default** is required. That assistant answers mail without a
+  sender-specific rule and can search the inbox. Reassigning the handler moves
+  mailbox access immediately.
+- **Who can receive replies?** can be Approved senders only or Anyone.
+  Approved-only accepts workspace members and the listed exact addresses;
+  other mail is filed into the brain and waits for review. Anyone accepts any
+  human sender, subject to machine-sender, block, rate, and credit safeguards.
+- Sender routing can map an exact email address to another workspace assistant.
+  A new thread uses that rule and stays pinned to the selected assistant for
+  the rest of the conversation. Everyone else uses the default handler.
+- Every non-member is an isolated external guest, including approved contacts.
+  They can converse in their current thread but cannot access workspace memory,
+  files, skills, connected tools, mailbox search, or unrelated outbound email.
 - Brain ingestion can be enabled or disabled for the inbox.
 - Send email and create/schedule draft permissions are granted separately for
   the handling assistant. Both actions still require confirmation.
@@ -83,7 +91,7 @@ In Telegram and Slack groups, the bot only responds when @mentioned. Anonymous g
 ## Notes for agents
 
 - Channels are workspace-owned. Connecting a bot does not attach it to an assistant until you route the channel to one.
-- Assistant email is also workspace-owned, but its **Handled by** assistant is required at creation. Manage the handler, sender access, ingestion, and outbound actions on the email Channel itself.
+- Assistant email is also workspace-owned, but its **Handled by default** assistant is required at creation. Manage default handling, access mode, sender routing, ingestion, and outbound actions on the email Channel itself.
 - Messaging platforms are bring-your-own credentials: the user owns the bot, Use Brian is the brain. Web is the only zero-setup channel.
 - In any group chat, expect a reply only when the bot is @mentioned, and expect no personal memory to be written for anonymous group members.
 - The official @use_brian_bot covers only the default assistant; routing a channel to any other assistant, or custom branding, requires a BYO bot.
