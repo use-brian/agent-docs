@@ -32,6 +32,13 @@ Accept: text/event-stream  # optional
     "roles": ["admin"]
   },
   "endUserContext": "plan: pro\nopen orders: #4471",
+  "clientMemory": {
+    "key": "consultation-profile-v1",
+    "summary": "Alice leads operations at Acme",
+    "detail": "Visitor-supplied consultation context.",
+    "tags": ["consultation", "prospect"]
+  },
+  "allowPublicResearch": true,
   "sessionId": "thread-789",
   "message": "How does the proposal vote work?"
 }
@@ -45,11 +52,29 @@ Accept: text/event-stream  # optional
 | `identified` | boolean | No | Opt into Tier 1 (memory on) without an email. See [Identity & memory](identity.md). |
 | `claims` | object | No | Turn-scoped identity your backend attests for this request: `email`, `orgId`, `roles`. See [End-user claims](#end-user-claims). |
 | `endUserContext` | string | No | Free-form account context for this turn (plan tier, open orders, ticket state). Max 4,000 characters. Passed to the model verbatim, labelled as attested by you and unverified. Never stored. |
+| `clientMemory` | object | No | Identified external turns only. Deterministically upserts one internal, exact-self memory using `{ key, summary, detail?, tags? }`. See [Deterministic client memory](#deterministic-client-memory). |
+| `allowPublicResearch` | boolean | No | `public_research` keys only. Set true only after explicit user consent; false or absent structurally withholds `webSearch` and `urlReader` for the turn. |
 | `actorEmail` | string | No | Internal-audience keys only: the workspace member this turn acts as. Omitted, the turn acts as the key's creator. Returns `400` on an external-audience key and `403 actor_not_member` if the email does not resolve to a workspace member. See [Key audience](identity.md#key-audience). |
 | `sessionId` | string | No | Conversation key. Reuse to continue a thread; pass a new value to start fresh. Defaults to `externalUserId` (one thread per user). |
 | `message` | string | Yes | The user's text. Max 16,000 characters. |
 
-The body is strict: an unknown top-level field, or an unknown field inside `claims`, returns `400 invalid_input`.
+The body is strict: an unknown top-level field, or an unknown field inside `claims` or `clientMemory`, returns `400 invalid_input`.
+
+## Deterministic client memory
+
+Use `clientMemory` when your backend has authenticated the end user and has
+permission to retain a bounded profile, handoff, or consultation snapshot.
+The request must be an identified external turn, and the keyed assistant must
+have at least internal clearance. The server always stores the memory at
+`internal`, exact to the resolved user and assistant, with exactly the
+machine-minted `client:<externalUserId>` compartment. The caller cannot supply
+sensitivity or compartments. Reusing `key` supersedes the prior value.
+
+The self-memory exception applies only to memory. It does not expose the
+visitor's team-only contact, workspace memory, knowledge, files, CRM,
+connectors, confidential data, another assistant's memory, or another
+visitor's rows. Public-web provenance never lowers retained client context to
+public.
 
 ## End-user claims
 
@@ -134,7 +159,7 @@ Error responses use the shape `{ "error": "<slug>", "detail": "..." }`.
 
 | HTTP | `error` | When it happens |
 |---|---|---|
-| 400 | `invalid_input` | Body missing required field, malformed email, or message too long. |
+| 400 | `invalid_input` | Body missing required field, malformed email, invalid `clientMemory`, contradictory audience fields, or message too long. |
 | 401 | `invalid_api_key` | Authorization header missing, malformed, hash mismatch, or the key does not match the assistant in the URL. |
 | 403 | `key_revoked` | Key exists but has been revoked. |
 | 403 | `actor_not_member` | Internal-audience keys only: the attributed actor (or the key's creator) is not a member of the assistant's workspace. |
