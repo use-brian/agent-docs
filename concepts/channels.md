@@ -56,10 +56,17 @@ Hard limits inherent to iLink -- set expectations before recommending this chann
 
 - The bot is its own WeChat contact. It does not act as the user's personal account; contacts must message the bot.
 - Direct messages only. Group chats are not delivered to bots.
-- No chat history: the bot only sees messages sent to it after connecting.
+- No chat history over the wire: the bot only receives messages sent to it
+  after connecting. A self-hosted deployment can still import prior
+  conversations from an authorized export into the
+  [chat message archive](../self-hosting.md#chat-message-archive), which is
+  what `searchChatHistory` reads — but iLink itself delivers nothing
+  retroactively.
 - One connection per bot account. Connecting the same bot elsewhere steals the session.
 
 Inbound text, images, and files work; voice notes are understood when WeChat attaches its own speech-to-text. Outbound is text (a markdown subset renders in the WeChat bot chat).
+
+The assistant cannot see or hear an attachment during the turn it arrives in — WeChat delivers images inline, but voice and video reach the model only as a note that something was sent. With the [chat message archive](../self-hosting.md#chat-message-archive) enabled, their contents are transcribed and described shortly afterwards and become searchable, so a follow-up question can be answered even though the original turn could not be.
 
 ## Assistant email
 
@@ -89,6 +96,7 @@ Do not tell users to configure AgentMail from Studio -> Assistants -> Tools.
 The assistant page is not an authority for inbox routing or permissions.
 Gmail and assistant email are separate identities: Gmail sends as the connected
 human, while assistant email sends from the assistant's own address.
+
 
 ## Group chats
 

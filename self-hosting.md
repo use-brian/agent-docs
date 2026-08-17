@@ -27,6 +27,9 @@ AGPLv3, OSI- and FSF-approved open source with a network-copyleft clause: run a 
   it before transcription runs, so without it uploaded recordings and voice
   notes sent through Slack, Discord, or Telegram fail at runtime rather than at
   install time. The `deploy-brian` kit installs it for you.
+- The optional [chat message archive](#chat-message-archive) has its own
+  prerequisites — a second PostgreSQL database and two extensions. It is off
+  unless you configure it.
 
 ## Quickstart
 
@@ -77,6 +80,78 @@ to `/ext`. If `BROWSER_RELAY_HOST` is omitted, the relay remains disabled.
 The store defaults to an embedded PGLite database under `~/.usebrian/`: nothing
 to install or run besides Node. Point `DATABASE_URL` at a local Postgres if you
 prefer a container.
+
+## Chat message archive
+
+Self-hosted only, and off by default. `brian-message-store` keeps a searchable
+archive of the messages your channels carry, including the attachment bytes, so
+an assistant can answer from what was actually said months ago rather than only
+from the current conversation. It adds the `searchChatHistory` and
+`listChatChannels` tools.
+
+The hosted service does not run one. Chat history is a self-hosting capability,
+and the deploy scripts deliberately leave it unset.
+
+### What it needs
+
+- **Its own PostgreSQL database.** Not the brain's. The archive applies its own
+  migrations, and pointing it at `DATABASE_URL` would put its schema inside the
+  platform's database — which is the coupling this service exists to avoid.
+- **A dedicated role that is not a superuser.** Startup refuses a superuser
+  connection and exits. This is not a precaution to work around: superusers
+  bypass row-level security *even when it is FORCED*, so every owner's messages
+  would be readable by every query.
+- **`pgvector` and `pg_trgm`, installed by a DBA.** The service role
+  deliberately lacks `CREATE EXTENSION`. The migration checks for both up front
+  and stops with an actionable message rather than failing halfway through on a
+  bare permission error.
+- **A disk volume for attachments.** Bytes are content-addressed on disk, never
+  in the database. This grows with media, not with message count, so size it
+  against the photos and voice notes your channels carry.
+- **`ffmpeg`, `ffprobe`, and a SILK decoder** on the service's `PATH` if you
+  want voice notes and video to be searchable by their content. WeChat voice
+  notes are SILK-encoded and need `silk_v3_decoder`; video needs `ffmpeg` for
+  frame sampling and audio extraction. A missing binary fails at exec time, per
+  attachment, which reads as "extraction is stuck" rather than "a dependency is
+  absent" — check these before debugging anything else.
+
+```bash
+BRIAN_MESSAGE_STORE_DATABASE_URL=postgres://archive_user:...@localhost:5432/archive
+BRIAN_MESSAGE_STORE_HMAC_SECRET=...      # shared with the platform
+BRIAN_MESSAGE_STORE_MEDIA_ROOT=/var/lib/brian/media
+```
+
+Unset `BRIAN_MESSAGE_STORE_DATABASE_URL` and the launcher skips the archive
+rather than starting it against the wrong database.
+
+### What it gives you
+
+Messages are searchable the instant they commit, by keyword. Semantic search
+follows within about a tick as embeddings are computed in the background —
+appending a message never waits on a model call, because the raw message is the
+one copy that cannot be fetched again from the provider.
+
+Attachments are searchable by what they *contain*: text in an image, speech in
+a voice note, what is visible in sampled video frames. Search results say
+plainly when part of the corpus is not yet embedded rather than reporting a
+partial answer as a complete one.
+
+Channel history can be imported from an authorized export, so the archive can
+cover conversations that predate the connection. Import runs offline against
+files you already have; it never attaches to a live account or bypasses a
+provider's encryption.
+
+### Limits worth knowing
+
+Attachment bytes are served over an authenticated loopback endpoint. The
+service binds to loopback by default, and splitting it from the platform across
+hosts requires an explicit opt-in — the port serves raw personal messages and
+files.
+
+Deleting a workspace on the platform does not cascade into the archive through
+a foreign key, because the two databases cannot reference each other. Deletion
+is an explicit signal plus a reconciliation sweep. Budget for the archive
+outliving anything you delete until that sweep runs.
 
 ## Local-first guarantee
 
