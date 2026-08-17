@@ -31,6 +31,18 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 | Computer Use | Built-in primitive; a controlled browser (the user's own Chrome via the Use Brian extension for account-sensitive sites, or a cloud browser for public ones). Sends require approval. |
 | Google Cloud Storage | Bring-your-own storage via a service-account key; exposes no assistant tools. |
 
+### Google Maps location intelligence
+
+Google Maps is a deployment-keyed first-party read capability, not a user connector and not an OAuth account. When the deployment sets `GOOGLE_MAPS_SERVER_API_KEY`, Brian can discover three canonical tools on demand:
+
+| Tool | Use |
+|---|---|
+| `googleMapsSearchPlaces` | Find current places, businesses, addresses, and points of interest. |
+| `googleMapsLookupWeather` | Read current, hourly, or daily weather for an address, Place ID, or coordinates. |
+| `googleMapsComputeRoute` | Compute current walking or driving distance and duration between two locations. |
+
+Maps results are current evidence, not durable workspace facts. Cite the Google source links returned with the result. Refresh hours, ratings, weather, and route duration rather than saving them to memory. A Google Place ID may be persisted alongside user-owned aliases or notes. The Maps tools never perform a Calendar, CRM, memory, or workflow write; use the separately governed write tool after the user chooses an option.
+
 ### Shopify campaign audiences
 
 The Shopify connector exposes two purpose-built audience tools for campaign preparation:
@@ -94,7 +106,7 @@ Scheduled tasks are timed jobs. They fire on a cron and run an assistant turn. W
 - A connector write can also be refused with an "action not granted" error when the assistant lacks the write grant for that action. This is not a transient failure; retrying will not help. Tell the user which action needs granting in Studio -> Assistants -> Tools.
 - Connector tools only exist after the service is connected in Studio -> Connectors and enabled for the assistant in its Tools tab. Never reference a connector tool that has not been connected.
 - On a selected-folder Google Drive connection, `googleDriveListFiles` searches Brian's active metadata catalog by file name and folder path. It does not run an account-wide Google full-text query, and reads outside the active folder snapshot are refused. Do not retry an out-of-scope file id; ask the workspace owner to update the Drive scope.
-- Workspace Files, Office, and Computer Use are built-in primitives and need no external account; every other tool-exposing connector requires OAuth or a personal access token.
+- Workspace Files, Office, and Computer Use are built-in primitives and need no external account. Google Maps is a separate deployment-keyed read capability. Other tool-exposing connectors require OAuth or a personal access token.
 - `createOfficeArtifact` requires an admitted template plus the outcome and audience. Its optional `additionalContext` accepts facts, constraints, examples, or reference URLs for that one artifact. Company website setup belongs to guided template creation and is not repeated in the artifact tool.
 - `getOfficeArtifact` returns one bounded permission-filtered page of stable section, object, slide, theme, master, layout, worksheet, cell, and image target IDs. When it returns `nextTargetOffset`, read the next page with that offset before revising a later target. `reviseOfficeArtifact` requires at least one returned ID (or a target selected by the user in the editor) and applies only supported canonical commands inside that boundary. It can edit Document structure/formatting/page setup, Presentation objects/layout/ordering, and Spreadsheet values/formulas/formatting/sheet structure. If the artifact advances before the job runs, the validated command batch becomes a proposal instead of overwriting intervening edits. It does not control editor chrome or authorize export, sharing, sending, or publishing.
 - If a file, office, or browser tool you expect is missing, the primitive may be switched off for that assistant. That is a configuration state, not a product limitation: the owner re-enables it on the assistant's Tools tab.
