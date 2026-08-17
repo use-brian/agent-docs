@@ -133,15 +133,17 @@ one copy that cannot be fetched again from the provider.
 
 Attachments are searchable by what they *contain*: text in an image, speech in
 a voice note, what is visible in sampled video frames, and the text of a
-document — Word, Excel, PowerPoint, OpenDocument, RTF, PDF, EPUB, CSV and plain
-text are all read. A file is identified by its contents rather than by the type
-its provider claims, because some channels label every attachment generically;
-sending a spreadsheet still finds a spreadsheet.
+document — Word, Excel and PowerPoint (`.docx`/`.xlsx`/`.pptx`), OpenDocument,
+RTF, PDF, EPUB, CSV and plain text are all read. A file is identified by its
+contents rather than by the type its provider claims, because some channels
+label every attachment generically; sending a spreadsheet still finds a
+spreadsheet.
 
-A format nothing can read — Apple Pages, Numbers and Keynote among them — is
-still archived, and still findable by its filename. Only its text is missing,
-and the assistant will say so and suggest exporting to a readable format rather
-than pretending the file is empty. Search results likewise say plainly when part
+Some files cannot be read: Apple Pages, Numbers and Keynote, the pre-2007 binary
+Office formats (`.doc`/`.xls`/`.ppt`), and anything corrupt or password
+protected. These are still archived and still findable by filename — only their
+text is missing, and the assistant says so and suggests exporting to a readable
+format rather than pretending the file is empty. Search results likewise say plainly when part
 of the corpus is not yet embedded rather than reporting a partial answer as a
 complete one.
 
