@@ -112,6 +112,17 @@ Available only on `read_write` credentials.
 
 `ingestToBrain` (default `decompose: true`) is the path for raw notes and documents: it derives entities and edges. `saveMemory` is for a single fact you have already distilled. Do not route task-shaped content through `saveMemory`: use `saveTask` or `ingestToBrain`.
 
+## Errors
+
+Every HTTP-level refusal carries a `message` beside the `error` slug, so an agent can act on it without a docs lookup:
+
+| HTTP | `error` | What the `message` tells you |
+|---|---|---|
+| 401 | `invalid_brain_key` | One uniform body for every authentication failure (missing header, malformed token, unknown key, revoked key, expired or revoked access token — deliberately not distinguished): send `Authorization: Bearer sk_brain_<keyId>_<secret>` or `Bearer oat_<authorizationId>_<secret>`; an `oat_` access token expires after 10 minutes and is renewed with `grant_type=refresh_token`; API keys are issued in Studio → Programmatic access. Retrying the same credential will fail the same way. |
+| 500 | `brain_mcp_error` | Authentication already succeeded — do not go looking at your credential. Transient; retry once, then stop. |
+
+Inside a tool call, a failure is a normal MCP tool result with `isError` and a text body that states what failed on which target, why, the next step (which sibling tool discovers a valid id, or "ask the user"), and whether the same input can ever succeed. Argument validation failures arrive as compact `path: message` lines, not a JSON blob. A workspace-less credential is refused with the remedy (a workspace admin re-issues or re-scopes the key) — no argument change helps.
+
 ## Notes for agents
 
 - One credential reaches exactly one workspace. To span workspaces, obtain one credential per workspace.
