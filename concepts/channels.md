@@ -18,7 +18,7 @@ Channels are where the assistant can be reached. They are owned by the workspace
 | Slack | BYO bot | @-mention | N/A | OAuth + signing secret |
 | Discord | BYO bot | @-mention or reply | N/A | Bot token |
 | Microsoft Teams | BYO Azure Bot | @-mention | N/A | App ID + secret + tenant |
-| WhatsApp | BYO number (QR pairing) | Opt-in per group | Yes | QR scan |
+| WhatsApp | BYO number (QR pairing) or Meta Cloud API | Opt-in per group (BYON) | Yes | QR scan or Meta credentials |
 | WeChat | BYO bot (QR pairing) | Not supported (DMs only) | STT only | QR scan |
 | Assistant email | Provisioned inbox | Email threads | N/A | Managed AgentMail or BYO key |
 
@@ -41,6 +41,12 @@ If you do not want to manage your own bot, the official @use_brian_bot works for
 2. Install the app to your workspace and copy the Bot User OAuth Token (`xoxb-...`) and Signing Secret.
 3. Paste both into Studio -> Channels -> Slack. Validation runs `auth.test` against Slack; you get a clear error if either is wrong.
 4. DM the bot in Slack to verify. In channels, the bot replies only when @mentioned (configurable).
+
+## WhatsApp Cloud API
+
+Studio can connect a workspace-owned Meta WhatsApp Business Cloud API number. Provide the Meta access token, app secret, verify token, Phone Number ID, and WhatsApp Business Account ID. Studio validates the number, subscribes the app to the business account, and gives you the callback URL to register in Meta's WhatsApp webhook configuration; select the `messages` field there.
+
+Cloud API traffic is direct messages only. Configure the sender access policy before relying on the number: access fails closed until a policy is chosen. Allowlisted external senders are isolated from workspace data, and connector-tool access is available only when that allowlist policy permits it. Authorized inbound messages can also start channel-triggered workflows, whether or not the channel sends an assistant reply.
 
 ## WeChat (BYO bot, QR pairing)
 
