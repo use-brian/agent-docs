@@ -217,6 +217,7 @@ turns on by itself. Set them in `.env` or under `~/.usebrian/`.
 | Page fetches | `JINA_API_KEY` | Cleaner reads via Jina Reader (works keyless at lower limits) |
 | Read X / Twitter | `TWITTER_BEARER_TOKEN` | Read x.com permalinks through the official X API v2 |
 | X search | `XAI_API_KEY` | xAI Grok fallback plus the `xSearch` tool |
+| Google Maps | `GOOGLE_MAPS_SERVER_API_KEY` | Place search, weather, and walking/driving routes through Maps Grounding Lite; use a dedicated server-only key restricted to that API |
 | Model fallback | `FALLBACK_PROVIDER_ENABLED=true` + `ANTHROPIC_API_KEY` | Keep running if Gemini is unavailable |
 | Google connector | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Calendar, Gmail, Drive via your own OAuth app |
 | Notion connector | `NOTION_CLIENT_ID` / `NOTION_CLIENT_SECRET` | Notion via your own OAuth app |

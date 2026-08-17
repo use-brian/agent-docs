@@ -7,7 +7,7 @@ canonical: https://usebrian.ai/docs/api/authentication
 
 > Human-readable version: https://usebrian.ai/docs/api/authentication
 
-Every public-API request authenticates with a per-assistant API key. Keys are issued from the web UI, scoped to one assistant, and revocable.
+Every public-API request authenticates with a per-assistant API key. Keys are issued from the web UI, scoped to one assistant, and revocable. A key's audience, anonymous-context posture, and tool policy are immutable; rotate the key to change them.
 
 ## Key format
 
@@ -36,6 +36,22 @@ Authorization: Bearer sk_live_a1b2c3d4-...-...-...-............_eXBlOiJKV1QiLCJh
 | List | Same tab | Name, prefix, last-used timestamp, status. Plaintext never returned by GET. |
 | Revoke | Row, Revoke | Key returns 403 immediately and forever |
 | Rotate | Create a new key, deploy it, then revoke the old one | No transactional rotate: overlap is what you want during deploy |
+
+## Tool policy
+
+New external chat keys default to `public_research`, the least-privilege
+ceiling. A turn receives `webSearch` and `urlReader` only when the request
+attests `allowPublicResearch: true`; false or absent withholds both. The turn
+also receives Tier-appropriate memory tools. It does not construct MCP connectors, workspace
+knowledge, files, skills, calendars, CRM, or the assistant's broader tool
+surface. `assistant` is the explicit wider trust choice and the backfill for
+older keys. Internal-audience keys always use `assistant`.
+
+Tool policy does not raise data clearance. In particular, a
+`public_research` key with `anonymousContext: thin` may front an
+internal-clearance assistant: normal external reads remain public, while an
+authenticated client can receive only the exact memory-only self exception
+documented in [Identity & memory](identity.md).
 
 ## Key safety
 

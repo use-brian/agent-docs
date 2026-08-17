@@ -17,7 +17,7 @@ If you do not pass `identified` or `externalUserEmail`, the visitor is treated a
 
 ### Tier 1: identified
 
-Triggered when you pass `identified: true` OR `externalUserEmail`. The assistant gains the `saveMemory` and `getMemory` tools, and the per-turn retrieval layer surfaces this visitor's accumulated memories in the prompt. Memory is keyed to `(visitor, assistant)` and survives across sessions. Use this when you have a stable user identity in your system (logged-in users, wallet addresses, internal uuids).
+Triggered when you pass `identified: true` OR `externalUserEmail`. Tier 1 enables durable, self-scoped memory for a stable visitor identity. For an assistant whose clearance includes `internal`, the visitor can read and update only memory exact to `(workspace, visitor, assistant, client compartment)`; the ordinary external lane remains public for every other resource. External shadows do not run automatic background consolidation. Use Tier 1 for logged-in users, wallet addresses, or stable internal UUIDs.
 
 ## What email adds on top
 
@@ -28,8 +28,8 @@ Email is the only cross-provider identity bridge. If you pass `externalUserEmail
 | Request signals | Tier | Memory tools | OAuth auto-merge |
 |---|---|---|---|
 | Neither `identified` nor `externalUserEmail` | Tier 2 (anonymous) | No | No |
-| `identified: true` (no email) | Tier 1 | Yes | No |
-| `externalUserEmail` (with or without `identified`) | Tier 1 | Yes | Yes |
+| `identified: true` (no email) | Tier 1 | Yes, self-scoped | No |
+| `externalUserEmail` (with or without `identified`) | Tier 1 | Yes, self-scoped | Yes |
 
 ## Key audience
 
@@ -39,7 +39,7 @@ Beyond the per-request tier, every API key declares an **audience** at creation,
 
 Serve your own end-customers. The tier table above applies, plus one key-level choice for the anonymous lane: **anonymous visitor context**.
 
-- **Limited** (default): anonymous turns read only public-sensitivity knowledge - the behavior external keys always had.
+- **Limited** (default): anonymous turns read only public-sensitivity context. Newly created external keys also default to the separate `public_research` tool ceiling: only public web research plus Tier-appropriate memory tools.
 - **Full assistant context**: anonymous turns get everything the assistant itself can read - team memory, files, brand, skills - read-only, exactly like a public chat link. The workspace owner opts into this at key creation; the assistant's clearance becomes the exposure ceiling for anyone holding the key. Identified (Tier 1) turns are unaffected: per-customer conversations stay on the limited context plus that customer's own memory.
 
 ### Internal keys
@@ -48,16 +48,18 @@ Act as a real workspace member - for internal tools, scripts, and automations, n
 
 ## Knowledge base access
 
-API requests honour the assistant's clearance, the same setting that gates knowledge-base reads on every other channel. To expose only public KB to third-party consumers, point the API key at an assistant whose clearance is set to public; for an internal-only integration, use an assistant with internal clearance. The visible setting on the assistant detail page is the single source of truth, the same for Tier 1 and Tier 2 visitors. External keys created with full anonymous context read at the assistant's clearance on anonymous turns, as described under [Key audience](#key-audience).
+API requests honour the key's lane and the assistant's clearance. A limited external lane cannot read internal knowledge, files, CRM, connectors, or workspace memory even when its assistant is internal. The only exception is the Tier 1 memory-specific self branch described above. External keys created with full anonymous context read at the assistant's clearance on anonymous turns, as described under [Key audience](#key-audience).
 
 ## Client accrual: what the workspace keeps
 
 An identified (Tier 1) turn leaves two things in the workspace brain:
 
 - **A contact record.** The visitor is materialized as a CRM contact (a person entity) the workspace team can see, paired to your `externalUserId` (and `externalUserEmail` when sent). This is how what each customer taught the brain becomes visible to the owning team.
-- **Client-walled writes.** Everything the turn writes (memories, CRM rows, tasks, knowledge) is stamped into a per-client compartment derived from `externalUserId`. No client can read another client's rows, and a client cannot read even its own contact record: accrual is write-only from the client's side. Workspace members read it all normally.
+- **Client-walled writes.** Everything the turn writes is stamped into a per-client compartment derived from `externalUserId`. A Tier 1 visitor may read only its own exact memory rows, never its contact, CRM rows, tasks, knowledge, another assistant's memory, or another client's rows. Workspace members with the required clearance and compartment universe can work with the client context.
 
-Anonymous (Tier 2) turns accrue no contact, but anything they do cause to be written still lands behind the same per-client wall.
+Anonymous (Tier 2) turns accrue no contact and receive no self-memory branch. Anything they do cause to be written still lands behind the same per-client wall.
+
+Your backend can persist a bounded profile or consultation snapshot without relying on model discretion by sending `clientMemory: { key, summary, detail?, tags? }` on an identified external turn. Use Brian forces the row to `internal` and the exact visitor compartment; the request cannot choose either. Reusing `key` updates the same logical memory. See [Send messages](messages.md#deterministic-client-memory).
 
 Two rules follow:
 
@@ -75,8 +77,8 @@ Setting `identified: true` on every request is a budget footgun: random per-page
 - Default is Tier 2. You must opt a visitor into memory explicitly; there is no implicit promotion from traffic alone.
 - Pick your `externalUserId` to be durable per human (logged-in user id, wallet address, internal uuid). Memory is keyed to `(visitor, assistant)`, so a per-pageview id fragments memory and costs the owner.
 - Pass `externalUserEmail` only when you actually have the person's email and want cross-service continuity. It is the one signal that survives a future OAuth signup and merges identities.
-- Knowledge-base visibility is a property of the assistant you key against, not the request. Choose a public-clearance assistant for external embeds and an internal-clearance assistant for private integrations.
-- Identified turns accrue a team-visible contact and compartment every write per client. Do not expect to read the accrued contact back on the end user's behalf: accrual is write-only from the client side, by design.
+- An internal-clearance assistant can serve a least-privilege external lane when its key uses `public_research` with `anonymousContext: thin`; that lane gets no internal KB, files, CRM, connectors, or workspace memory.
+- Identified turns accrue a team-visible contact and compartment every write per client. The end user may recall only exact own-memory rows, never the accrued contact.
 
 ## Related
 
