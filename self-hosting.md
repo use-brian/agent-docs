@@ -132,9 +132,18 @@ appending a message never waits on a model call, because the raw message is the
 one copy that cannot be fetched again from the provider.
 
 Attachments are searchable by what they *contain*: text in an image, speech in
-a voice note, what is visible in sampled video frames. Search results say
-plainly when part of the corpus is not yet embedded rather than reporting a
-partial answer as a complete one.
+a voice note, what is visible in sampled video frames, and the text of a
+document — Word, Excel, PowerPoint, OpenDocument, RTF, PDF, EPUB, CSV and plain
+text are all read. A file is identified by its contents rather than by the type
+its provider claims, because some channels label every attachment generically;
+sending a spreadsheet still finds a spreadsheet.
+
+A format nothing can read — Apple Pages, Numbers and Keynote among them — is
+still archived, and still findable by its filename. Only its text is missing,
+and the assistant will say so and suggest exporting to a readable format rather
+than pretending the file is empty. Search results likewise say plainly when part
+of the corpus is not yet embedded rather than reporting a partial answer as a
+complete one.
 
 Channel history can be imported from an authorized export, so the archive can
 cover conversations that predate the connection. Import runs offline against
