@@ -51,6 +51,12 @@ It provides one-shot targets for Debian 12/13 and Ubuntu 25.04/25.10. Configure
 the tunnel and DNS first, then clone the kit on the server, fill the target's
 `client.conf` and owner-only `private/` inputs, and run its `install.sh`.
 
+The WeChat channel (Tencent iLink bot, QR pairing in Studio) is opt-in on
+self-host: set `WECHAT_CONNECTOR=true` in `client.conf` and add
+`WECHAT_CONNECTOR_SECRET` to the secrets file. The kit then runs the connector
+as a loopback service; it needs no public hostname. Without the toggle, the
+WeChat tab in Studio reports pairing as unavailable.
+
 Production uses three explicit public origins on that tunnel: `APP_HOST` sends
 all application traffic directly to Next.js, `API_HOST` sends API and provider
 webhook traffic directly to the backend, and `DOCSYNC_HOST` sends collaboration
