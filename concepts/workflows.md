@@ -86,6 +86,13 @@ A workflow definition can carry `permission_grants: { action_kind, grant: 'allow
 - An ask-policy `tool_call` inside a run pauses the whole run on the approvals queue until resolved; a block-policy tool errors at dispatch. Prefer allow-policy tools (or a `permission_grants` entry) for unattended runs.
 - Approvals resolve cross-channel and against one `pending_approvals` table, so a run started from web can be approved from Telegram.
 - Revoking a permission grant applies to future runs only; it does not retroactively pause an in-flight run.
+- Hosted operator assistants may discover `listOperatorWorkflowEventBindings`
+  plus configure/disable/test binding tools. They appear only when the bound
+  assistant holds the operator-only `operator_automation` grant; mutation also
+  requires the normal `configure` gate and stages human approval. Build the
+  webhook workflow first, then bind by workflow id. Never ask for or copy its
+  webhook slug or HMAC secret: the server provisions and resolves those
+  credentials internally.
 
 ## Related
 
