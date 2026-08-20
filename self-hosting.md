@@ -92,8 +92,12 @@ prefer a container.
 Self-hosted only, and off by default. `brian-message-store` keeps a searchable
 archive of the messages your channels carry, including the attachment bytes, so
 an assistant can answer from what was actually said months ago rather than only
-from the current conversation. It adds the `searchChatHistory` and
-`listChatChannels` tools.
+from the current conversation. It adds the `searchChatHistory`,
+`listChatChannels`, and `saveChatMedia` tools: search hits carry the sender's
+id, display/push name, and (when the owner's WhatsApp address book has synced)
+their saved contact name, plus a `media_sha256` for any attachment.
+`saveChatMedia` pulls those stored bytes into the workspace file layer, where
+`sendFile` can deliver them on a document-capable channel.
 
 The hosted service does not run one. Chat history is a self-hosting capability,
 and the deploy scripts deliberately leave it unset.
