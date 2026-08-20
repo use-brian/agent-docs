@@ -30,6 +30,9 @@ AGPLv3, OSI- and FSF-approved open source with a network-copyleft clause: run a 
 - The optional [chat message archive](#chat-message-archive) has its own
   prerequisites — a second PostgreSQL database and two extensions. It is off
   unless you configure it.
+- The optional WeChat desktop personal-account bridge requires a container
+  runtime, the chat message archive, and a host that can run the WeChat Linux
+  client with `SYS_PTRACE` and `seccomp=unconfined`.
 
 ## Quickstart
 
@@ -56,6 +59,20 @@ self-host: set `WECHAT_CONNECTOR=true` in `client.conf` and add
 `WECHAT_CONNECTOR_SECRET` to the secrets file. The kit then runs the connector
 as a loopback service; it needs no public hostname. Without the toggle, the
 WeChat tab in Studio reports pairing as unavailable.
+
+The separate WeChat desktop bridge mirrors a personal account instead of
+creating an iLink bot. Clone `brian-message-store` beside `use-brian`; its
+`agent-wechat/` directory is the pinned standalone runtime source used by the
+`wechat-desktop-bridge` Compose stack. Enable the chat message archive, create
+a Custom channel in Studio, and give the bridge the one-time channel token.
+The runtime port stays on the Compose network; the bridge needs only outbound
+HTTPS to the Use Brian API. Pairing is completed by scanning the QR shown in
+the Custom channel detail panel.
+
+The imported `agent-wechat` revision currently has no upstream `LICENSE` or
+`COPYING` file. That is not a redistribution grant: keep modified images on the
+operator's own deployment until upstream licensing is resolved. See
+`agent-wechat/UPSTREAM.md` in `brian-message-store` for the exact revision.
 
 Production uses three explicit public origins on that tunnel: `APP_HOST` sends
 all application traffic directly to Next.js, `API_HOST` sends API and provider

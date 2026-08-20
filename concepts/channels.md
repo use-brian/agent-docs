@@ -20,6 +20,7 @@ Channels are where the assistant can be reached. They are owned by the workspace
 | Microsoft Teams | BYO Azure Bot | @-mention | N/A | App ID + secret + tenant |
 | WhatsApp | BYO number (QR pairing) or Meta Cloud API | Opt-in per group (BYON) | Yes | QR scan or Meta credentials |
 | WeChat | BYO bot (QR pairing) | Not supported (DMs only) | STT only | QR scan |
+| WeChat desktop (self-host) | Personal-account bridge | @-mention in groups | Yes | Custom-channel token + QR scan |
 | Assistant email | Provisioned inbox | Email threads | N/A | Managed AgentMail or BYO key |
 
 ## Web
@@ -68,6 +69,31 @@ Inbound text, images, and files work; voice notes are understood when WeChat att
 
 The assistant cannot see or hear an attachment during the turn it arrives in — WeChat delivers images inline, but voice and video reach the model only as a note that something was sent. With the [chat message archive](../self-hosting.md#chat-message-archive) enabled, their contents are transcribed and described shortly afterwards and become searchable, so a follow-up question can be answered even though the original turn could not be.
 
+## WeChat desktop bridge (self-hosted personal account)
+
+This is separate from the sanctioned iLink bot above. A self-hosted operator
+runs the WeChat Linux client and the open WeChat desktop bridge in containers,
+then creates a Custom channel in Studio and pairs the user's personal account
+by QR. The bridge mirrors direct messages and groups; by default, groups answer
+only when the personal account is @-mentioned.
+
+Inbound images and readable documents are available to the same turn. Short
+voice notes are synchronously transcribed before the assistant answers. Video,
+long media, and other files are archived first, described or transcribed in the
+background, and become available through chat-history search. Attachment
+recovery is durable: a not-yet-downloaded WeChat asset holds that chat's cursor
+and retries until the provider returns bytes or an explicit terminal reason.
+Once bytes are available, the bridge streams them into the message store and
+persists that stored reference before posting the inbound message, so a bridge
+restart cannot turn a recovered file back into a missing attachment. Outbound
+documents work when the bridge reports its file-send capability.
+
+Tool confirmation uses `yes`, `no`, `always`, and `never`, including prompts
+from scheduled or workflow runs. For a long-running turn, the bridge may send
+one fixed `Working...` status followed by the final answer. It does not expose
+the internal SSE stream, model deltas, tool inputs, hidden reasoning, or
+chain-of-thought.
+
 ## Assistant email
 
 Studio -> Channels -> Email creates an address owned by the assistant, such as
@@ -100,7 +126,7 @@ human, while assistant email sends from the assistant's own address.
 
 ## Group chats
 
-In Telegram and Slack groups, the bot only responds when @mentioned. Anonymous group members get session-only context. Chat works, but no personal memories are written about them. WeChat has no group support at all (DMs only).
+In Telegram and Slack groups, the bot only responds when @mentioned. Anonymous group members get session-only context. Chat works, but no personal memories are written about them. The WeChat iLink bot has no group support; the self-hosted WeChat desktop personal-account bridge supports groups and defaults to @-mention gating.
 
 ## Notes for agents
 
