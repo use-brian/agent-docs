@@ -75,6 +75,8 @@ Three modes per tool:
 
 Read tools default to Allow; write and destructive tools default to Ask. You can change the defaults per assistant.
 
+For Gmail, Company Email (IMAP), and Assistant Email send/draft tools, this configured policy is authoritative once the separate action grant also admits the tool. Ask freezes the exact recipients, subject, body, and attachments for confirmation; Allow executes without that pause; Block refuses. A sensitivity label or audit classifier may annotate the approval/audit record but does not add a hidden veto after admission. The action can still fail for an objective reason such as an unreadable attachment, size limit, invalid sender, expired credential, or provider rejection.
+
 ### Tool policy matrix
 
 Defaults by tool class, all overridable per assistant from the Tools tab:
@@ -105,6 +107,7 @@ Scheduled tasks are timed jobs. They fire on a cron and run an assistant turn. W
 
 - A tool that is `Block` never runs, and write/destructive tools default to Ask, so a write action may pause for user confirmation before it executes. Do not assume a write succeeded until the confirmation resolves.
 - A connector write can also be refused with an "action not granted" error when the assistant lacks the write grant for that action. This is not a transient failure; retrying will not help. Tell the user which action needs granting in Studio -> Assistants -> Tools.
+- For an admitted email send/draft, do not invent a second confidentiality-policy refusal. Follow the configured grant and Allow/Ask/Block decision; report only objective execution failures returned by the tool.
 - Connector tools only exist after the service is connected in Studio -> Connectors and enabled for the assistant in its Tools tab. Never reference a connector tool that has not been connected.
 - On a selected-folder Google Drive connection, `googleDriveListFiles` searches Brian's active metadata catalog by file name and folder path. It does not run an account-wide Google full-text query, and reads outside the active folder snapshot are refused. Do not retry an out-of-scope file id; ask the workspace owner to update the Drive scope.
 - Workspace Files, Office, and Computer Use are built-in primitives and need no external account. Google Maps is a separate deployment-keyed read capability. Other tool-exposing connectors require OAuth or a personal access token.
