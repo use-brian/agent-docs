@@ -11,7 +11,13 @@ CRM in Use Brian is people, companies, and deals: the durable graph of who the t
 
 ## Entity-backed, not a separate store
 
-CRM is not a separate database. Every contact (person), company (organization), and deal (opportunity) is a node in the same brain graph as your memories and tasks. Frozen v1 shape: no custom fields, no priority, no description. `tags` are a string array; `external_ref` is a free-form JSONB passthrough for synced rows.
+CRM is not a separate database. Every contact (person), company (organization), and deal (opportunity) is a node in the same brain graph as your memories and tasks. The universal fields remain fixed, while each workspace may add bounded typed fields: text, number, date, boolean, single-select, multi-select, or a reference to another visible CRM entity. `tags` remain lightweight labels on contacts and companies; they are not a substitute for structured deal or relationship fields. `external_ref` is a free-form JSONB passthrough for synced rows.
+
+## Workspace fields
+
+Call `listCrmFields` before reading or changing a workspace-specific dimension. It returns the live field keys, entity kind, type, select options, required state, and allowed target kinds for reference fields. Pass `record_id` to include the current custom values of one visible contact, company, or deal. Do not invent a field key or infer one from its label.
+
+Use `setCrmCustomFields` to patch one visible contact, company, or deal by entity id. Values are validated against the current catalog. A reference value must be the id of a visible entity whose kind is allowed by the definition. When a call rejects an unknown key, refresh the catalog rather than retrying a guessed vocabulary.
 
 ## Deal stages
 
@@ -36,7 +42,7 @@ Adding a stage requires a migration plus a tool-description update plus an analy
 
 Every assistant with the `crm` capability gets the full CRUD surface plus `advanceDealStage` as the canonical stage-transition verb (separate from `updateDeal`, which will not accept a stage). There are no delete tools in v1: soft-delete is `advanceDealStage(id, 'lost')` and field-nulling.
 
-`saveContact` / `getContact` / `listContacts` / `updateContact` · `saveCompany` / `getCompany` / `listCompanies` / `updateCompany` · `saveDeal` / `getDeal` / `listDeals` / `updateDeal` / `advanceDealStage`
+`saveContact` / `getContact` / `listContacts` / `updateContact` · `saveCompany` / `getCompany` / `listCompanies` / `updateCompany` · `saveDeal` / `getDeal` / `listDeals` / `updateDeal` / `advanceDealStage` · `listCrmFields` / `setCrmCustomFields`
 
 ## Accrued client contacts
 

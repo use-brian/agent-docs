@@ -86,6 +86,7 @@ Available on both `read` and `read_write` credentials.
 | `getMemory` / `getTask` / `getContact` / `getCompany` / `getDeal` | record `id` | Full record |
 | `listTasks` | assignee / status / due range / tag / parent filters | Compact task projection |
 | `listContacts` / `listCompanies` / `listDeals` | CRM filters | Compact CRM projection |
+| `listCrmFields` | optional CRM entity kind and record id | Live custom-field keys, types, options, and reference targets; a visible record id also returns its current values |
 | `fileRead` | file `id` or path | Text content + metadata of one workspace file. **Text only** — on an image, PDF, or other binary it returns an error rather than a lossy decode, so do not use it to inspect a stored image. Nothing returns raw bytes: bytes leave the brain by being delivered (attached to an email, sent to a chat channel), never by entering a tool result |
 | `fileSearch` | title / summary / tag / name query | Compact file projection |
 | `getBrand` | optional `slug` (omit = the workspace default brand); optional `include_draft` | The workspace's brand record: naming and legal usage, strategy, messaging and voice, color tokens, typography, logo variants bound by workspace file id, applications, claims, rights, governance, sources. Returns the APPROVED record by default; `include_draft: true` returns unapproved changes, which are a proposal. Present only on deployments with the brand surface wired |
@@ -104,6 +105,7 @@ Available only on `read_write` credentials.
 | `saveContact` / `updateContact` | Upsert / patch a contact |
 | `saveCompany` / `updateCompany` | Upsert / patch a company |
 | `saveDeal` / `updateDeal` / `advanceDealStage` | Create / patch a deal; move a deal through `lead` -> `qualified` -> `proposal` -> `negotiation` -> `won` / `lost` |
+| `setCrmCustomFields` | Patch typed workspace fields on one visible CRM entity. Call `listCrmFields` first and use its stable keys |
 | `fileWrite` / `fileAppend` / `fileSetMeta` / `fileDelete` | Create or overwrite a file with authored text, append text, patch metadata, delete a file |
 | `saveFileToBrain` | Promote a previously uploaded cached file (a `fileId`) into the brain, preserving the original bytes |
 | `saveFileBytes` | Persist a file from raw bytes supplied as base64, preserving the exact bytes. Size-capped; larger files use the HTTP upload route |
