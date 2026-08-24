@@ -53,6 +53,8 @@ If you do not want to manage your own bot, the official @use_brian_bot works for
 
 The channel sends proactive and scheduled messages, interactive confirmation cards, reactions, images, and files. Outbound files are capped at 20 MiB. Short audio is transcribed before the reply; long or costly media processing still requires the web app's estimate-and-confirm flow. Feishu China and international Lark use different API domains, so choose the platform that issued the credentials.
 
+Passive group ingestion is separate from chat replies. A tenant administrator must grant `im:message.group_msg`, subscribe and publish the app for all group messages, and approve the change. Then a workspace owner or admin enables individual observed groups in Studio -> Events. Nothing is ingested from a group until that per-group opt-in is present. Feishu uses the same routing, scheduled digest, Episode, and brain-extraction pipeline as Slack; addressed messages stay on the interactive chat path so they are not distilled twice.
+
 To attach channel conversations to personal memory, open Settings -> Account -> Connected accounts -> Feishu / Lark, generate a six-character code, and send it to Brian in Feishu/Lark. Without this link, each sender remains an isolated channel identity with session history but no personal memory consolidation.
 
 ## WhatsApp Cloud API
