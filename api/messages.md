@@ -74,6 +74,11 @@ have at least internal clearance. The server always stores the memory at
 `internal`, exact to the resolved user and assistant, with exactly the
 machine-minted `client:<externalUserId>` compartment. The caller cannot supply
 sensitivity or compartments. Reusing `key` supersedes the prior value.
+Superseding edits keep that exact compartment, and client-bound model updates
+retain the server-owned client-memory tags. During a request that already
+carries `clientMemory`, the deterministic server upsert is the only memory
+mutation; later identified turns may continue learning through the same
+client-isolated memory tools.
 
 The self-memory exception applies only to memory. It does not expose the
 visitor's team-only contact, workspace memory, knowledge, files, CRM,
