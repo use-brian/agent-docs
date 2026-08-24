@@ -44,7 +44,7 @@ Four ways to fire a workflow. Every trigger feeds the same runtime.
 | Manual | `POST /api/workflows/:id/run` from your service, or click "Run now" in the web builder. |
 | Schedule | Cron expression in your workspace timezone. Runs on the scheduled-jobs poll worker. |
 | Webhook | HMAC-signed `POST /api/workflow-webhooks/:slug` from any external service. Per-row slug + secret. |
-| Event | A subscribed connector instance (GitHub, Fathom, Calendar) or channel integration (Slack, Telegram). Fires whenever its match filter passes. |
+| Event | A subscribed connector instance (GitHub, Fathom, Calendar) or channel integration (Slack, Telegram, Feishu/Lark). Fires whenever its match filter passes. |
 
 ## Cost
 

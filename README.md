@@ -6,7 +6,7 @@ If you are an AI agent (Claude, ChatGPT, a coding agent, or a custom integration
 
 ## What Use Brian is
 
-A shared brain for solo founders and small teams. An assistant that remembers the company (people, deals, decisions, documents), acts through connected tools, runs scheduled work and multi-step workflows, and is reachable from web chat, Telegram, Slack, a public REST API, and MCP. The longer a team uses it, the more it knows.
+A shared brain for solo founders and small teams. An assistant that remembers the company (people, deals, decisions, documents), acts through connected tools, runs scheduled work and multi-step workflows, and is reachable from web chat, Telegram, Slack, Feishu/Lark, a public REST API, and MCP. The longer a team uses it, the more it knows.
 
 ## Fastest paths
 

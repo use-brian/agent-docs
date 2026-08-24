@@ -17,6 +17,7 @@ Channels are where the assistant can be reached. They are owned by the workspace
 | Telegram | BYO bot (or @use_brian_bot) | @-mention | Yes | Bot token |
 | Slack | BYO bot | @-mention | N/A | OAuth + signing secret |
 | Discord | BYO bot | @-mention or reply | N/A | Bot token |
+| Feishu / Lark | BYO enterprise app | @-mention | Short audio | App ID + App Secret |
 | Microsoft Teams | BYO Azure Bot | @-mention | N/A | App ID + secret + tenant |
 | WhatsApp | BYO number (QR pairing) or Meta Cloud API | Opt-in per group (BYON) | Yes | QR scan or Meta credentials |
 | WeChat | BYO bot (QR pairing) | Not supported (DMs only) | STT only | QR scan |
@@ -42,6 +43,17 @@ If you do not want to manage your own bot, the official @use_brian_bot works for
 2. Install the app to your workspace and copy the Bot User OAuth Token (`xoxb-...`) and Signing Secret.
 3. Paste both into Studio -> Channels -> Slack. Validation runs `auth.test` against Slack; you get a clear error if either is wrong.
 4. DM the bot in Slack to verify. In channels, the bot replies only when @mentioned (configurable).
+
+## Feishu / Lark (BYO enterprise app)
+
+1. In the Feishu or Lark developer console, create a tenant-owned enterprise app and enable its bot.
+2. Configure long-connection delivery for message, card-action, and reaction events, then publish or approve the app for the tenant.
+3. Open Studio -> Channels -> Feishu / Lark, choose the China or international platform, and paste the App ID and App Secret.
+4. DM the bot to verify. In groups, the bot replies only when @mentioned by default; mention gating, threaded replies, processing reactions, and sender access policy are configurable.
+
+The channel sends proactive and scheduled messages, interactive confirmation cards, reactions, images, and files. Outbound files are capped at 20 MiB. Short audio is transcribed before the reply; long or costly media processing still requires the web app's estimate-and-confirm flow. Feishu China and international Lark use different API domains, so choose the platform that issued the credentials.
+
+To attach channel conversations to personal memory, open Settings -> Account -> Connected accounts -> Feishu / Lark, generate a six-character code, and send it to Brian in Feishu/Lark. Without this link, each sender remains an isolated channel identity with session history but no personal memory consolidation.
 
 ## WhatsApp Cloud API
 
@@ -126,7 +138,7 @@ human, while assistant email sends from the assistant's own address.
 
 ## Group chats
 
-In Telegram and Slack groups, the bot only responds when @mentioned. Anonymous group members get session-only context. Chat works, but no personal memories are written about them. The WeChat iLink bot has no group support; the self-hosted WeChat desktop personal-account bridge supports groups and defaults to @-mention gating.
+In Telegram, Slack, and Feishu/Lark groups, the bot only responds when @mentioned by default. Anonymous group members get session-only context. Chat works, but no personal memories are written about them. The WeChat iLink bot has no group support; the self-hosted WeChat desktop personal-account bridge supports groups and defaults to @-mention gating.
 
 ## Notes for agents
 
