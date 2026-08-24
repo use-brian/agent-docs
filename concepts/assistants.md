@@ -36,6 +36,7 @@ Every assistant belongs to a workspace: your company brain from day 1, even when
 - Memory is scoped per (user, assistant). Switching a user to a different assistant changes what is remembered about them; do not assume facts carry across assistants.
 - Channels are workspace-owned, not assistant-owned. Route messaging Channels to an assistant from Studio -> Channels. For assistant email, create the inbox there, set **Handled by default**, and manage access and exact sender routes there; do not configure AgentMail from the assistant's Tools page.
 - Built-in tools (memory, web search, knowledge) exist without any connector; connector tools (Calendar, Gmail, Notion) require the service to be connected first.
+- Web search normally uses the platform's provider fallback order. A workflow that measures one search index may select that exact provider and submit a bounded query panel; exact-provider searches fail closed instead of silently switching indexes.
 - "Scheduled tasks" on an assistant are cron jobs, distinct from workspace Tasks (the brain primitive). Do not conflate the two.
 
 ## Related
