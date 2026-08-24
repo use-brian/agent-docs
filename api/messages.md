@@ -38,6 +38,10 @@ Accept: text/event-stream  # optional
     "detail": "Visitor-supplied consultation context.",
     "tags": ["consultation", "prospect"]
   },
+  "clientLead": {
+    "key": "consultation-handoff-v1",
+    "name": "Alice - consultation"
+  },
   "allowPublicResearch": true,
   "sessionId": "thread-789",
   "message": "How does the proposal vote work?"
@@ -53,12 +57,13 @@ Accept: text/event-stream  # optional
 | `claims` | object | No | Turn-scoped identity your backend attests for this request: `email`, `orgId`, `roles`. See [End-user claims](#end-user-claims). |
 | `endUserContext` | string | No | Free-form account context for this turn (plan tier, open orders, ticket state). Max 4,000 characters. Passed to the model verbatim, labelled as attested by you and unverified. Never stored. |
 | `clientMemory` | object | No | Identified external turns only. Deterministically upserts one internal, exact-self memory using `{ key, summary, detail?, tags? }`. See [Deterministic client memory](#deterministic-client-memory). |
+| `clientLead` | object | No | Identified external turns carrying a verified email only. Atomically ensures the exact client contact and one idempotent linked CRM lead using `{ key, name? }`. See [Deterministic client lead](#deterministic-client-lead). |
 | `allowPublicResearch` | boolean | No | `public_research` keys only. Set true only after explicit user consent; false or absent structurally withholds `webSearch` and `urlReader` for the turn. |
 | `actorEmail` | string | No | Internal-audience keys only: the workspace member this turn acts as. Omitted, the turn acts as the key's creator. Returns `400` on an external-audience key and `403 actor_not_member` if the email does not resolve to a workspace member. See [Key audience](identity.md#key-audience). |
 | `sessionId` | string | No | Conversation key. Reuse to continue a thread; pass a new value to start fresh. Defaults to `externalUserId` (one thread per user). |
 | `message` | string | Yes | The user's text. Max 16,000 characters. |
 
-The body is strict: an unknown top-level field, or an unknown field inside `claims` or `clientMemory`, returns `400 invalid_input`.
+The body is strict: an unknown top-level field, or an unknown field inside `claims`, `clientMemory`, or `clientLead`, returns `400 invalid_input`.
 
 ## Deterministic client memory
 
@@ -75,6 +80,16 @@ visitor's team-only contact, workspace memory, knowledge, files, CRM,
 connectors, confidential data, another assistant's memory, or another
 visitor's rows. Public-web provenance never lowers retained client context to
 public.
+
+## Deterministic client lead
+
+Use `clientLead` when a verified application handoff should create a CRM lead
+without relying on the model to call a CRM tool. The request must be an
+identified external turn carrying `claims.email` or `externalUserEmail`. Use Brian atomically ensures the team-visible client
+contact and one linked deal at the `lead` stage, stamped with the exact client
+compartment. The request cannot choose the workspace, contact id, stage,
+sensitivity, or compartments. Reusing `key` for the same API-key client
+identity reuses the deal instead of creating a duplicate.
 
 ## End-user claims
 
@@ -159,7 +174,7 @@ Error responses use the shape `{ "error": "<slug>", "detail": "..." }`.
 
 | HTTP | `error` | When it happens |
 |---|---|---|
-| 400 | `invalid_input` | Body missing required field, malformed email, invalid `clientMemory`, contradictory audience fields, or message too long. |
+| 400 | `invalid_input` | Body missing required field, malformed email, invalid `clientMemory` or `clientLead`, contradictory audience fields, or message too long. |
 | 401 | `invalid_api_key` | Authorization header missing, malformed, hash mismatch, or the key does not match the assistant in the URL. |
 | 403 | `key_revoked` | Key exists but has been revoked. |
 | 403 | `actor_not_member` | Internal-audience keys only: the attributed actor (or the key's creator) is not a member of the assistant's workspace. |

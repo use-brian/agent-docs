@@ -46,6 +46,23 @@ Four ways to fire a workflow. Every trigger feeds the same runtime.
 | Webhook | HMAC-signed `POST /api/workflow-webhooks/:slug` from any external service. Per-row slug + secret. |
 | Event | A subscribed connector instance (GitHub, Fathom, Calendar) or channel integration (Slack, Telegram, Feishu/Lark). Fires whenever its match filter passes. |
 
+## Client-isolated email drafts
+
+An IMAP event workflow may bind its whole definition to one external API-key
+client principal. `resolve.kind: verified_email_pairing` lowercases the inbound
+sender and resolves it only through server-owned identity pairings previously
+written by identified turns on the exact configured active external chat key
+and assistant. Zero matches or more than one distinct external identity fails
+before any assistant registry, context, model call, CRM read, or draft. It
+never searches workspace contacts, deals, memories, or mail archives, so other
+CRM entries cannot enter the resolution surface.
+
+The principal-bound assistant lane is read-only and draft-only. A workflow may
+place one structurally reviewed `imapSendMessage` reply after the draft, but it
+must target the triggering sender and message, freeze its envelope, and require
+explicit human approval. Sender routing is not authentication, and this lane
+never auto-sends.
+
 ## Cost
 
 A workflow run is billed as the sum of its `assistant_call` steps at whatever tier each step uses. `tool_call`, `wait`, and `branch` steps cost zero credits. Before you run a workflow, the builder shows the exact message count ("Running 'Competitor Analysis': 3 Pro messages per run"); branches are shown as a range.
