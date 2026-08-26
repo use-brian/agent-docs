@@ -66,6 +66,22 @@ Reads are clearance-filtered to the credential's ceiling: a credential never ret
 
 The doc-page tools follow the same rule inside teamspaces: a page that lives in a teamspace resolves by the credential's clearance against the teamspace's sensitivity (and the page's own clearance), never by any human account's teamspace membership. A page you expect that does not resolve usually means the clearance ceiling, not a missing page.
 
+### Team and Project binding
+
+An `sk_brain_*` key may be issued with one Team and/or one Project binding in
+Studio: Programmatic Access. The binding is immutable for that key and is
+intersected with the workspace primary assistant's grants on every request.
+General rows remain available; other Team/Project rows do not. Project
+participation is not an ACL.
+
+There is no MCP argument or request header that selects or widens this context.
+To switch or widen scope, a workspace admin must issue a new key. If the bound
+Team or Project is archived or no longer available, the request fails closed
+rather than falling back to company-wide access. Stable Team/Project ids may be
+shown in management UI; raw compartment keys are never part of the MCP
+contract. OAuth-issued Brain credentials are currently workspace-wide subject
+to their normal clearance ceiling.
+
 ## Connect Claude Code
 
 One command. Replace the key with your own:
@@ -131,6 +147,7 @@ Inside a tool call, a failure is a normal MCP tool result with `isError` and a t
 - **There is no tool that approves a brand, and there will not be one.** `saveBrandDraft` writes a draft; a human with an owner or admin role approves it in the app. If you are delivering a brand system into a client's workspace, push the draft, upload the master assets with `saveFileBytes`, bind them by file id, and then tell the client to approve. Do not report the brand as changed before they do.
 - Call `tools/list` after `initialize` and select from what is returned. If a write tool is absent, the credential is `read`-scoped; if file tools are absent, the deployment has no file storage; if the page tools are absent, the deployment has no doc surface.
 - An empty read result may be a clearance filter, not an empty brain: the credential only sees rows at or below its tier.
+- An empty read may also be the key's Team/Project envelope. Never infer that a hidden Project is absent or ask the caller for a raw compartment key.
 - Every write is audited exactly like a chat write. Assume no action is invisible to the workspace owner.
 - Prefer `searchBrain` over the deprecated `searchKnowledge`.
 

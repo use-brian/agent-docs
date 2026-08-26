@@ -65,6 +65,21 @@ Accept: text/event-stream  # optional
 
 The body is strict: an unknown top-level field, or an unknown field inside `claims`, `clientMemory`, or `clientLead`, returns `400 invalid_input`.
 
+### Team and Project context
+
+This request does not accept Team or Project selectors. The first call for a
+new `sessionId` inherits the assistant's server-configured default context; the
+binding locks when the first message is stored. Reusing that `sessionId`
+continues the same context. To switch context, start a new session through an
+authorized Use Brian surface; sending an unknown `contextGroupId`,
+`contextProjectId`, or raw compartment field here returns `400 invalid_input`.
+
+Team is an audience boundary and Project is a body-of-work filter, not an ACL.
+The server intersects the attributed actor, assistant, and session scope before
+the model runs. An owner/admin actor does not bypass a narrower assistant or
+session. If a bound Team or Project is archived or no longer available, the
+turn fails closed and never falls back to company-wide context.
+
 ## Deterministic client memory
 
 Use `clientMemory` when your backend has authenticated the end user and has

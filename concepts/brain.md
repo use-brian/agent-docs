@@ -23,6 +23,20 @@ Five operational primitives, three cognitive ones. The operational primitives ar
 | Edges | Typed graph relationships between entities (`works_at`, `engagement_of`, `mentioned_in`). Bi-temporal: a closed relationship keeps its history. |
 | Episodes | The append-only observation log. Every memory, entity, and edge points back to the episode that observed it. Episodes are immutable; consolidation reads, never writes. |
 
+## Team and Project scope
+
+Every readable brain row composes the existing workspace, visibility, and
+sensitivity checks with two independent axes: Team requirements are lateral
+audience boundaries; Project requirements identify a body of work and are not
+an ACL. General rows carry neither requirement. A scoped turn can still use
+General rows plus the exact Team/Project rows its effective grant satisfies.
+
+The same predicate applies to search, direct id reads, graph walks, counts,
+provenance, and rollups. An excluded id behaves like a missing id. Derived
+writes retain the union of active scope and every source row actually read,
+including through extraction, consolidation, synthesis, chunking, and
+supersession.
+
 ## How signals become structure
 
 Pipeline B is the unified extraction surface. Given any episode, it runs a single LLM call that emits entities, edges, tasks, memories, and ephemeral items, with every observation evaluated against the precedence ladder (Task -> Entity/Edge -> CRM -> Memory -> Ephemeral). Memory is the last resort; emissions carry `why_not_entity` / `why_not_task` justifications so the model confronts the alternative.
@@ -62,6 +76,7 @@ Memory is one primitive in the brain: the layer that holds inferred behavioral f
 - Episodes are immutable and append-only; there is no path to edit or delete an observation, only to supersede or retract the rows derived from it.
 - Extraction always prefers the strongest shape: a stated commitment becomes a Task, a named person an Entity/CRM row, and only leftover behavioral facts become Memory. Expect a "remember X" to land as the most structured primitive that fits, not always as a memory.
 - Every derived row is traceable: use `provenance` to walk one level back to the episode, and `getRowHistory` for the supersession chain.
+- Empty search results may be scope filtering rather than an empty workspace. Do not ask for or expose raw compartment keys; operators work with stable Team and Project ids.
 - Ingestion routing is per-connector-instance and first-match-wins; a connector set to `drop` or `scheduled` will not produce realtime brain rows.
 
 ## Related

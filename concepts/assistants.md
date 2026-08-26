@@ -23,6 +23,21 @@ An assistant's core is its name, persona, and system prompt. Every capability be
 | Scheduled tasks | Cron-like jobs the assistant runs on its own session ("every weekday at 9am, summarize my unread email"). |
 | Knowledge base | Shared facts the assistant can search. Workspace-scoped, sensitivity-tiered, optionally synced from a GitHub repo. |
 
+## Team and Project context
+
+An assistant may be assigned to a finite set of Teams and Projects and may
+carry one default of each for new tasks. A Team is an audience boundary; a
+Project is a body-of-work context and never grants access by itself. On every
+turn Use Brian intersects the member, assistant, and immutable session/key
+scope before prompt and tool assembly. A narrower assistant or session still
+narrows an owner/admin turn.
+
+Team supersets are flat grants, not nesting. A Management Team can read all;
+another Team can explicitly read Sales, Product, and Strategy. Grants are not
+transitive, and a future Team is invisible to a finite superset until granted.
+The assistant never receives raw compartment keys and cannot widen the running
+scope with a tool input.
+
 ## Why have multiple assistants
 
 Memory is scoped per-assistant, so a single assistant ends up confused if you mix client-facing and internal contexts. The clean pattern is one assistant for internal ops, one for sales, and one per public-facing project (for example a community Q&A bot).
@@ -34,6 +49,8 @@ Every assistant belongs to a workspace: your company brain from day 1, even when
 ## Notes for agents
 
 - Memory is scoped per (user, assistant). Switching a user to a different assistant changes what is remembered about them; do not assume facts carry across assistants.
+- Treat Team and Project as independent axes: Team answers who may discover a row; Project answers which work context it belongs to. Project membership is not permission.
+- A context chosen for a task is immutable after its first message. Switching Team or Project means starting a new task, not relabelling the existing transcript.
 - Channels are workspace-owned, not assistant-owned. Route messaging Channels to an assistant from Studio -> Channels. For assistant email, create the inbox there, set **Handled by default**, and manage access and exact sender routes there; do not configure AgentMail from the assistant's Tools page.
 - Built-in tools (memory, web search, knowledge) exist without any connector; connector tools (Calendar, Gmail, Notion) require the service to be connected first.
 - Web search normally uses the platform's provider fallback order. A workflow that measures one search index may select that exact provider and submit a bounded query panel; exact-provider searches fail closed instead of silently switching indexes.
