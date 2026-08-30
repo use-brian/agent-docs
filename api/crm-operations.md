@@ -140,6 +140,39 @@ closed and return bounded valid choices. Do not guess labels from prose.
 effective evidence ids. Treat only `allowed` as permission. This API does not
 send campaigns or override provider restrictions.
 
+## CRM workflow event source
+
+Committed CRM operations can start workflows through the id-less `crm` event
+source. Event type uses `match.inChannels`; stable definition, purpose, plan,
+event, pipeline, or stage keys use `match.tags`:
+
+```json
+{
+  "kind": "event",
+  "event": {
+    "sources": [
+      {
+        "source": { "type": "crm" },
+        "match": {
+          "inChannels": ["crm.submission.received"],
+          "tags": ["website_contact"]
+        }
+      }
+    ]
+  }
+}
+```
+
+The closed event types are `crm.submission.received`,
+`crm.submission.updated`, `crm.consent.changed`,
+`crm.suppression.changed`, `crm.entitlement.changed`,
+`crm.participation.changed`, and `crm.deal.stage_changed`. Enumerate the
+workspace filter catalog before selecting a stable key; never guess one from a
+display label. Events carry stable record pointers and classifications, not
+personal field values. A workflow step that needs detail reads it with its own
+authorized CRM tool. Assistant/system-authored operations require
+`match.fromBots: true`.
+
 ## Credential lifecycle
 
 Workspace owners/admins create, list, rotate, and revoke intake credentials in
