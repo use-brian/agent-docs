@@ -180,6 +180,45 @@ CRM settings or member REST. A secret is shown once and only its hash is stored.
 Rotation creates a new secret and explicitly revokes the old credential. No API
 reveals an existing secret.
 
+## Member import and operational audit
+
+A member-authenticated integration can stage a workspace file and use the
+server import job. Production import has a mandatory write-free dry run and a
+separate confirmed commit:
+
+```text
+POST /api/crm/:workspaceId/operations/imports/dry-run
+POST /api/crm/:workspaceId/operations/imports
+GET  /api/crm/:workspaceId/operations/imports
+GET  /api/crm/:workspaceId/operations/imports/:jobId
+POST /api/crm/:workspaceId/operations/imports/:jobId/resume
+POST /api/crm/:workspaceId/operations/imports/:jobId/cancel
+GET  /api/crm/:workspaceId/operations/imports/:jobId/errors.csv
+```
+
+The server reads the complete staged file, limited to 30 MB and 100,000 data
+rows. Confirmation must provide the exact dry-run hash and immutable mapping.
+Jobs advance in replay-safe 50-row chunks and may map contacts, companies,
+deals, external identities, consent, suppression, entitlements, and
+participation. Verified-email matching requires an explicitly selected trusted
+source and admin authority. Always inspect the dry run and obtain approval
+before committing real data. Custom values are parsed against their live field
+types during dry run. Replays use deterministic evidence identities and exact
+repeated stage writes are no-ops, so a crash before the row receipt does not
+duplicate consent, suppression, audit, or workflow events.
+
+Members can inspect bounded execution evidence with:
+
+```text
+GET /api/crm/:workspaceId/operations/audit
+GET /api/crm/:workspaceId/operations/event-delivery
+```
+
+Owners/admins may request a complete operations privacy export at
+`GET /api/crm/:workspaceId/operations/privacy-export`. Intake credential secret
+hashes are excluded. The confirmed retention endpoint requires a caller-chosen
+cutoff; Use Brian does not invent a legal retention period for the workspace.
+
 ## Association compatibility
 
 `/api/association` remains available for existing integrations. Generic

@@ -21,28 +21,39 @@ Use `setCrmCustomFields` to patch one visible contact, company, or deal by entit
 
 ## Deal stages
 
-Six values, locked:
+Deal stages come from the workspace's live pipeline catalog. Call
+`listCrmPipelines` and use its stable pipeline and stage ids.
+`setDealPipelineStage({ dealId, pipelineId, stageId })` is the canonical write
+and validates that the stage belongs to the selected pipeline. Stage category
+is `open`, `won`, or `lost`; names and keys are workspace-defined.
 
-| Stage | |
-|---|---|
-| `lead` | Unqualified opportunity. |
-| `qualified` | Vetted as a real opportunity. |
-| `proposal` | Proposal or quote out. |
-| `negotiation` | Terms in discussion. |
-| `won` | Closed successfully. |
-| `lost` | Closed without a deal. |
-
-Adding a stage requires a migration plus a tool-description update plus an analytics taxonomy update, by design. No custom pipelines in v1.
+The default pipeline retains the legacy `lead`, `qualified`, `proposal`,
+`negotiation`, `won`, and `lost` keys for compatibility. `advanceDealStage`
+works only against that default legacy catalog and delegates to the same
+canonical operation. Do not treat those six values as universal.
 
 ## Amounts and dates
 
-`amount` is decimal dollars (USD-equivalent), not cents. Users type "50000", not "5000000". `close_date` is a calendar date; "Q3 close" is not a wall-clock instant. Currency is implicit USD; a `currency_code` column ships when multi-currency does.
+`amount` is a decimal major-currency value, not minor units. Users type
+`50000`, not `5000000`, for fifty thousand units. Use the deal's explicit ISO
+currency code. `close_date` is a calendar date; "Q3 close" is not a wall-clock
+instant. Reports group amounts by currency and never silently convert them.
 
 ## Chat tools
 
-Every assistant with the `crm` capability gets the full CRUD surface plus `advanceDealStage` as the canonical stage-transition verb (separate from `updateDeal`, which will not accept a stage). There are no delete tools in v1: soft-delete is `advanceDealStage(id, 'lost')` and field-nulling.
+Every assistant with the `crm` capability gets the record CRUD surface plus the
+catalog-backed operations allowed for that assistant. `updateDeal` does not
+accept a stage. Use `listCrmPipelines` followed by `setDealPipelineStage`.
+`advanceDealStage` is a default-pipeline compatibility tool. There are no
+delete tools in v1; close a deal by selecting a stage whose category is `lost`
+and clear nullable fields through the normal update tools.
 
-`saveContact` / `getContact` / `listContacts` / `updateContact` · `saveCompany` / `getCompany` / `listCompanies` / `updateCompany` · `saveDeal` / `getDeal` / `listDeals` / `updateDeal` / `advanceDealStage` · `listCrmFields` / `setCrmCustomFields`
+`saveContact` / `getContact` / `listContacts` / `updateContact` · `saveCompany` / `getCompany` / `listCompanies` / `updateCompany` · `saveDeal` / `getDeal` / `listDeals` / `updateDeal` / `advanceDealStage` · `listCrmFields` / `setCrmCustomFields` · `listCrmPipelines` / `setDealPipelineStage`
+
+The broader operational tool catalog covers typed submissions,
+consent/suppression and sendability, shared segments, entitlements, events, and
+participation. Discover it at runtime and follow [CRM Operations API](../api/crm-operations.md)
+for the credential and closed-world catalog contracts.
 
 ## Accrued client contacts
 
@@ -59,9 +70,13 @@ Every CRM row is an entity in the underlying graph. Save a memory about a contac
 
 ## Notes for agents
 
-- Change a deal's stage only through `advanceDealStage`; `updateDeal` rejects the stage field. The six stages are fixed, so do not attempt custom pipeline values.
-- Write `amount` as decimal dollars ("50000" = $50,000), never cents. Write `close_date` as a calendar date, not a timestamp.
-- There is no delete: closing a deal is `advanceDealStage(id, 'lost')`; removing other rows is field-nulling.
+- Change a deal's stage through `setDealPipelineStage` using ids returned by
+  `listCrmPipelines`; `updateDeal` rejects the stage field. Use
+  `advanceDealStage` only for a known default-legacy pipeline value.
+- Write `amount` in major currency units with its explicit ISO currency code,
+  never minor units. Write `close_date` as a calendar date, not a timestamp.
+- There is no delete: close a deal with a catalog stage in the `lost` category;
+  remove nullable values through ordinary field updates.
 - CRM rows are brain entities, so use the `links` param and `getEntity` to connect and retrieve related memories, tasks, and deals in one place rather than treating CRM as a separate store.
 
 ## Related
