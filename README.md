@@ -16,6 +16,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 | Use the brain MCP tools well | [mcp/usage-patterns.md](mcp/usage-patterns.md) |
 | Embed an assistant in an app (REST) | [api/overview.md](api/overview.md), [api/messages.md](api/messages.md) |
 | Build a membership/event website on Brian records | [api/association-operations.md](api/association-operations.md) |
+| Submit external forms safely or automate CRM operations | [api/crm-operations.md](api/crm-operations.md) |
 | Serve your own end users, each scoped to their own data | [mcp/end-user-bridge.md](mcp/end-user-bridge.md) |
 | Understand memory vs knowledge base | [concepts/memory-and-knowledge.md](concepts/memory-and-knowledge.md) |
 | Discover outcome-led Use Brian showcase specifications | [showcases/README.md](showcases/README.md), [showcases/catalog.json](showcases/catalog.json) |
@@ -48,6 +49,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 - [api/connector-identity.md](api/connector-identity.md): trusted identity headers for your MCP server
 - [api/ingest-append-contract.md](api/ingest-append-contract.md): `ub.ingest.append.v1` — the idempotent endpoint an external service implements to receive a connector's normalized event stream (outbox-relayed, ack-gated cursor)
 - [api/association-operations.md](api/association-operations.md): CRM-linked enquiries, consent, memberships, events, tickets, orders, and provider reconciliation
+- [api/crm-operations.md](api/crm-operations.md): least-privilege atomic intake, idempotency, CRM operations tools, and Association compatibility
 
 ### MCP
 

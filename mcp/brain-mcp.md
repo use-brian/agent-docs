@@ -130,6 +130,27 @@ Available only on `read_write` credentials.
 
 `ingestToBrain` (default `decompose: true`) is the path for raw notes and documents: it derives entities and edges. `saveMemory` is for a single fact you have already distilled. Do not route task-shaped content through `saveMemory`: use `saveTask` or `ingestToBrain`.
 
+### CRM operations tools
+
+When the deployment has CRM operations enabled, both scopes can receive:
+`listCrmIntakeDefinitions`, `listCrmSubmissions`, `getCrmSubmission`,
+`listCrmConsentPurposes`, `getCrmConsent`, `checkCrmSendability`,
+`listCrmSegments`, `previewCrmSegment`, `listCrmEntitlementPlans`,
+`listCrmEntitlements`, `listCrmEvents`, `listCrmParticipation`, and
+`listCrmPipelines`.
+
+`read_write` may additionally receive `recordCrmSubmission`,
+`updateCrmSubmission`, `recordCrmConsent`, `recordCrmSuppression`,
+`saveCrmSegment`, `archiveCrmSegment`, `grantCrmEntitlement`,
+`updateCrmEntitlement`, `recordCrmParticipation`, `updateCrmParticipation`, and
+`setDealPipelineStage`. Call catalog readers first and pass stable ids/keys;
+unknown catalog values fail closed with valid choices. Treat a sendability
+verdict as permission only when it is exactly `allowed`.
+
+`sk_intake_*` is a separate write-only credential for one atomic external
+submission route. Brain MCP rejects it. See
+[CRM operations API](../api/crm-operations.md).
+
 ## Errors
 
 Every HTTP-level refusal carries a `message` beside the `error` slug, so an agent can act on it without a docs lookup:
