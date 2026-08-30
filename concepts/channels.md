@@ -91,6 +91,12 @@ then creates a Custom channel in Studio and pairs the user's personal account
 by QR. The bridge mirrors direct messages and groups; by default, groups answer
 only when the personal account is @-mentioned.
 
+The account owner must personally scan the QR and confirm the login. Multiple
+accounts may share an operator host only as isolated one-account stacks with
+separate tokens, cursor state, volumes, ports, containers, and service units;
+credentials and message data must never be pooled, and agent-wechat stays
+loopback-only. This is not a multi-tenant WeChat service.
+
 Inbound images and readable documents are available to the same turn. Short
 voice notes are synchronously transcribed before the assistant answers. Video,
 long media, and other files are archived first, described or transcribed in the

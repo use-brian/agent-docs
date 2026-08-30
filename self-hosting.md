@@ -69,6 +69,14 @@ The runtime port stays on the Compose network; the bridge needs only outbound
 HTTPS to the Use Brian API. Pairing is completed by scanning the QR shown in
 the Custom channel detail panel.
 
+The account owner must personally scan that QR and confirm the desktop login.
+One host may run multiple consenting owners only as separate one-account
+stacks, each with its own runtime directory, tokens, cursor state, named
+volumes, loopback ports, containers, and service units. The `deploy-brian`
+helper records only generic instance slugs in `WECHAT_DESKTOP_INSTANCES` after
+an instance is healthy. Do not pool credentials or message data, expose the
+agent-wechat endpoint, or operate it as a multi-tenant WeChat service.
+
 The imported `agent-wechat` revision currently has no upstream `LICENSE` or
 `COPYING` file. That is not a redistribution grant: keep modified images on the
 operator's own deployment until upstream licensing is resolved. See
