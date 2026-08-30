@@ -126,7 +126,7 @@ Available only on `read_write` credentials.
 | `saveFileToBrain` | Promote a previously uploaded cached file (a `fileId`) into the brain, preserving the original bytes |
 | `saveFileBytes` | Persist a file from raw bytes supplied as base64, preserving the exact bytes. Size-capped; larger files use the HTTP upload route |
 | `saveBrandDraft` | Propose a change to the workspace's brand record. Writes the DRAFT only. It does not take effect until a workspace owner or admin approves it in Studio, which creates a new approved version. Each field group you pass replaces that group whole, so call `getBrand` first and send the complete group back when adding to a list. Bind assets by workspace file id (upload with `saveFileBytes` first), never by path |
-| `createPage` / `editPage` / `deletePage` / `createPageFromTemplate` | Author doc pages: create, edit, delete, or seed from a template. Present only on deployments with the doc surface wired |
+| `createPage` / `editPage` / `deletePage` / `createPageFromTemplate` | Author doc pages: create, edit, delete, or seed from a template. `editPage` accepts Markdown and applies it to the live collaborative document when doc-sync is configured, so an edit is immediately shared with open page editors; deployments without doc-sync use the legacy version-checked page store. Present only on deployments with the doc surface wired |
 
 `ingestToBrain` (default `decompose: true`) is the path for raw notes and documents: it derives entities and edges. `saveMemory` is for a single fact you have already distilled. Do not route task-shaped content through `saveMemory`: use `saveTask` or `ingestToBrain`.
 
