@@ -259,7 +259,7 @@ turns on by itself. Set them in `.env` or under `~/.usebrian/`.
 
 | Capability | Key(s) | What you get |
 |---|---|---|
-| Web search | `BRAVE_SEARCH_API_KEY`, `SERPER_API_KEY`, `SERPAPI_API_KEY`, or `TAVILY_API_KEY` | Upgrade search past the keyless DuckDuckGo fallback |
+| Web search | `BRAVE_SEARCH_API_KEY`, `SERPER_API_KEY`, `SERPAPI_API_KEY`, `TAVILY_API_KEY`, or `BAIDU_SEARCH_API_KEY` | Upgrade search past the keyless DuckDuckGo fallback; Baidu adds Chinese-language and mainland-China coverage |
 | Page fetches | `JINA_API_KEY` | Cleaner reads via Jina Reader (works keyless at lower limits) |
 | Read X / Twitter | `TWITTER_BEARER_TOKEN` | Read x.com permalinks through the official X API v2 |
 | X search | `XAI_API_KEY` | xAI Grok fallback plus the `xSearch` tool |

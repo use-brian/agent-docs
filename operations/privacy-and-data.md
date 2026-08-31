@@ -49,7 +49,7 @@ Use Brian is a shared brain for a team. Its value depends on remembering the bus
 |---|---|
 | Google Gemini | Primary inference |
 | Anthropic Claude Haiku | Fallback when Gemini returns a retryable error |
-| Brave Search, Serper, SerpAPI, Tavily | Web research, chosen per query |
+| Brave Search, Serper, SerpAPI, Tavily, Baidu Search | Web research, chosen per query |
 | xAI (Grok) | X-aware `urlReader` / `xSearch` tools |
 | Jina Reader | JS-heavy page reads |
 | Connector providers | Connector calls (Google Calendar, Gmail, Notion, GitHub, and others) route through the connector's own provider |
