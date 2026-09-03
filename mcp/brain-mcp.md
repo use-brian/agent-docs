@@ -115,7 +115,7 @@ Available only on `read_write` credentials.
 
 | Tool | What it does |
 |---|---|
-| `ingestToBrain` | Capture content into the brain. `decompose: true` (default) runs the full extraction pipeline (entities, edges, tasks, memories, deduplicated) and returns a summary. `decompose: false` files one distilled memory verbatim, no extraction. Inputs: `content`, optional `sourceLabel`, optional `decompose` |
+| `ingestToBrain` | Capture content into the brain. `captureMode: "immediate"` (default) keeps the existing behavior: `decompose: true` runs full extraction and `decompose: false` files one distilled memory. `captureMode: "routed"` submits one message to the connection's configured assistant capture profile. Routed inputs require stable `eventId` and may include `occurredAt`, `sessionId`, `subjectId`, `role`, and bounded scalar `metadata`. A scheduled match is durably queued without an extraction-model call and is extracted later as part of one pooled window. |
 | `saveMemory` / `deleteMemory` | Save one distilled workspace memory; soft-delete a memory by id |
 | `saveTask` / `updateTask` / `closeTask` / `reopenTask` | Create, patch, and transition tasks |
 | `saveContact` / `updateContact` | Upsert / patch a contact |
@@ -129,6 +129,22 @@ Available only on `read_write` credentials.
 | `createPage` / `editPage` / `deletePage` / `createPageFromTemplate` | Author doc pages: create, edit, delete, or seed from a template. `editPage` accepts Markdown and applies it to the live collaborative document when doc-sync is configured, so an edit is immediately shared with open page editors; deployments without doc-sync use the legacy version-checked page store. Present only on deployments with the doc surface wired |
 
 `ingestToBrain` (default `decompose: true`) is the path for raw notes and documents: it derives entities and edges. `saveMemory` is for a single fact you have already distilled. Do not route task-shaped content through `saveMemory`: use `saveTask` or `ingestToBrain`.
+
+### Routed message capture
+
+Use `captureMode: "routed"` when an integration is forwarding message-shaped work activity and the workspace wants Brian to decide what to keep and when to extract it. The connection must first be assigned a capture assistant in Studio: Programmatic Access. The connection may inherit that assistant's default capture profile or override it. If there is no selected assistant or effective profile, the call fails closed; it never falls back to another assistant.
+
+Profiles are workspace-owned and reusable. Each profile has one partition policy (`connection`, `user`, `session`, or `subject`) and an ordered first-match-wins rule list. Rules may match every event, keywords, actor, role, or scalar metadata and route to `drop`, `scheduled`, or `realtime`. Connection rules and assistant defaults are selected, never merged.
+
+For every routed call:
+
+- Generate a stable `eventId` from the source message. Reusing it on a retry returns the existing receipt instead of appending twice.
+- Send `occurredAt` as ISO 8601 with an explicit offset when the source timestamp is known.
+- Send `sessionId` when the selected profile partitions by session, or `subjectId` when it partitions by subject.
+- Treat `subjectId` and metadata as opaque routing/provenance labels. They do not select a workspace, assistant, or security principal.
+- Do not set `decompose: false`; flat-memory mode is only available with immediate capture.
+
+A queued result means the event was durably appended. It does not mean extraction ran yet. The profile's cron window or the 32k-token size bound flushes a batch keyed by workspace, assistant, rule, partition, and firing time. Brian orders that window and makes one extraction call for the whole batch. MCP does not passively observe another product's transcript: the connected client must call `ingestToBrain` for each message it chooses to submit.
 
 ### CRM operations tools
 
@@ -165,6 +181,7 @@ Inside a tool call, a failure is a normal MCP tool result with `isError` and a t
 ## Notes for agents
 
 - One credential reaches exactly one workspace. To span workspaces, obtain one credential per workspace.
+- Routed capture requires a Studio-configured capture assistant and effective profile. Do not infer that ordinary Brain-MCP access passively captures the host agent's conversation.
 - **There is no tool that approves a brand, and there will not be one.** `saveBrandDraft` writes a draft; a human with an owner or admin role approves it in the app. If you are delivering a brand system into a client's workspace, push the draft, upload the master assets with `saveFileBytes`, bind them by file id, and then tell the client to approve. Do not report the brand as changed before they do.
 - Call `tools/list` after `initialize` and select from what is returned. If a write tool is absent, the credential is `read`-scoped; if file tools are absent, the deployment has no file storage; if the page tools are absent, the deployment has no doc surface.
 - An empty read result may be a clearance filter, not an empty brain: the credential only sees rows at or below its tier.

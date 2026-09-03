@@ -19,6 +19,7 @@ To connect a new row to an existing entity, you need that entity's UUID. Call `g
 | You have | Use |
 |---|---|
 | Raw notes, a document, a mixed dump | `ingestToBrain` with `decompose: true` (default) |
+| A stream of message-shaped work activity | `ingestToBrain` with `captureMode: "routed"`, one stable `eventId` per message |
 | One already-distilled atomic fact | `saveMemory` |
 | Task-shaped content (a commitment, follow-up) | `saveTask` to create the task now; `ingestToBrain` only files it as a suggestion |
 
@@ -26,7 +27,9 @@ The two task paths are not interchangeable. `saveTask` creates the row. Tasks th
 
 `ingestToBrain` with `decompose: true` runs the full extraction pipeline and builds an entity + edge graph. `saveMemory` and `ingestToBrain` with `decompose: false` skip extraction: they store text flat. Never hand task-shaped content to `saveMemory` (unstructured, cannot be filtered, assigned, or closed).
 
-Call `ingestToBrain` once per coherent unit (one project, document, or topic) with a `sourceLabel`. Extraction quality drops on one mixed blob.
+For immediate mode, call `ingestToBrain` once per coherent unit (one project, document, or topic) with a `sourceLabel`. Extraction quality drops on one mixed blob.
+
+For routed mode, call it once per source message. The selected assistant capture profile applies ordered rules and partitions scheduled messages into durable pools. A queued result costs no per-message extraction call; Brian runs one extraction when the time or size window flushes. Keep `eventId` stable across retries, and provide the partition field the profile requires (`sessionId` or `subjectId`). The MCP connection does not automatically observe the host conversation.
 
 ## Narrow searches with scope
 
