@@ -55,6 +55,22 @@ consent/suppression and sendability, shared segments, entitlements, events, and
 participation. Discover it at runtime and follow [CRM Operations API](../api/crm-operations.md)
 for the credential and closed-world catalog contracts.
 
+## Canonical email drafts
+
+When the runtime exposes `saveEmailDraft`, save the complete envelope, body,
+and `attachments` list before presenting or revising an email draft. Each
+attachment is a saved workspace file id or absolute path, with at most 10 per
+draft. Include the complete list on every revision; `[]` removes all
+attachments. Omit `draft_id` to revise the conversation's active draft, or use
+`start_new: true` for a different email. `getEmailDraft` returns the exact saved
+revision, including its attachment references.
+
+Saving a CRM draft does not create a provider draft, request send approval, or
+send email. When the user asks to send, pass the saved references to the
+available email send tool, which resolves the files and applies its normal
+access, size, and approval checks. A photo saved in the workspace is attached
+to a draft only after its reference is included in that draft's saved list.
+
 ## Accrued client contacts
 
 Identified end users arriving through the public API accrue a contact automatically: the first identified turn materializes a person entity paired to the integration's `externalUserId`, visible to the workspace team like any other contact. The client side is write-only: an end user can never read the contact that describes them, nor anything another end user's turns wrote (every client turn's writes are walled into a per-client compartment). See [Identity & memory](../api/identity.md).
