@@ -121,3 +121,14 @@ Scheduled tasks are timed jobs. They fire on a cron and run an assistant turn. W
 - [Tasks](./tasks.md)
 - [Workflows](./workflows.md)
 - [Channels](./channels.md)
+
+## Per-assistant mini-app tool access
+
+Users configure Page, Office, Browse, Tasks, CRM, and Feed under Assistant >
+Tools > Mini apps. Each app has a master switch and separate Read and Write
+tool-set switches. A disabled app or set removes its tools from the assistant's
+available tool list and refuses stale calls. Turning the app back on preserves
+its previous set selections. These controls are independent of workspace Home
+navigation and do not grant connector credentials or bypass tool confirmations.
+If an expected tool is unavailable, ask the user to enable the relevant app and
+tool set for that assistant instead of retrying an unavailable tool name.
