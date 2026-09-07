@@ -187,6 +187,19 @@ cover conversations that predate the connection. Import runs offline against
 files you already have; it never attaches to a live account or bypasses a
 provider's encryption.
 
+WhatsApp history can come from a chat export, an already-decrypted Android
+`msgstore.db`, or an already-decrypted iOS `ChatStorage.sqlite` from an iPhone
+backup. The two databases are different formats and are not interchangeable, so
+each has its own source. Decrypting the backup is a separate step you run
+yourself — the archive is handed plaintext files and never derives a key.
+
+An iOS import also loads your WhatsApp address book, which is what lets search
+find a conversation by the name you know someone under rather than by their
+number. That matters more than it sounds: WhatsApp increasingly addresses people
+by a privacy identifier that contains no phone number, so a participant you have
+never saved may have no name and no number anywhere in the backup. They are
+still archived and still searchable by what they said.
+
 ### Limits worth knowing
 
 Attachment bytes are served over an authenticated loopback endpoint. The
