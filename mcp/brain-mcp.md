@@ -97,6 +97,8 @@ Available on both `read` and `read_write` credentials.
 | Tool | Inputs | Returns |
 |---|---|---|
 | `searchBrain` | `query` (required); optional `scope` (`memory` \| `task` \| `contact` \| `company` \| `deal` \| `file` \| `kb_chunk` \| `entity` \| `file_segment`, single value or array, omit = all scopes); optional `limit` (default 20, max 100) | Unified retrieval across every primitive, clearance-filtered and scoped to the workspace |
+| `listRecordings` | Optional `query` (title/file-name substring), `kind` (`memo` or `meeting`), `since` (inclusive ISO date/time), `until` (exclusive), `limit` (default 20, max 100) | Newest-first recording metadata: `recordingId`, `title`, `kind`, `status`, `occurredAt`, `durationMs`, `truncated`, `hasTranscript`. Includes queued and processing recordings before transcription finishes |
+| `searchRecording` | `recordingId` + `query`, optional `topK` (max 20), or `fromIndex` / `toIndex` for sequential paging | Timestamped transcript passages inside one known recording. Resolve its id and status with `listRecordings` first |
 | `searchFileContent` | `fileId` + `query`, or `fromIndex` / `toIndex` for sequential paging | Passages inside one stored document. Never returns the whole file |
 | `getEntity` | entity `id` or display name; optional `walk_depth` / `walk_edge_types` | Entity rollup: existing relationship edges, recent episodes, memory, open tasks. Use it to resolve an entity's UUID and read existing edges before a linking write |
 | `getMemory` / `getTask` / `getContact` / `getCompany` / `getDeal` | record `id` | Full record |
@@ -108,6 +110,8 @@ Available on both `read` and `read_write` credentials.
 | `getBrand` | optional `slug` (omit = the workspace default brand); optional `include_draft` | The workspace's brand record: naming and legal usage, strategy, messaging and voice, color tokens, typography, logo variants bound by workspace file id, applications, claims, rights, governance, sources. Returns the APPROVED record by default; `include_draft: true` returns unapproved changes, which are a proposal. Present only on deployments with the brand surface wired |
 | `readPage` / `listPages` / `listPageTemplates` | page `id` or title; list filters; template catalog | Read doc pages. Present only on deployments with the doc surface wired |
 | `searchKnowledge` | `query` | Deprecated alias for `searchBrain` with `scope: 'kb_chunk'`. Prefer `searchBrain` |
+
+For a just-uploaded recording, use `listRecordings` even if `fileSearch` or transcript search has no hit. The catalog exists before transcription; `status` distinguishes `awaiting_upload`, `queued`, `processing`, `processed`, and `failed`. `awaiting_upload` reserves an identity but does not prove that uploaded media exists. Report queued/processing status while waiting for transcript content. The `/recordings` transcript file and transcript segments are created later, so their absence is not evidence that the recording is missing. Recording discovery observes the credential's workspace, visibility, clearance, Team and Project access.
 
 ## Write tools
 
