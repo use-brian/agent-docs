@@ -21,11 +21,46 @@ Association API adapter.
 | `sk_intake_*` | Write-only, bound to one workspace and one or more intake definitions | A public website's trusted backend submitting a form or application |
 | `sk_brain_*` with `read` | Workspace-scoped Brain MCP reads only | An external agent reading CRM operational state |
 | `sk_brain_*` with `read_write` | Workspace-scoped Brain MCP reads and permitted writes | An external agent operating CRM records |
+| `sk_crm_*` | CRM-only operation grants with explicit resource selectors, expiry and revocation | A backend integrating CRM catalogs, submissions, entitlements, participation or Association commerce |
 | Member JWT | Current user's workspace membership and role | The first-party UI or a member-authenticated integration |
 
-Never put either key family in browser code. `sk_intake_*` is deliberately not
+Never put machine keys in browser code. `sk_intake_*` is deliberately not
 accepted by Brain MCP or member routes. It cannot list contacts, read
 submissions, search the brain, mutate configuration, or call arbitrary tools.
+
+## Scoped CRM integration requests
+
+Authenticate `/api/crm/integration/*` with `Authorization: Bearer sk_crm_<uuid>_<secret>`.
+Workspace and actor come from that credential. Do not send `workspaceId`,
+`actor`, or `authority` in command bodies. `GET /catalog` returns the operation
+and selector vocabulary and the current grants. Unknown routes and missing
+operations fail with 403 `integration_scope_denied`; invalid, expired or
+revoked credentials return 401. CRM keys do not authenticate Brain MCP, intake,
+member/admin routes, or public chat.
+
+`POST /operations/commands` uses the canonical typed command union. Resource
+aliases accept business fields at `/operations/intake-definitions`,
+`/consent-purposes`, `/entitlement-plans`, `/events`, `/submissions`,
+`/entitlements`, and `/participation`. Catalog saves require
+`crm.catalog.configure`; reading a catalog uses `crm.catalog.read`, not an
+implied write grant. Definition, plan and event selectors are UUIDs; purpose
+and provider selectors are stable keys. An omitted selector permits none.
+Creating a catalog resource requires explicit `all` for its dimension.
+Integration configuration cannot acknowledge trusted identity sources, issue
+credentials, enable modules or erase subjects.
+
+Corresponding read resources return the existing named arrays. Event, plan,
+submission, entitlement and participation reads filter by granted resources
+before applying their page limit. `/association/*` provides the shared
+Association command adapter and checks every event referenced by an order.
+A mixed-event order is available only if every event is permitted.
+
+An owner/admin member issues keys through
+`/api/crm/:workspaceId/operations/integration-credentials`. POST accepts label,
+future expiry, grants, and optional `revokeCredentialId` for atomic rotation.
+The plaintext `oneTimeSecret` appears only in that creation response. GET
+returns safe metadata; POST `/:id/revoke` revokes a key for the next request.
+
 
 ## Atomic intake endpoint
 

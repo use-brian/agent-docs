@@ -99,3 +99,29 @@ intent. A `pending` intent is not evidence that a message was delivered.
 Association commerce now has workspace lifecycle state separate from navigation and assistant grants. Existing workspaces keep enabled access; new workspaces start disabled. Ticket writes and new orders return HTTP 409 with `module_disabled` or `module_draining` when admission is stopped. Generic CRM identities, enquiries, consent, entitlement plans/grants, events and unconstrained participation remain available under their existing authority.
 
 Disabling preserves historical reads and existing-order recovery. Exact committed order retries return the existing order even after disable; changed reuse of an idempotency key still conflicts. Existing provider reconciliation and registration cancel/check-in remain available under their original authority. A disabled module does not refund or erase an order. Credential permissions do not enable the workspace module. Owner/admin lifecycle controls and scoped integration credentials are introduced by the subsequent command-plane phase; do not infer an enable endpoint from a commerce write failure.
+
+## Native command adapters and scoped integrations
+
+Member sessions use `/api/crm/:workspaceId/association`; CRM-only credentials
+use `/api/crm/integration/association`. Both call the same typed service as the
+legacy `/api/association` adapter. No member browser needs a machine key.
+
+Order history is available at GET `/orders` with bounded `limit`, `cursor`,
+`eventId`, `contactId` and `status` filters; GET `/orders/:id` returns one order.
+POST `/orders/:id/cancel` cancels an eligible pending order and does not claim
+a refund. POST `/orders/:id/confirm-free` requires a zero-total, unexpired
+pending order and creates no payment-provider evidence. The member/scoped
+adapters expose GET `/module` and `/module-blockers` for state and pending
+orders. Authorized history and recovery remain available after disabling.
+
+Member/chat callers cannot submit payment-success evidence. Backend provider
+events require the explicit reconciliation authority; a CRM integration key
+needs `association.provider_events.write` for both every order event and the
+provider. `association.orders.write` alone cannot mark a paid checkout successful.
+
+Module reads use GET `/api/workspaces/:workspaceId/modules`. Owner/admin
+member actions use POST `/api/workspaces/:workspaceId/modules/association/actions`
+with `action` and `expectedVersion`; machine grants cannot activate a module.
+Legacy plan/event writes retain their established Brain-key catalog authority
+and now use the generic CRM configuration commands. New scoped keys require
+`crm.catalog.configure` and matching catalog resources.

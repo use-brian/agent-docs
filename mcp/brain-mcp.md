@@ -198,3 +198,10 @@ Inside a tool call, a failure is a normal MCP tool result with `isError` and a t
 - [MCP usage patterns](usage-patterns.md)
 - [Pricing and credits](../operations/pricing-and-credits.md)
 - [Self-hosting](../self-hosting.md)
+
+## CRM-only integration credential boundary
+
+`sk_crm_*` is accepted only at `/api/crm/integration/*`. It cannot authenticate
+Brain MCP or acquire general tool access. Use a Brain credential for this
+endpoint, or call the CRM integration resources with explicit operation and
+resource grants. CRM integrations cannot enable modules or administer keys.
