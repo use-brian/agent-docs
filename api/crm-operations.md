@@ -756,3 +756,31 @@ Traverse every page and treat a denied, malformed or incomplete catalog as a
 failed preview. Neither endpoint seeds configuration or appends audit. Avoid
 `/api/crm/:workspaceId/config` for manifest preview: that settings getter can
 create the default pipeline. Discovery alone does not apply a manifest.
+
+## Configuration commands
+
+Member `POST /api/crm/:workspaceId/operations/commands` accepts
+`create_record_field`, `update_record_field`, `set_record_field_archived`,
+`create_pipeline`, `update_pipeline`, `create_pipeline_stage`, and
+`update_pipeline_stage`. CRM keys use the existing scoped commands endpoint.
+They need `crm.catalog.configure` with explicit `all` for all four catalog
+dimensions: definition ids, purpose keys, plan ids and event ids. Reads still
+need their own grants. Current member role or credential admission is checked
+inside the transaction; a request-time permission snapshot is insufficient.
+
+Create requires the business identity and configuration; updates require an
+existing id and change only supplied fields. Field key/type/entity kind cannot
+be changed. Duplicate creation returns 409 `conflict` with
+`details.reason=configuration_exists`; read its current values before choosing
+an update. Unique-name update collisions are 409 `configuration_conflict` in
+details. Unchanged updates/archive states return `duplicate: true` and write
+no configuration timestamps or audit. This is not a general request replay key.
+
+Existing member settings and preset routes delegate to these commands and
+retain their resource/ok responses. Field limit, used-option, live-deal archive
+and default-pipeline barriers apply. Select another default before archiving
+the current one; setting its `isDefault` to false alone fails. Restore an
+archived field before editing it; stage restoration and edits can share one
+command. No Association activation is needed for generic CRM configuration.
+Each resource command is atomic. This does not make an entire manifest atomic,
+and the manifest CLI's diff/apply/recovery work is still pending.
