@@ -579,8 +579,8 @@ New caller-supplied `submittedAt` requires valid trusted proof and the same time
 window; otherwise return `400 invalid_input`, reason
 `occurrence_time_requires_verification` or `occurrence_time_out_of_window`.
 Omitted time is server receipt time. Direct evidence commands retain their
-explicit `occurredAt` contract. CSV occurrence-time mapping is separate pending
-assurance work. Proof failure never changes existing
+explicit `occurredAt` contract, including historical CSV mappings described
+below. Proof failure never changes existing
 contact data, consent, tasks, audit or outbox and rolls back the pending receipt.
 Migration 504 adds nullable bounded `identity_verification_evidence` to enquiries;
 only successfully verified proof plus its business request hash is stored and
@@ -594,3 +594,19 @@ returns before proof/key-version/age validation. It may carry a renewed proof or
 no proof and cannot create effects. Changed business bytes still conflict; a
 proof cannot be transplanted to a new idempotency key, workspace or definition.
 This does not promise replay beyond the separately configured receipt horizon.
+
+### Historical CSV evidence times
+
+Optional `consentOccurredAt` and `suppressionOccurredAt` CSV targets carry each
+source event's historical instant to the canonical command unchanged, preserving
+offsets and up to six fractional digits. They use the same persisted ISO instant
+validator as direct evidence commands; excess precision, a date-only,
+timezone-free, invalid calendar or malformed value
+is a dry-run row error. A timestamp without its complete consent/suppression
+field group is also an error. Blank or unmapped times retain the existing
+receipt-time behavior and request fingerprints. That compatibility fallback is
+not evidence of a historical event time; a migration claiming historical
+ordering must map and reconcile the actual source timestamps. Event ids remain
+job/row-scoped, and delayed imported grants or releases cannot override later
+withdrawals or suppressions. Import authority and confirmation remain required;
+this mapping cannot confer trusted public-intake identity authority.
