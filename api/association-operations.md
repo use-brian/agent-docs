@@ -93,3 +93,9 @@ order state. An identity provider owns authentication sessions; a payment
 provider owns payment instruments and settlement; a delivery provider owns
 transport and bounce telemetry. `/notifications` exposes durable delivery
 intent. A `pending` intent is not evidence that a message was delivered.
+
+## Workspace module admission
+
+Association commerce now has workspace lifecycle state separate from navigation and assistant grants. Existing workspaces keep enabled access; new workspaces start disabled. Ticket writes and new orders return HTTP 409 with `module_disabled` or `module_draining` when admission is stopped. Generic CRM identities, enquiries, consent, entitlement plans/grants, events and unconstrained participation remain available under their existing authority.
+
+Disabling preserves historical reads and existing-order recovery. Exact committed order retries return the existing order even after disable; changed reuse of an idempotency key still conflicts. Existing provider reconciliation and registration cancel/check-in remain available under their original authority. A disabled module does not refund or erase an order. Credential permissions do not enable the workspace module. Owner/admin lifecycle controls and scoped integration credentials are introduced by the subsequent command-plane phase; do not infer an enable endpoint from a commerce write failure.
