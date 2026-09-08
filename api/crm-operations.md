@@ -936,3 +936,60 @@ under a transaction lock; stale soft deletion also cannot append a new personal
 audit copy after erasure. A failed deletion rolls the audit changes back. This
 contract covers correction history, not a claim of complete workspace or
 external-backup erasure.
+
+## Streamed CRM privacy exports
+
+The member workspace route `GET /api/crm/:workspaceId/operations/privacy-export`
+keeps the existing JSON response when `format` is absent or
+`crm-operations-privacy-v1`. Use `?format=crm-privacy-v2` for the NDJSON export.
+`GET /api/crm/:workspaceId/operations/contacts/:contactId/privacy-export`
+defaults to v2. Both require a current owner/admin session. An existing person
+id is required for the subject route.
+
+Scoped integration equivalents are
+`GET /api/crm/integration/operations/privacy-export` and
+`GET /api/crm/integration/operations/contacts/:contactId/privacy-export`.
+These accept v2 only, derive workspace from the credential, and require the
+current `crm.privacy.export` grant. This grant is independently required even
+when the key can read ordinary CRM records. Revoked credentials fail admission;
+Association being disabled does not prevent privacy exports.
+
+The response is `application/x-ndjson` with `Cache-Control: no-store`. Consume it
+as UTF-8 lines, preserving each record line's exact bytes and trailing newline:
+
+1. A `type:header` line identifies `schema:crm-privacy-v2`, `exportId`,
+   `workspaceId`, `scope`, optional subject `contactId`, and `snapshotAt`.
+2. Every `type:record` line carries `domain` and `record`. JSON integers may
+   exceed JavaScript's safe integer range; use a lossless reader for amounts.
+3. The final `type:manifest` line must match the export id, carry `complete:true`,
+   and verify aggregate `totalRecords`/`sha256` plus every domain's
+   `count`/`sha256`. Hash only complete record lines, including their newlines,
+   in emitted order. An empty domain hashes the empty byte string.
+
+Verify the final manifest before accepting the download as evidence. An HTTP
+200 without that manifest is incomplete. An interrupted export can be restarted
+safely as a new snapshot; do not splice lines from two exports together.
+Database failures after headers close the stream without a success manifest.
+An oversized projected row fails with `privacy_export_row_too_large` rather
+than being truncated. Each export uses a repeatable-read database snapshot and
+bounded cursor fetches, with no record-count cap.
+
+The manifest names included, redacted and excluded domains/columns. The CRM
+slice covers canonical CRM/custom fields, attributed links/tasks/activities,
+identity and correction history, intake/consent/suppression, entitlement and
+commerce records, drafts/delivery evidence, import lineage, and relevant
+configuration metadata. Shared financial context remains while other
+attendees' identities are redacted. Shared messages redact content,
+attachments and other recipients; single-subject message content remains.
+Raw shared import sources and unpartitioned file content require separate
+review. Failed/legacy import rows without explicit subject links and incidental
+free-text mentions are declared coverage limits, not inferred matches.
+Retained suppression appears without HMACs or secret key checks; missing
+required retained key material fails the subject export rather than implying
+no suppression exists.
+
+This is a CRM slice, not a database backup or whole-brain export. Manifest links
+to other export facilities require their own authority; the workspace reset
+link is explicitly marked destructive and is not an export. Export completion
+does not imply erasure, retention policy, restore-journal or operational
+assurance completion.
