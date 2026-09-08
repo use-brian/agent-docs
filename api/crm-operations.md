@@ -33,7 +33,9 @@ submissions, search the brain, mutate configuration, or call arbitrary tools.
 Authenticate `/api/crm/integration/*` with `Authorization: Bearer sk_crm_<uuid>_<secret>`.
 Workspace and actor come from that credential. Do not send `workspaceId`,
 `actor`, or `authority` in command bodies. `GET /catalog` returns the operation
-and selector vocabulary and the current grants. Unknown routes and missing
+and selector vocabulary, current grants, and credential-derived `workspaceId`
+and `credentialId` with `Cache-Control: no-store`. Verify `workspaceId` against
+your intended destination before a configuration apply. Unknown routes and missing
 operations fail with 403 `integration_scope_denied`; invalid, expired or
 revoked credentials return 401. CRM keys do not authenticate Brain MCP, intake,
 member/admin routes, or public chat.
@@ -741,3 +743,16 @@ credential lock is acquired. A revocation that wins admission prevents the
 write; an already admitted write can finish before revocation returns. Exact
 commerce replay requires the same current authority. This does not recall
 in-flight operations or replace import source ceilings.
+
+## Read-only configuration discovery
+
+Use `GET /api/crm/integration/operations/record-fields` and `/operations/pipelines`
+with `crm.records.read`. Member JWT clients use the corresponding
+`/api/crm/:workspaceId/operations/` paths. These return `fields` or `pipelines`
+and `nextCursor`, accept the common page/time filters and `includeArchived=true`,
+and otherwise select live configuration. Fields accept `entityKind` of person,
+company or deal; pipelines accept deal and include their selected stages.
+Traverse every page and treat a denied, malformed or incomplete catalog as a
+failed preview. Neither endpoint seeds configuration or appends audit. Avoid
+`/api/crm/:workspaceId/config` for manifest preview: that settings getter can
+create the default pipeline. Discovery alone does not apply a manifest.
