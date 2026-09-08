@@ -834,3 +834,36 @@ equivalent current state. No blind mutation retry is issued. Other errors stop
 and retain completed references in the JSON report. SIGINT/SIGTERM abort requests
 and return a nonzero interrupted report when possible; re-read after any lost
 response before assuming a change did or did not commit.
+
+
+## Address suppression after erasure
+
+The member privacy-policy command accepts optional `addressSuppression:
+{ retentionSeconds } | null`. Omission preserves the current setting. Only a
+current owner/admin human may approve policy or release retained suppression.
+Erasure and workspace reset capture effective restrictions transactionally;
+missing policy, key material or usable normalization blocks the transaction.
+A reset preserves these restrictions even though it clears ordinary CRM rows.
+
+Sendability may return `blocked` with `address_suppression` when a recreated
+contact's address matches retained evidence. Imports and ordinary intake do not
+release it. Missing or changed retained key material returns a fixed conflict category
+instead of an allowed verdict. Key rotation cannot extend an already captured
+retention horizon. Existing consent/channel checks still apply after release.
+
+Owner/admin `GET /api/crm/:workspaceId/operations/address-suppression` returns
+`tombstones` and `nextCursor`, without addresses or digests. Follow the cursor
+for complete review. `POST .../address-suppression/:tombstoneId/release` accepts
+`confirmed:true`, `evidenceKind` and `evidenceId`. A withdrawal needs
+`evidenceKind:consent_event` naming a later human-recorded grant for the same
+purpose/address, recorded after capture. Older, future-dated, imported,
+withdrawn or wrong-address evidence fails.
+Other reasons need `evidenceKind:workspace_file` naming a current file in this
+workspace. The owner must review that evidence before confirming. Identical
+release replay returns `duplicate:true` without another audit; changed evidence
+for an already released row conflicts. These owner controls are unavailable to
+integration/intake keys and do not grant permission to send.
+
+Dedicated server HMAC keys and their retained versions are an operator custody
+requirement. Retained rows are pseudonymous sensitive data. No production
+policy period, key provisioning or operational privacy readiness is implied.

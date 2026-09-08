@@ -19,7 +19,9 @@ The owner-only `DELETE /api/workspaces/:workspaceId/data` route resets the
 workspace's learned/produced content while preserving its identity, members,
 assistants, connector configuration, settings and policies. It also works for a
 Personal workspace. This is a destructive workspace reset, separate from a
-contact erasure request; it clears intake replay history. Existing user review
+contact erasure request; it clears intake replay history. Retained address
+suppression survives the reset; missing required suppression policy or key
+material blocks it with a structured 409. Existing user review
 and confirmation still apply.
 
 The operation is transactional in both OSS and hosted editions. Optional
