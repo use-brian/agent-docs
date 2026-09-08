@@ -867,3 +867,14 @@ integration/intake keys and do not grant permission to send.
 Dedicated server HMAC keys and their retained versions are an operator custody
 requirement. Retained rows are pseudonymous sensitive data. No production
 policy period, key provisioning or operational privacy readiness is implied.
+
+## Correction history after person erasure
+
+Person hard purge minimizes the matching correction history and the new purge
+receipt in its existing transaction. Free-text reasons, ticket references,
+details and snapshots are not retained there as personal-data copies. The audit
+keeps its action, subject/actor identifiers and time. A missing target fails
+under a transaction lock; stale soft deletion also cannot append a new personal
+audit copy after erasure. A failed deletion rolls the audit changes back. This
+contract covers correction history, not a claim of complete workspace or
+external-backup erasure.
