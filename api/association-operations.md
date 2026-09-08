@@ -125,3 +125,25 @@ with `action` and `expectedVersion`; machine grants cannot activate a module.
 Legacy plan/event writes retain their established Brain-key catalog authority
 and now use the generic CRM configuration commands. New scoped keys require
 `crm.catalog.configure` and matching catalog resources.
+
+
+### Effective membership reads
+
+`GET /contacts/:contactId/memberships` accepts optional `activeOnly=true|false`
+and ISO `effectiveAt`, retaining `memberships` and raw status while adding each
+row's `isEffective`/evaluation instant. Access requires active status with start
+inclusive and end exclusive (or absent). Member-price admission always rechecks
+current database time; a historical read or raw active status cannot authorize
+a discount outside the grant window.
+
+
+### Query-bound collection cursors
+
+Paged enquiries, plans, events, orders, event registrations and notifications
+use the common CRM cursor: immutable creation timestamp/id with microsecond
+precision, a first-page upper bound, and workspace/resource/filter binding.
+`createdAfter` is inclusive and `createdBefore` exclusive. Read authority and
+integration event selectors are rechecked before each page. Named arrays and
+URLs stay unchanged. Retired unbound cursor tokens are rejected with
+`invalid_input`; restart those traversals without a cursor. Do not decode or
+construct tokens in adapters.

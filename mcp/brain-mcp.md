@@ -218,3 +218,8 @@ feeds `cursor`, and `snapshotNextCursor` feeds `snapshot_cursor`. Keep the
 segment/filter selection unchanged; a segment edit rejects the old cursor.
 `snapshot_limit` remains bounded at 1-10,000 per call. Follow the ID stream
 to null for a complete audience, then recheck sendability at dispatch.
+
+`listCrmEntitlements` accepts `active_only` and optional ISO `effective_at`.
+Read raw `status` separately from `isEffective`; future-start and ended periods
+provide no current access. Continue with the same filters and `nextCursor`.
+Historical evaluation never authorizes present-day member pricing.

@@ -331,3 +331,15 @@ The count is current dynamic membership, not a frozen database snapshot or
 continuing permission to send. The native SDK completes the ID stream before
 presenting a snapshot. Contact compliance reads return all authorized purposes,
 consent and suppression evidence, including histories beyond 500 events.
+
+
+### Effective entitlement filters
+
+`GET .../operations/entitlements` accepts `activeOnly=true|false` and optional
+ISO `effectiveAt`. Rows keep raw `status` and add `isEffective` plus the resolved
+evaluation time. Active status alone is insufficient: access starts inclusively
+and ends exclusively; no end means no expiry. Default evaluation uses database
+time retained across cursor pages. Keep filters unchanged while continuing.
+A historical read grants no present-day commerce authority. Segment plan
+status `active` means effective access; raw-active periods outside the window
+have derived value `inactive`, with raw stored status preserved.
