@@ -14,6 +14,29 @@ events, and resumable imports. The same operations back Brian chat, Brain MCP,
 member REST, the first-party CRM UI, workflows, imports, and the legacy
 Association API adapter.
 
+## Managed email account policy
+
+Owner/admin member sessions can read or approve a policy at
+`GET`/`POST /api/crm/:workspaceId/operations/mailbox-policies/:connectorInstanceId`.
+POST requires `providerKey`, `expectedVersion` (0 for a new binding),
+`confirmed:true`, `managed`, `purposeKeys`, and optional `templatePurposes`.
+The canonical command is `save_managed_mailbox_policy`. CRM machine grants
+cannot approve it. Stale versions conflict; no-op updates create no new audit.
+
+Managed Gmail, IMAP/SMTP and AgentMail sends require `crmPurposeKey` and an
+optional approved `crmTemplateKey`. Current consent/suppression checks cover
+all To/Cc/Bcc recipients at dispatch; missing or ambiguous people block the
+entire send. Omitting these fields does not bypass a managed account. Ordinary
+unmanaged mail keeps its existing behavior. A provider timeout may mean it
+accepted the email: verify delivery before retrying.
+
+Managed provider-scheduled drafts are unavailable. Mutable AgentMail drafts
+and implicit recipient replies return `managed_recipient_snapshot_required`;
+use explicit recipients. Interactive incoming-email replies retain their
+separate server-bound channel path. Durable CRM delivery commands/receipts
+and integration-to-mailbox grants are still pending; do not infer safe replay
+or CRM readiness from the admission gate alone.
+
 ## Choose the right credential
 
 | Credential | Authority | Use it for |
