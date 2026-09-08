@@ -782,8 +782,8 @@ and default-pipeline barriers apply. Select another default before archiving
 the current one; setting its `isDefault` to false alone fails. Restore an
 archived field before editing it; stage restoration and edits can share one
 command. No Association activation is needed for generic CRM configuration.
-Each resource command is atomic. This does not make an entire manifest atomic,
-and the manifest CLI's diff/apply/recovery work is still pending.
+Each resource command is atomic. The manifest CLI applies resources independently,
+with fresh discovery, partial recovery and final residual-diff verification.
 
 ## Scoped segment discovery
 
@@ -812,5 +812,25 @@ all-page discovery for member and integration modes. Build `@use-brian/core`
 before importing it. Discovery checks the explicit workspace against the key's
 catalog, refuses redirects and incomplete catalogs, and requests only required
 resource/dependency catalogs. Segment discovery requires the global grants
-listed above. It does not expose a completed diff/apply CLI; that remains
-implementation work, including partial apply recovery and a zero-command rerun.
+listed above. The operator CLI is `scripts/crm/apply-manifest.mjs`; its default is a pure
+JSON preview. Add `--apply` for canonical writes and review the report of
+completed and failed references. An identical reapply issues zero commands.
+
+## Manifest execution
+
+The operator guide is `docs/operations/crm-manifest.md` in the OSS repository.
+Run the CLI with explicit `--manifest`, `--api-url`, `--workspace`, `--mode`
+and either `--token-env NAME` or `--token-file PATH`. Values of bearer tokens
+are never command arguments. Preview is GET-only; `--apply` requires the
+appropriate canonical write grants. Segment writes require `crm.records.write`
+in addition to their derived-catalog read grants.
+
+The planner shares the live segment vocabulary and validates projected fields,
+purposes, plans, events, mappings and wording locales before mutation. Explicit
+ids bind renames; natural keys prevent a partial rerun from creating duplicates.
+Each command has its own transaction; final success requires zero residual drift.
+A create conflict or uncertain response is accepted only when a re-read proves
+equivalent current state. No blind mutation retry is issued. Other errors stop
+and retain completed references in the JSON report. SIGINT/SIGTERM abort requests
+and return a nonzero interrupted report when possible; re-read after any lost
+response before assuming a change did or did not commit.
