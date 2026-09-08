@@ -13,6 +13,22 @@ Workspaces turn an assistant into a shared resource. Sharing lets your assistant
 
 A workspace is the unit of brain identity, billing, and membership: a company brain from day 1, even when you are the only member. One workspace is auto-created when you sign up (named from the business you tell us about during onboarding). Inviting teammates later does not migrate anything; the same workspace just gains new members. A workspace owns its assistants, memories, knowledge base, connector instances, and channel installs. Memory is per (user, assistant): team-scoped facts are shared across the workspace, while personal memories stay yours.
 
+## Workspace data reset
+
+The owner-only `DELETE /api/workspaces/:workspaceId/data` route resets the
+workspace's learned/produced content while preserving its identity, members,
+assistants, connector configuration, settings and policies. It also works for a
+Personal workspace. This is a destructive workspace reset, separate from a
+contact erasure request; it clears intake replay history. Existing user review
+and confirmation still apply.
+
+The operation is transactional in both OSS and hosted editions. Optional
+hosted content tables absent from OSS contribute zero to the deleted counts;
+installed tables are processed. Missing required tables or other SQL failures
+roll back the reset. A successful response reports `ok`, per-table `deleted`
+counts and `total`; cascade-deleted children are not separately counted.
+Off-database file cleanup and external-provider erasure are separate facilities.
+
 ## Roles
 
 | Role | What it can do |
