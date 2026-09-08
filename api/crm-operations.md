@@ -475,3 +475,48 @@ default option. Intake configuration exposes consent mappings and their locale
 binding alongside the existing field schema. All use the canonical commands
 and the four locale dictionaries. No Association enablement/grant changes are
 part of wording configuration.
+
+### Intake credential rotation and replay namespaces
+
+Migration 503 adds immutable `replay_scope_id` and nullable
+`rotated_from_credential_id` to intake credentials. Existing keys are backfilled
+with their own id, preserving every existing `intake_key:<id>` receipt key.
+Ordinary key creation starts a separate namespace. Owner/admin creation may
+supply `rotateFromCredentialId` naming a credential in the same workspace,
+including a revoked credential during recovery. The database derives the new
+key's namespace from that parent; requests cannot supply a namespace. A parent
+link is workspace-safe and becomes null if its credential is later deleted;
+the inherited namespace remains immutable. Credential secret/grant checks and
+expiry of replay receipts are independent of that namespace.
+
+Rotation does not copy or widen grants: creation still carries an explicit
+validated definition list. Every submission, including an exact replay, checks
+the current key's active state and definition binding inside its transaction,
+holding shared locks on both through commit so revocation serializes with an
+in-flight submission. Only then does it claim `(workspace, inherited scope, definition, idempotency
+key)` with the same canonical request hash. An exact committed replay returns
+before applying the latest field schema or definition payload limit, so a schema
+revision cannot invalidate already accepted bytes. Current credential/definition
+authority and the route's hard payload bound still apply. New submissions must
+pass the current schema and configured size limit before any CRM effect.
+Identical retries across a chain of
+replacements return the original ids without new contact, consent, task, audit
+or outbox effects; changed input conflicts. An unrelated key cannot select a
+prior namespace by label or body fields. New canonical enquiries use
+`source_submission_id = crm:<receipt id>`, so their older workspace/source
+uniqueness constraint cannot collapse independent namespaces. The backend key
+remains in `crm_intake_idempotency.idempotency_key`; existing submission ids and
+source ids are unchanged. A committed replay returns before creating an enquiry.
+The winning submission retains its
+original actor/credential attribution. Rotation does not extend retention or
+restore erased content; retired receipts remain separate privacy work.
+
+`POST .../operations/intake-credentials` retains its existing fields and accepts
+optional `rotateFromCredentialId`. Creation returns the one-time new secret and
+safe parent metadata. New display prefixes contain the full non-secret key id
+to avoid the old four-hex-character prefix uniqueness collisions; existing
+prefixes remain unchanged. Lists and privacy export include safe lineage metadata,
+never secrets/hashes. The native credential control creates a replacement with
+the original definition list and explains that the old key remains active until
+explicitly revoked after backend cutover. It also allows recovery from a revoked
+key. No existing credential is silently revoked by rotation.
