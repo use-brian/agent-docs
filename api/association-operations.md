@@ -147,3 +147,7 @@ integration event selectors are rechecked before each page. Named arrays and
 URLs stay unchanged. Retired unbound cursor tokens are rejected with
 `invalid_input`; restart those traversals without a cursor. Do not decode or
 construct tokens in adapters.
+
+Consent preference reads order occurrence time, recording time, then stable id,
+all descending, matching generic CRM sendability and segment evaluation. A
+delayed old grant does not override a newer withdrawal by receipt time alone.

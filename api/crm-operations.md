@@ -355,3 +355,16 @@ An external-subject binding to an archived/retracted/superseded person also
 requires review. Concurrent lookup/create/bind for one workspace/identity is
 serialized. This is independent of verification authority and does not make a
 claimed address in a `new_or_review` submission a merge instruction.
+
+## Effective evidence ordering
+
+Consent and suppression use occurrence time, recording time, then stable id,
+all descending. A delayed old grant cannot override a newer withdrawal merely
+because Brian received it later. The shared evaluator preserves PostgreSQL
+microseconds and equivalent timezone offsets; invalid timestamps fail closed.
+Read queries select the latest consent and latest suppression per channel by
+the same ordering, keeping evaluation bounded. A purpose's nonempty channel
+list restricts it to those channels; empty or legacy absent lists mean all.
+A mismatch returns blocked with `purpose_channel_inapplicable`, including for
+purposes configured without required consent. Releasing suppression does not
+undo withdrawal or suppression in another channel scope.
