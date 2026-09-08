@@ -610,3 +610,41 @@ ordering must map and reconcile the actual source timestamps. Event ids remain
 job/row-scoped, and delayed imported grants or releases cannot override later
 withdrawals or suppressions. Import authority and confirmation remain required;
 this mapping cannot confer trusted public-intake identity authority.
+
+### Atomic execution contract
+
+The server owns one transaction per bounded 50-row chunk. It locks the job
+before admission, rechecks current member or integration authority, and keeps
+that lock through chunk/job checkpoints. A concurrent resume fails with a
+processing conflict; cancellation serializes on the same row and cannot return
+success while a later chunk is admitted under the previous state. A disconnected
+process releases its transaction, so recovery needs no five-minute stale lease.
+File reads finish before borrowing the transaction connection; locked job
+immutability and source/mapping hashes validate the prefetched bytes. Reads
+performed inside the transaction (custom fields, attribution and identities)
+reuse that connection, avoiding nested pool acquisition under a small pool.
+
+Each row uses a savepoint. Canonical entity creation/updates, custom fields,
+stable identity bindings, operations commands, audit/outbox and its completed
+receipt share the caller-owned client. A row rejection rolls these effects back
+before writing its failed receipt/error. Connection loss, serialization failure
+or deadlock aborts the whole chunk instead of recording a business rejection.
+Chunk counts and the job checkpoint commit together; committed legacy chunks
+reconcile absolute progress when their former job checkpoint is missing.
+
+The import composition constructs `CrmOperationsService` over the same
+transaction client; the command store neither begins nor commits an outer
+transaction it does not own. Existing standalone callers retain owned
+transactions. `crm.ts` and `entities-store.ts` accept explicit transaction
+clients while preserving caller access predicates and workspace checks.
+Custom-field definitions/references use that client too. Graph relationships
+remain best-effort projections of canonical CRM attributes: enqueue their
+effects while writing, discard them on row/chunk rollback and invoke only after
+commit. No ambient transaction interception or alternate SQL mutation engine.
+
+Trusted import email matching uses the same normalized-email namespace lock as
+intake, excludes inactive/archived records, and returns review conflict for
+multiple matches. A stable-provider import holds the existing identity lock
+before resolution; unavailable identity persistence fails the row instead of
+silently creating an unbound record. None of these locks grants public-intake
+verification or widens the captured source/job grant ceiling.
