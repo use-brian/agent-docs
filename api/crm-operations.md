@@ -62,6 +62,37 @@ The plaintext `oneTimeSecret` appears only in that creation response. GET
 returns safe metadata; POST `/:id/revoke` revokes a key for the next request.
 
 
+## Scoped record reads and CSV imports
+
+`GET /api/crm/integration/operations/records` requires `crm.records.read`.
+Use `kind=person|company|deal`, optional `query`, `includeArchived=true`,
+`limit` (1-100), and the returned `nextCursor`. `/:id` reads one CRM record;
+`/record-fields` enumerates custom-field definitions. These grant no general
+Brain or workspace Files access.
+
+Upload immutable CSV bytes to `POST /api/crm/integration/operations/import-sources`
+with `Content-Type: text/csv` and a stable UUID `Idempotency-Key` (maximum 30 MiB).
+Keep the returned `sourceId`; equal upload replay returns it, changed bytes
+conflict. `POST /operations/imports/dry-run` takes `sourceId`,
+`entityKind` (`contact|company|deal|operations`) and `mapping.columns` from
+column indexes to enumerated import targets. `POST /operations/imports` adds
+`confirmed: true` and the exact `dryRunHash`. Confirm creates a job; POST
+`/operations/imports/:id/resume` processes one bounded chunk. Read progress with
+GET `/operations/imports/:id`, list jobs with GET `/operations/imports`, cancel
+with POST `/operations/imports/:id/cancel`, and download failures at GET
+`/operations/imports/:id/errors.csv`.
+
+Imports require `crm.imports.write` plus each mapped domain write operation.
+The import selectors and domain selectors both constrain purpose/plan/event
+references. Source and job authority is immutable: a replacement key must cover
+the original grants, and a wider key cannot widen an old source or job. Read
+inspection requires corresponding read grants. Use equal-grant key rotation to
+resume existing jobs. `stagedFileId` is for member sessions only; a CRM key
+cannot read arbitrary workspace files or legacy file jobs. Machine imports
+cannot nominate a trusted identity source. The dry run rejects scope violations
+before creating contacts or compliance evidence.
+
+
 ## Atomic intake endpoint
 
 ```text
