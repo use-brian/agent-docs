@@ -33,9 +33,44 @@ accepted the email: verify delivery before retrying.
 Managed provider-scheduled drafts are unavailable. Mutable AgentMail drafts
 and implicit recipient replies return `managed_recipient_snapshot_required`;
 use explicit recipients. Interactive incoming-email replies retain their
-separate server-bound channel path. Durable CRM delivery commands/receipts
-and integration-to-mailbox grants are still pending; do not infer safe replay
-or CRM readiness from the admission gate alone.
+separate server-bound channel path. SMTP partial recipient acceptance requires
+reconciliation; do not resend the whole envelope automatically.
+
+Durable command and member/scoped-integration adapters are implemented behind
+an explicit server delivery port, which normal boot has not enabled at this
+checkpoint. Do not infer availability from the route catalog or a CRM write
+grant: an unbound deployment returns `delivery_unavailable`. Assistant/MCP
+exposure remains pending the admission barrier.
+
+When enabled, `POST .../operations/deliveries` accepts a stable UUID
+`deliveryId`, exact `connectorInstanceId`, `purposeKey`, optional `templateKey`,
+`to`/`cc`/`bcc` arrays, `subject`, Markdown `body` and inline-base64
+`attachments` (`filename`, `mime`, `contentBase64`). The prefixes are
+`/api/crm/:workspaceId` for members and `/api/crm/integration` for scoped keys.
+Do not supply workspace, actor or authority fields in the body. Bound the
+entire envelope to 8 MiB, 1,000 total recipients, 20 attachments and 200,000
+body characters. POST returns the ordinary command result with `record`,
+`created` and `duplicate`; `GET .../operations/deliveries/:deliveryId` returns
+`{receipt}`, without message content or private claim material.
+
+A committed `dispatching` receipt precedes external sending. Exact replay
+by the same principal returns the same receipt without a new attempt; changed
+reuse or another actor reusing that id conflicts. `sent` means provider
+acceptance only, with `confirmedAt:null` until separately verified. Refusals
+after claiming are `blocked`, definite rejection is `failed`, and ambiguous
+outcomes are `needs_reconciliation`. An expired abandoned claim is also
+uncertain. Never automatically retry it under a fresh id. Erasure removes
+content while retaining the original replay identity.
+
+Scoped sending requires both `crm.delivery.dispatch` purpose/provider
+selectors and an owner-approved exact mailbox binding. Owners/admins manage
+the binding with `GET`/`POST` at
+`.../operations/mailbox-policies/:connectorInstanceId/integration-grants/:credentialId`.
+POST takes `expectedVersion` (0 initially), `confirmed:true` and `enabled`.
+Configuration is human-only and checked against current membership. Revoking
+an existing binding remains possible after credential expiry or disconnection.
+Receipt GET requires independent `crm.delivery.read` selectors; dispatch alone
+does not authorize unrelated receipt reads.
 
 ## Choose the right credential
 
