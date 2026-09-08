@@ -98,7 +98,7 @@ intent. A `pending` intent is not evidence that a message was delivered.
 
 Association commerce now has workspace lifecycle state separate from navigation and assistant grants. Existing workspaces keep enabled access; new workspaces start disabled. Ticket writes and new orders return HTTP 409 with `module_disabled` or `module_draining` when admission is stopped. Generic CRM identities, enquiries, consent, entitlement plans/grants, events and unconstrained participation remain available under their existing authority.
 
-Disabling preserves historical reads and existing-order recovery. Exact committed order retries return the existing order even after disable; changed reuse of an idempotency key still conflicts. Existing provider reconciliation and registration cancel/check-in remain available under their original authority. A disabled module does not refund or erase an order. Credential permissions do not enable the workspace module. Owner/admin lifecycle controls and scoped integration credentials are introduced by the subsequent command-plane phase; do not infer an enable endpoint from a commerce write failure.
+Disabling preserves historical reads and existing-order recovery. Exact committed order retries return the existing order even after disable; changed reuse of an idempotency key still conflicts. Existing provider reconciliation and registration cancel/check-in remain available under their original authority. A disabled module does not refund or erase an order. Credential permissions do not enable the workspace module. Owner/admin lifecycle controls and scoped integration credentials use the native command adapters documented below; commerce write permission does not grant module administration.
 
 ## Native command adapters and scoped integrations
 
@@ -166,3 +166,16 @@ reference and resolved locale, with stored-default fallback. Legacy purposes
 without a catalog remain unlinked (null wording/hash/version id) and cannot
 claim localized wording. Exact provider retries return the original evidence
 before checking the current catalog. No caller-supplied text/hash is authority.
+
+## Transaction-time scoped credential admission
+
+Scoped CRM-key commerce writes lock and recheck the active credential and
+stored grants before module/inventory locks. The original request ceiling and
+current stored selectors must both permit each referenced event, plan and
+provider. This covers ticket saves, new orders, exact order/provider replay,
+cancellation, free-order confirmation and registration updates. Revoked,
+expired, absent or malformed stored authority returns HTTP 401
+`credential_revoked`; insufficient live scope returns HTTP 403
+`integration_scope_denied`. A command admitted first finishes before revocation
+returns; a revocation that wins admission prevents the command. This does not
+cancel an already admitted command or widen the disabled-module recovery path.

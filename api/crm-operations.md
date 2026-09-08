@@ -727,3 +727,17 @@ or supply a production website. See the engineering CRM assurance specification
 for its prerequisite and acceptance boundary.
 
 The operator guide at `use-brian/docs/operations/intake-reference.md` describes the loopback CLI, private receipt inspection, explicit retry/cancel actions and deployment gates. Queue payload deletion is logical; the backend queue, WAL and backups need their own approved privacy/recovery policy. Fatal fixture worker failure stops accepting submissions and exits nonzero.
+
+### Transaction-time integration admission
+
+Generic CRM commands and commerce writes recheck a scoped key inside their
+transaction, before module/domain locks. The workspace-bound credential and
+grant rows remain locked through commit; current stored permission and the
+original request/source ceiling must both allow the operation and resources.
+Missing, revoked, expired or malformed authority returns HTTP 401
+`credential_revoked`; insufficient live grants return HTTP 403
+`integration_scope_denied`. Expiry is evaluated with database time after the
+credential lock is acquired. A revocation that wins admission prevents the
+write; an already admitted write can finish before revocation returns. Exact
+commerce replay requires the same current authority. This does not recall
+in-flight operations or replace import source ceilings.
