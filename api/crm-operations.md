@@ -413,3 +413,65 @@ The shared persistence helper is
 `use-brian/packages/api/src/crm-operations/evidence-replay.ts`.
 Fingerprints follow their event's existing RLS/export/purge/flush classification;
 they are personal-data-derived integrity metadata, not anonymized data.
+
+### Immutable wording and locale resolution
+
+Migration 502 adds `crm_consent_purpose_versions`, unique by workspace, purpose
+and bounded string version. A version freezes default wording/hash, an optional
+default locale, and optional locale wording/hash maps. Supported locale keys are
+the shared app catalog (`en`, `zh`, `zh-CN`, `ja`), also consumed by OSS app i18n.
+No locale is guessed for existing combined-text wording: its default locale is
+null. Missing requested translations fall back to that stored default and the
+event records the resolved locale (possibly null), not a falsely claimed
+translation. If a locale map includes the declared default locale, that text
+must equal the default wording.
+
+The purpose keeps its existing active-version/default-wording fields and gains
+`defaultLocale`, `localeWordings`, and server-computed `localeWordingHashes`.
+Its database trigger inserts or selects the immutable version on every write;
+different wording/default locale/locale maps under an existing version fails
+with a conflict. Label, description, channel policy and archive edits may reuse
+unchanged wording. A deferred composite FK binds the active purpose to its own
+version, and version rows cannot be updated. Purpose deletion still cascades
+through version rows for approved privacy/flush operations. Configuration uses
+the existing owner/admin command authority; version rows have member-read and
+owner/admin-write RLS with the existing system bypass convention.
+
+Backfill preserves the current purpose snapshot. Historical event versions are
+added only when their stored text/hash pair is unambiguous. An old event whose
+same version label carries conflicting or missing wording stays unlinked;
+its original snapshot is retained and never relabelled as verified history.
+Consent events gain `wordingVersionId` and `wordingLocale` with workspace/purpose
+FKs; exact stored snapshots remain available in compliance and privacy exports.
+Versions are included in workspace privacy export and cleared before purposes
+in workspace flush. Subject export later selects only versions referenced by
+that subject's evidence (§ privacy assurance).
+
+`save_consent_purpose` accepts optional `defaultLocale` and `localeWordings`
+(locale to text); hashes and immutable ids are always server-owned. Omitted
+locale settings preserve the current settings for an update, while explicit
+null/default and an empty map clear them only under a new wording version.
+`record_consent` accepts an optional enumerated `locale`, which is part of
+provider replay identity when supplied; omitting it preserves migration 501's
+request fingerprint. Consent-answer mappings may choose a fixed `locale` or
+`localeFieldKey` (mutually exclusive); a locale field must be a required text
+field with nonempty options drawn entirely from the shared locale catalog.
+Neither route bodies nor mapped fields may supply authoritative text/hashes.
+The member and canonical consent schemas reject those unknown authority fields.
+
+Compatibility `/api/association/consents` retains its explicit `wordingVersion`.
+For a catalogued purpose, it resolves that immutable version (including an
+optional locale), saves server-owned text/hash/id, and rejects unknown versions
+or archived purposes. Uncatalogued legacy purposes remain accepted without a
+locale and retain null text/hash/version references, never fabricated evidence.
+Exact provider replays still precede catalog validation and return the original
+snapshot, including after archival. A legacy null-fingerprint replay cannot
+assert a locale that its stored evidence does not establish.
+
+The native purpose editor supports creating/selecting a purpose, inspecting its
+current wording, and saving a new version with optional translations and an
+explicit default. Consent actions expose locale selection with the stored
+default option. Intake configuration exposes consent mappings and their locale
+binding alongside the existing field schema. All use the canonical commands
+and the four locale dictionaries. No Association enablement/grant changes are
+part of wording configuration.

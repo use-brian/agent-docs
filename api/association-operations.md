@@ -153,3 +153,16 @@ all descending, matching generic CRM sendability and segment evaluation. A
 delayed old grant does not override a newer withdrawal by receipt time alone.
 
 Consent provider replay compares the complete business request, including metadata, occurrence time or its absence, and the legacy wording version. Changed reuse returns `409 idempotency_conflict`, also on concurrent insertion. Pre-upgrade events require exact stored fields and explicit original occurrence time. See CRM Operations → "Provider evidence replay" for the shared fingerprint contract.
+
+## Consent wording compatibility
+
+Consent belongs to shared CRM and remains available with Association disabled.
+Migration 502 catalogues immutable default and localized wording; see
+`crm-operations.md` → "Immutable wording and locale resolution". The existing
+`POST /consents` keeps `wordingVersion` and accepts optional `locale` from
+`en`, `zh`, `zh-CN`, `ja`. For a known purpose, the requested version must exist
+and the purpose must be unarchived. The server saves its exact text/hash/version
+reference and resolved locale, with stored-default fallback. Legacy purposes
+without a catalog remain unlinked (null wording/hash/version id) and cannot
+claim localized wording. Exact provider retries return the original evidence
+before checking the current catalog. No caller-supplied text/hash is authority.
