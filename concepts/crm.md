@@ -55,6 +55,27 @@ consent/suppression and sendability, shared segments, entitlements, events, and
 participation. Discover it at runtime and follow [CRM Operations API](../api/crm-operations.md)
 for the credential and closed-world catalog contracts.
 
+## Native aliases
+
+CRM records use the Brain entity's native `aliases` array, separate from the
+canonical display name. To teach a nickname for an existing contact, company,
+or deal, resolve its explicit record id and use `noteAlias` with `entity_id`
+and `alias`. CRM ids are entity ids. Use `splitAlias` to remove an incorrect
+alias. These tools are available independently of the optional reclassifier
+in both hosted and OSS editions.
+
+Do not append an alias to the name, delete/recreate the contact, or substitute
+a custom field or memory. A rename requires an actual canonical-name change
+request. Confirm a saved alias from the mutation result's persisted `aliases`;
+CRM get/list reads expose the same array. Contact and company searches,
+collection search, and relationship pickers match aliases. An ordinary CRM
+update preserves the id and relationships.
+
+Aliases are retrieval evidence, not authority to merge people or choose a
+person write target. Resolve ambiguity with the user. Conflicts never merge
+records automatically. Alias reads and writes respect the caller's workspace
+and access scope.
+
 ## Canonical email drafts
 
 When the runtime exposes `saveEmailDraft`, save the complete envelope, body,

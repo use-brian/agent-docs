@@ -93,3 +93,89 @@ order state. An identity provider owns authentication sessions; a payment
 provider owns payment instruments and settlement; a delivery provider owns
 transport and bounce telemetry. `/notifications` exposes durable delivery
 intent. A `pending` intent is not evidence that a message was delivered.
+
+## Workspace module admission
+
+Association commerce now has workspace lifecycle state separate from navigation and assistant grants. Existing workspaces keep enabled access; new workspaces start disabled. Ticket writes and new orders return HTTP 409 with `module_disabled` or `module_draining` when admission is stopped. Generic CRM identities, enquiries, consent, entitlement plans/grants, events and unconstrained participation remain available under their existing authority.
+
+Disabling preserves historical reads and existing-order recovery. Exact committed order retries return the existing order even after disable; changed reuse of an idempotency key still conflicts. Existing provider reconciliation and registration cancel/check-in remain available under their original authority. A disabled module does not refund or erase an order. Credential permissions do not enable the workspace module. Owner/admin lifecycle controls and scoped integration credentials use the native command adapters documented below; commerce write permission does not grant module administration.
+
+## Native command adapters and scoped integrations
+
+Member sessions use `/api/crm/:workspaceId/association`; CRM-only credentials
+use `/api/crm/integration/association`. Both call the same typed service as the
+legacy `/api/association` adapter. No member browser needs a machine key.
+
+Order history is available at GET `/orders` with bounded `limit`, `cursor`,
+`eventId`, `contactId` and `status` filters; GET `/orders/:id` returns one order.
+POST `/orders/:id/cancel` cancels an eligible pending order and does not claim
+a refund. POST `/orders/:id/confirm-free` requires a zero-total, unexpired
+pending order and creates no payment-provider evidence. The member/scoped
+adapters expose GET `/module` and `/module-blockers` for state and pending
+orders. Authorized history and recovery remain available after disabling.
+
+Member/chat callers cannot submit payment-success evidence. Backend provider
+events require the explicit reconciliation authority; a CRM integration key
+needs `association.provider_events.write` for both every order event and the
+provider. `association.orders.write` alone cannot mark a paid checkout successful.
+
+Module reads use GET `/api/workspaces/:workspaceId/modules`. Owner/admin
+member actions use POST `/api/workspaces/:workspaceId/modules/association/actions`
+with `action` and `expectedVersion`; machine grants cannot activate a module.
+Legacy plan/event writes retain their established Brain-key catalog authority
+and now use the generic CRM configuration commands. New scoped keys require
+`crm.catalog.configure` and matching catalog resources.
+
+
+### Effective membership reads
+
+`GET /contacts/:contactId/memberships` accepts optional `activeOnly=true|false`
+and ISO `effectiveAt`, retaining `memberships` and raw status while adding each
+row's `isEffective`/evaluation instant. Access requires active status with start
+inclusive and end exclusive (or absent). Member-price admission always rechecks
+current database time; a historical read or raw active status cannot authorize
+a discount outside the grant window.
+
+
+### Query-bound collection cursors
+
+Paged enquiries, plans, events, orders, event registrations and notifications
+use the common CRM cursor: immutable creation timestamp/id with microsecond
+precision, a first-page upper bound, and workspace/resource/filter binding.
+`createdAfter` is inclusive and `createdBefore` exclusive. Read authority and
+integration event selectors are rechecked before each page. Named arrays and
+URLs stay unchanged. Retired unbound cursor tokens are rejected with
+`invalid_input`; restart those traversals without a cursor. Do not decode or
+construct tokens in adapters.
+
+Consent preference reads order occurrence time, recording time, then stable id,
+all descending, matching generic CRM sendability and segment evaluation. A
+delayed old grant does not override a newer withdrawal by receipt time alone.
+
+Consent provider replay compares the complete business request, including metadata, occurrence time or its absence, and the legacy wording version. Changed reuse returns `409 idempotency_conflict`, also on concurrent insertion. Pre-upgrade events require exact stored fields and explicit original occurrence time. See CRM Operations → "Provider evidence replay" for the shared fingerprint contract.
+
+## Consent wording compatibility
+
+Consent belongs to shared CRM and remains available with Association disabled.
+Migration 502 catalogues immutable default and localized wording; see
+`crm-operations.md` → "Immutable wording and locale resolution". The existing
+`POST /consents` keeps `wordingVersion` and accepts optional `locale` from
+`en`, `zh`, `zh-CN`, `ja`. For a known purpose, the requested version must exist
+and the purpose must be unarchived. The server saves its exact text/hash/version
+reference and resolved locale, with stored-default fallback. Legacy purposes
+without a catalog remain unlinked (null wording/hash/version id) and cannot
+claim localized wording. Exact provider retries return the original evidence
+before checking the current catalog. No caller-supplied text/hash is authority.
+
+## Transaction-time scoped credential admission
+
+Scoped CRM-key commerce writes lock and recheck the active credential and
+stored grants before module/inventory locks. The original request ceiling and
+current stored selectors must both permit each referenced event, plan and
+provider. This covers ticket saves, new orders, exact order/provider replay,
+cancellation, free-order confirmation and registration updates. Revoked,
+expired, absent or malformed stored authority returns HTTP 401
+`credential_revoked`; insufficient live scope returns HTTP 403
+`integration_scope_denied`. A command admitted first finishes before revocation
+returns; a revocation that wins admission prevents the command. This does not
+cancel an already admitted command or widen the disabled-module recovery path.
