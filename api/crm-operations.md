@@ -147,7 +147,10 @@ definition. Retry an uncertain request with the same key and byte-equivalent
 JSON body.
 
 - Same key and same canonical request returns the original committed ids with
-  `duplicate: true`; it does not repeat consent, tasks, audit, or events.
+  `duplicate: true` while its parents remain live; after retirement within the
+  approved replay horizon it returns only `duplicate:true` and
+  `outcome:"submission_retired"`. It does not repeat consent, tasks, audit, or
+  events. Do not change the key to recreate a retired submission.
 - Same key and changed request returns HTTP 409 with
   `error: "idempotency_conflict"`. Generate a new key only for a genuinely new
   submission.
@@ -510,7 +513,7 @@ remains in `crm_intake_idempotency.idempotency_key`; existing submission ids and
 source ids are unchanged. A committed replay returns before creating an enquiry.
 The winning submission retains its
 original actor/credential attribution. Rotation does not extend retention or
-restore erased content; retired receipts remain separate privacy work.
+restore erased content; the retired-receipt contract below governs deletion.
 
 `POST .../operations/intake-credentials` retains its existing fields and accepts
 optional `rotateFromCredentialId`. Creation returns the one-time new secret and
@@ -648,3 +651,61 @@ multiple matches. A stable-provider import holds the existing identity lock
 before resolution; unavailable identity persistence fails the row instead of
 silently creating an unbound record. None of these locks grants public-intake
 verification or widens the captured source/job grant ceiling.
+
+### Retired intake receipts and explicit replay policy
+
+Migration `505_crm_intake_retired_receipts.sql` introduces versioned
+`crm_privacy_policies` and extends intake receipts. The first policy domain is
+`intakeReplay: { retentionSeconds: positive integer } | null`; absence/null is
+unconfigured. The upper bound 2147483647 is a storage bound, not a recommended
+period. No legal duration is selected by the product. Other privacy domains,
+previews, suppression tombstones and restore journals remain subsequent work.
+
+`GET /api/crm/:workspaceId/operations/privacy-policy` returns the current
+version (0 and null when absent). Owner/admin
+`POST .../operations/privacy-policy` submits `expectedVersion`, `confirmed:true`
+and `intakeReplay` to `save_privacy_policy`. Only a current human member with
+owner/admin role may approve it; neither assistants nor integration credentials
+may self-approve. The canonical command locks/rechecks membership, serializes
+policy versions, rejects stale versions, and treats identical saves as no-ops.
+Policy versions are immutable during normal use; audit records contain version
+and configuration state, not submissions. The native CRM settings surface uses
+the same command and explicit confirmation. Policies are exported as settings
+and preserved by workspace data flush; workspace deletion removes them.
+
+A new receipt captures the then-current policy version and expiry measured
+from its database `created_at`. Changing/removing a policy never shortens or
+extends an already captured horizon. Legacy/unconfigured receipts acquire the
+current explicitly approved period, also measured from their original creation,
+when their parent is retired. If such a receipt has no approved period, erasure
+or retention refuses with `conflict`, reason `intake_replay_policy_unconfigured`,
+before deleting its evidence. Workspaces with no affected receipts need no
+replay policy to erase unrelated records. This is a replay-specific prerequisite,
+not completion of the programme's wider privacy/retention policy gates.
+
+The existing contact purge hook and retention transaction retire receipts
+*before* deleting enquiries/people. A retired receipt keeps its scoped opaque
+key, request fingerprint, timestamps and policy version/expiry, and clears all
+person/submission/task references. These are minimized pseudonymous processing
+records, not claimed anonymous data; backends must use opaque source ids, not
+addresses, for keys. Parent FKs refuse accidental deletion while live receipts
+still refer to them. Full workspace flush deletes receipts before entities.
+Both paths lock affected enquiries in id order before receipt locks, so a
+concurrent contact purge cannot hold a receipt while retention holds its
+enquiry. Retention locks the exact resolved/spam enquiries it will delete; it never
+prunes a live committed receipt or failed/undelivered outbox event as housekeeping.
+
+Current credential/definition authorization still precedes replay. An exact
+non-expired retired replay is HTTP 200 with only
+`{ duplicate:true, outcome:"submission_retired" }`; the canonical result has
+that outcome, `created:false`, and no emitted events. No old ids or payload are
+returned and no contact, consent, enquiry or task is recreated. Changed-body
+reuse remains 409. Expired retired receipts can be forgotten by retention or
+the next scoped claim, after which the key is a new submission and all current
+validation applies. Live parents retain ordinary result replay even after that
+minimum horizon. There is no perpetual post-erasure idempotency promise.
+
+Actual PostgreSQL tests exercise policy authority/version races, missing-policy
+rollback, parent FK refusal, contact and retention retirement, key rotation and
+revocation, changed-body conflicts, expiry and concurrent retries, export/RLS
+and flush classification in both schema compositions.
