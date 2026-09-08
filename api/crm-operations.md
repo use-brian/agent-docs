@@ -383,3 +383,33 @@ never a raw forwarded-header fallback. Shared boot leaves proxy trust disabled.
 Operators must verify their actual trusted proxy boundary; arbitrary forwarded
 prefixes cannot choose a bucket outside that boundary. Durable backend receipts
 and multi-instance aggregate pacing remain separate integration obligations.
+
+### Provider evidence replay
+
+Consent and suppression provider ids each identify one workspace-scoped event.
+Migration 501 adds a nullable SHA-256 request fingerprint to both existing
+streams. New writes bind the normalized business request: contact, purpose or
+channel/reason, action, source, metadata, and explicit occurrence time (UTC,
+six-digit precision) or an omitted-time marker. Actor credentials and the
+server's receipt time are not request identity. Canonical consent also excludes
+the current purpose wording, so an identical retry returns its original snapshot
+after a wording edit or archive. It still needs current write/resource authority.
+The legacy consent API's explicit wording version is part of its request; moving
+the same provider id between unequal legacy/canonical envelopes conflicts.
+
+The database's provider unique index serializes concurrent inserts. Both the
+early replay lookup and a losing insert compare the fingerprint before returning
+the original event. Different payload reuse returns `409 idempotency_conflict`
+with no new audit/outbox effects. Exact retries add no effects. Streams remain
+separate; a consent id is not a suppression id.
+
+Pre-upgrade events retain a null fingerprint because original request bytes
+cannot be reconstructed honestly. To replay one, callers must supply its exact
+stored occurrence time and matching persisted business fields (including legacy
+wording version where applicable). Missing time requires review and returns
+`idempotency_conflict` with `legacy_evidence_requires_occurred_at`; changed
+evidence conflicts. Never invent a new event id merely to bypass a conflict.
+The shared persistence helper is
+`use-brian/packages/api/src/crm-operations/evidence-replay.ts`.
+Fingerprints follow their event's existing RLS/export/purge/flush classification;
+they are personal-data-derived integrity metadata, not anonymized data.

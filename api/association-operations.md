@@ -151,3 +151,5 @@ construct tokens in adapters.
 Consent preference reads order occurrence time, recording time, then stable id,
 all descending, matching generic CRM sendability and segment evaluation. A
 delayed old grant does not override a newer withdrawal by receipt time alone.
+
+Consent provider replay compares the complete business request, including metadata, occurrence time or its absence, and the legacy wording version. Changed reuse returns `409 idempotency_conflict`, also on concurrent insertion. Pre-upgrade events require exact stored fields and explicit original occurrence time. See CRM Operations → "Provider evidence replay" for the shared fingerprint contract.
