@@ -159,6 +159,11 @@ When the deployment has CRM operations enabled, both scopes can receive:
 `listCrmEntitlements`, `listCrmEvents`, `listCrmParticipation`, and
 `listCrmPipelines`.
 
+These catalog/program collection tools return a named array plus `nextCursor`.
+Pass it as `cursor` with the same filters until it is null. `limit` is 1-100
+(default 50); `created_after` and `created_before` provide inclusive/exclusive
+creation-time bounds. Do not treat the first page as the complete catalog.
+
 `read_write` may additionally receive `recordCrmSubmission`,
 `updateCrmSubmission`, `recordCrmConsent`, `recordCrmSuppression`,
 `saveCrmSegment`, `archiveCrmSegment`, `grantCrmEntitlement`,
@@ -205,3 +210,11 @@ Inside a tool call, a failure is a normal MCP tool result with `isError` and a t
 Brain MCP or acquire general tool access. Use a Brain credential for this
 endpoint, or call the CRM integration resources with explicit operation and
 resource grants. CRM integrations cannot enable modules or administer keys.
+
+`listCrmSegments` also takes `limit`, `cursor`, `created_after` and
+`created_before`; retain the same filters while following `nextCursor`.
+`previewCrmSegment` exposes separate row and ID continuations: `nextCursor`
+feeds `cursor`, and `snapshotNextCursor` feeds `snapshot_cursor`. Keep the
+segment/filter selection unchanged; a segment edit rejects the old cursor.
+`snapshot_limit` remains bounded at 1-10,000 per call. Follow the ID stream
+to null for a complete audience, then recheck sendability at dispatch.

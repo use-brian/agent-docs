@@ -62,6 +62,25 @@ The plaintext `oneTimeSecret` appears only in that creation response. GET
 returns safe metadata; POST `/:id/revoke` revokes a key for the next request.
 
 
+## Traverse complete collections
+
+CRM operations collections keep their named arrays and add `nextCursor`.
+Use `limit` (1-100, default 50), optional `cursor`, `createdAfter` (inclusive)
+and `createdBefore` (exclusive). Follow each returned cursor with unchanged
+workspace, resource and filters until it is null; changing page size is allowed.
+An old cursor used for another query returns `invalid_input`. Ordering is by
+immutable creation time/id, with PostgreSQL microseconds retained and an upper
+bound from the first page. This is a traversal contract, not a snapshot across
+record edits/deletes or backdated inserts. Current grants are rechecked.
+
+This applies to intake definitions/credentials, purposes, submissions, plans,
+entitlements, events, participation, pipelines, CRM records/custom-field
+definitions, import jobs, integration credentials, and audit/event-delivery
+history. Scoped `/operations/audit` and `/operations/event-delivery` require
+`crm.audit.read`; outbound message receipt reads use `crm.delivery.read`.
+Never infer a complete count from one page.
+
+
 ## Scoped record reads and CSV imports
 
 `GET /api/crm/integration/operations/records` requires `crm.records.read`.
@@ -298,3 +317,17 @@ integrations should use CRM operations contracts and CRM contact ids.
 - [Brain MCP](../mcp/brain-mcp.md)
 - [Association operations](association-operations.md)
 - [CRM concepts](../concepts/crm.md)
+
+### Segment and compliance completeness
+
+Segment lists keep `segments` and `catalog`, and return `nextCursor`. Catalog
+choices are complete, including fields/options and workflow event stable keys.
+`GET .../operations/segments/:segmentId/preview` accepts the common page inputs
+plus `snapshotCursor` and `snapshotLimit` (1-10,000; default 1,000). Its existing
+`rows`, `count`, and `snapshotIds` gain `nextCursor` for rows and
+`snapshotNextCursor` for IDs. Follow each stream to null with the same segment
+and filters. An edited segment invalidates either cursor; begin a new traversal.
+The count is current dynamic membership, not a frozen database snapshot or
+continuing permission to send. The native SDK completes the ID stream before
+presenting a snapshot. Contact compliance reads return all authorized purposes,
+consent and suppression evidence, including histories beyond 500 events.
