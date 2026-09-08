@@ -784,3 +784,33 @@ archived field before editing it; stage restoration and edits can share one
 command. No Association activation is needed for generic CRM configuration.
 Each resource command is atomic. This does not make an entire manifest atomic,
 and the manifest CLI's diff/apply/recovery work is still pending.
+
+## Scoped segment discovery
+
+Member and scoped integration `GET .../operations/segments` share the existing
+segment read store and query schema. Responses carry `segments`, `nextCursor`
+and the complete predicate `catalog`; select each entity kind explicitly when
+discovering all segments. Archived rows require `includeArchived=true`. The
+integration adapter retains the store's workspace-wide segment authority:
+`crm.records.read`, global `crm.catalog.read` (all four catalog dimensions),
+global consent, entitlement and participation read grants. A partial grant
+cannot expose a wider derived catalog. Discovery performs no configuration,
+audience materialization or command execution.
+
+
+## Manifest input and discovery foundation
+
+The OSS version-1 manifest schema is `packages/core/src/crm/manifest.ts`.
+It derives business validation from canonical commands, with local resource
+references and a pipeline reference on each stage. The fictional full input
+is `scripts/crm/fixtures/community-manifest.v1.json`. Sensitive intake fields
+are submission-only; trusted identity setup, archive operations, authority,
+credentials and module activation are outside version-1 manifest input.
+
+`scripts/crm/manifest-client.mjs` supplies private token loading and pure
+all-page discovery for member and integration modes. Build `@use-brian/core`
+before importing it. Discovery checks the explicit workspace against the key's
+catalog, refuses redirects and incomplete catalogs, and requests only required
+resource/dependency catalogs. Segment discovery requires the global grants
+listed above. It does not expose a completed diff/apply CLI; that remains
+implementation work, including partial apply recovery and a zero-command rerun.
