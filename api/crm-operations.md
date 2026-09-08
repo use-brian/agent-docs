@@ -157,8 +157,9 @@ JSON body.
 
 ## Example backend adapter
 
-This example uses reserved `example.com` data and keeps the intake credential on
-the server:
+This unverified-form example requires a `new_or_review` definition. It uses
+reserved `example.com` data and keeps the intake credential on the server.
+Trusted matching instead requires the backend proof contract below:
 
 ```ts
 export async function submitApplication(form: {
@@ -520,3 +521,76 @@ never secrets/hashes. The native credential control creates a replacement with
 the original definition list and explains that the old key remains active until
 explicitly revoked after backend cutover. It also allows recovery from a revoked
 key. No existing credential is silently revoked by rotation.
+
+### Trusted intake verification and occurrence time
+
+Trusted identity policies require `definition.identityVerification` with
+`{keyId, publicKey, maxAgeSeconds, acknowledged:true}`. `publicKey` is the
+43-character canonical base64url Ed25519 public-key x coordinate; no private key
+enters Brian. `maxAgeSeconds` is explicitly chosen between 1 and 86400 seconds,
+with no default. Only a member-authenticated owner/admin may save a trusted
+version and acknowledge that the backend verifies address control (email policy)
+or authenticates the configured provider subject (external policy) before
+signing. Machine, assistant, workflow and Home app actors cannot give that
+acknowledgement. Ordinary `new_or_review` versions contain no verification key.
+
+Configuration lives in the existing immutable-by-service version's
+`schema_snapshot.identityVerification`; `created_by_user_id` and `created_at`
+record its acknowledging member and time. The save transaction rechecks and
+locks current owner/admin membership; admission holds the definition lock
+through commit so version/deactivation changes serialize with submissions.
+Catalog reads expose the safe acknowledgement fields.
+Legacy trusted versions lack the configuration and refuse new submissions with
+`409 conflict`, reason `identity_verification_unconfigured`, until an owner saves
+a configured version. The same blocker applies if the recorded acknowledging
+member is unavailable; a current owner/admin can save a newly acknowledged
+version. Records and committed replay receipts remain available.
+The native editor defaults to `new_or_review`, exposes trusted configuration and
+explicit acknowledgement, and edits existing versions without dropping routing,
+consent or follow-up settings. Key rotation creates a new definition version.
+
+New trusted submissions require `identityProof`:
+`{keyId, definitionVersion, verifiedAt, signature}`. The signature is a canonical
+86-character base64url Ed25519 signature over UTF-8 `canonicalCrmRequest` of:
+
+```json
+{"protocol":"crm-intake-identity-v1","workspaceId":"uuid","definitionKey":"fixture","definitionVersion":1,"idempotencyKey":"opaque-key","requestHash":"64-hex","keyId":"backend_key","verifiedAt":"ISO-instant"}
+```
+
+`requestHash` is the existing canonical hash of
+`{definitionKey,fields,externalIdentity: claim-or-null,submittedAt: supplied-or-null}`.
+Thus proof binds the workspace, current definition version, backend submission
+key, all field values, provider/subject and explicit occurrence time. The signer
+must actually verify the mapped address or provider subject; a signature proves
+that the configured backend attested this, not that Brian independently ran the
+backend's challenge. Provider verification wiring remains a live operator gate.
+The test fixture signs synthetic assertions only. The portable reference
+adapter remains part of the pending assurance tooling.
+
+The service verifies current key id/version, canonical encodings, signature and
+`now-maxAgeSeconds <= verifiedAt <= now` before identity lookup or CRM effects.
+`now` is server receipt time; no future clock allowance. Invalid/missing proof
+returns `401 not_authorized` with reason `identity_verification_required` or
+`identity_verification_invalid`. Legacy unconfigured status takes precedence.
+Malformed wire shapes remain 400. A caller-supplied `verified` or private key is
+rejected, including nested external-identity authority fields.
+
+New caller-supplied `submittedAt` requires valid trusted proof and the same time
+window; otherwise return `400 invalid_input`, reason
+`occurrence_time_requires_verification` or `occurrence_time_out_of_window`.
+Omitted time is server receipt time. Direct evidence commands retain their
+explicit `occurredAt` contract. CSV occurrence-time mapping is separate pending
+assurance work. Proof failure never changes existing
+contact data, consent, tasks, audit or outbox and rolls back the pending receipt.
+Migration 504 adds nullable bounded `identity_verification_evidence` to enquiries;
+only successfully verified proof plus its business request hash is stored and
+returned by authorized submission detail reads. No
+raw identity or secret is added to audit/outbox. The existing enquiry export,
+retention, erasure and workspace-flush coverage owns this column too.
+
+Proof is admission metadata, excluded from the business request hash. Exact
+committed replay still requires current credential/definition authority, then
+returns before proof/key-version/age validation. It may carry a renewed proof or
+no proof and cannot create effects. Changed business bytes still conflict; a
+proof cannot be transplanted to a new idempotency key, workspace or definition.
+This does not promise replay beyond the separately configured receipt horizon.
