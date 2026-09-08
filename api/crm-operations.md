@@ -343,3 +343,15 @@ time retained across cursor pages. Keep filters unchanged while continuing.
 A historical read grants no present-day commerce authority. Segment plan
 status `active` means effective access; raw-active periods outside the window
 have derived value `inactive`, with raw stored status preserved.
+
+
+### Identity review conflicts
+
+Trusted email resolution normalizes whitespace/case without provider-specific
+dot or plus rules. Multiple live matches return HTTP 409 `conflict`, with
+`reason: identity_review_required`; no third contact, submission or replay
+receipt is committed. Resolve the ambiguous CRM records before retrying.
+An external-subject binding to an archived/retracted/superseded person also
+requires review. Concurrent lookup/create/bind for one workspace/identity is
+serialized. This is independent of verification authority and does not make a
+claimed address in a `new_or_review` submission a merge instruction.
