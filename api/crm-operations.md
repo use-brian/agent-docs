@@ -368,3 +368,18 @@ list restricts it to those channels; empty or legacy absent lists mean all.
 A mismatch returns blocked with `purpose_channel_inapplicable`, including for
 purposes configured without required consent. Releasing suppression does not
 undo withdrawal or suppression in another channel scope.
+
+## Intake rate-limit retry contract
+
+The initial limit remains 60 attempts per 60-second sliding window, keyed by
+credential candidate and resolved source address within each API process.
+Duplicates/rejected requests consume the window. HTTP 429 includes
+`Retry-After: 60` and `{error:"rate_limited",retryable:true,retryAfterSeconds:60}`.
+This is a conservative delay, not a remaining-quota or durable-queue claim.
+Retain the same body/idempotency key and use aggregate pacing plus bounded
+backoff/jitter; do not automatically retry changed-body 409s or permanent 4xxs.
+Source IP uses Express's configured proxy-trust resolution, then the socket,
+never a raw forwarded-header fallback. Shared boot leaves proxy trust disabled.
+Operators must verify their actual trusted proxy boundary; arbitrary forwarded
+prefixes cannot choose a bucket outside that boundary. Durable backend receipts
+and multi-instance aggregate pacing remain separate integration obligations.
