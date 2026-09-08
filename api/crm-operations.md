@@ -709,3 +709,21 @@ Actual PostgreSQL tests exercise policy authority/version races, missing-policy
 rollback, parent FK refusal, contact and retention retirement, key rotation and
 revocation, changed-body conflicts, expiry and concurrent retries, export/RLS
 and flush classification in both schema compositions.
+
+### Durable backend reference
+
+The OSS `scripts/crm/durable-intake-queue.mjs` and
+`scripts/crm/reference-intake-backend.mjs` provide an owner-private SQLite
+queue and loopback fixture. They commit a receipt before queued acknowledgement,
+share pacing and expiring leases across workers, preserve key/body across
+restart or lost response, and honor Retry-After with bounded backoff. Permanent
+4xx responses are not retried automatically. A configured replay deadline
+pauses uncertain work before upstream receipts may be forgotten; qualify it
+against the approved workspace policy. A `submission_retired` result is final.
+No API secret is persisted, and successful/retired payloads are logically
+cleared. Failed/pending payloads and local WAL/backups need the operator's
+privacy and recovery policy. This reference does not prove identity ownership
+or supply a production website. See the engineering CRM assurance specification
+for its prerequisite and acceptance boundary.
+
+The operator guide at `use-brian/docs/operations/intake-reference.md` describes the loopback CLI, private receipt inspection, explicit retry/cancel actions and deployment gates. Queue payload deletion is logical; the backend queue, WAL and backups need their own approved privacy/recovery policy. Fatal fixture worker failure stops accepting submissions and exits nonzero.
