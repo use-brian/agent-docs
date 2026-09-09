@@ -317,3 +317,21 @@ application or sender starts automatically. A storage-only proof remains blocked
 for application acceptance. Off-instance custody, upload/scheduling/alerts,
 measured RPO/RTO and a deployment-specific application rehearsal remain operator
 work; a synthetic local pass does not approve cutover.
+
+## CRM engineering acceptance
+
+`scripts/crm/brian-contract-check.mjs --mode local --report-dir /new/private/report`
+runs an explicit suite catalog with disposable PostgreSQL 18, a restricted app
+role, loopback API routes, fake providers and complete persisted workflows.
+Select an installation with pgvector/pg_trgm using `--pg-bin`. It rebuilds
+shared/core first and records actual SHA, schema/migration and fixture hashes,
+assertion names and logical/PITR recovery evidence. Missing, skipped or failed
+evidence cannot pass. Existing report directories are refused.
+
+Remote QA requires an explicit dedicated workspace, controlled synthetic prefix,
+CRM-scoped credential and confirmation. QA and production modes expose only
+catalog qualification; production cannot dispatch mutations, sends, erasure or
+load tests. These modes report the engineering matrix as unexecuted, even when
+qualification succeeds. See the OSS `docs/operations/crm-assurance-runbook.md`.
+Local success does not approve policy, live integrations, data cutover,
+off-instance recovery, staff acceptance or measured soak.
