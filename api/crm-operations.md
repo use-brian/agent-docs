@@ -1360,3 +1360,17 @@ read/write request is its own write authorization. All recipients must pass the
 managed purpose policy at dispatch. `sent` proves provider acceptance only.
 Inspect `needs_reconciliation` under the original UUID; a fresh UUID may send
 a duplicate. No message is resent by receipt reads or exact replay.
+
+## Protected recovery evidence
+
+CRM privacy-v2 declares `crm_erasure_journal` as protected recovery evidence.
+Workspace exports include existence metadata only; primary keys and recorded
+mutation values are excluded. The schema registry has no workspace content and
+is excluded. Integration credentials cannot edit recovery evidence.
+
+Completed hard purges, retention, staged-file cleanup and workspace reset record
+transactional recovery effects from migration 522 onward. Restoring an older
+backup requires a current encrypted journal checkpoint before sending resumes.
+This is an operator recovery procedure, not a CRM command or a replacement for
+provider/storage erasure. Earlier coverage, journal custody and retention need
+explicit privacy/deployment qualification.

@@ -301,3 +301,19 @@ The hosted product also gives every new workspace a 30-day Pro trial. See [Prici
 - [Pricing and credits](operations/pricing-and-credits.md)
 - [Brain MCP server](mcp/brain-mcp.md)
 - [Privacy and data](operations/privacy-and-data.md)
+
+## CRM recovery tooling
+
+The OSS tree supplies `scripts/operations/brian-backup.mjs`,
+`brian-restore-check.mjs` and `brian-wal-archive.mjs`, with configuration and
+readiness gates in `docs/operations/crm-recovery.md`. They use PostgreSQL 18,
+explicit private credential/key files, encrypted artifacts and new disposable
+loopback restore targets. Logical full restore and physical base-backup plus
+continuous-WAL PITR are separate paths. Default CLI behavior is preflight.
+
+Restore verifies migration/schema and content hashes, replays protected erasure
+effects and checks referential integrity before application verification. No
+application or sender starts automatically. A storage-only proof remains blocked
+for application acceptance. Off-instance custody, upload/scheduling/alerts,
+measured RPO/RTO and a deployment-specific application rehearsal remain operator
+work; a synthetic local pass does not approve cutover.
