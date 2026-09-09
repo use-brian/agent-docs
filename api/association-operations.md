@@ -362,3 +362,23 @@ transitions and revoked authority remain visible reconciliation cases. Resolve
 the cause and explicitly replay the same input to restart a cycle. Applied means
 canonical state committed; it never means a notification was sent. The trusted
 backend still verifies provider signatures before forwarding normalized input.
+
+
+## Provider backend reference
+
+The OSS `scripts/crm/reference-provider-backend.mjs` and
+`docs/operations/crm-provider-reference.md` supply a fictional loopback webhook
+and periodic missed-event adapter. The provider port verifies exact raw bytes
+before normalization and enumerates a stable, complete event cursor. Both order
+and membership events use the normalized inbox endpoints. The client verifies
+the configured workspace against its CRM credential before forwarding.
+
+The private SQLite checkpoint advances only after an applied or explicit durable
+processing/reconciliation receipt. Uncertain responses and unrecorded errors
+retain the cursor; HTTP 429 persists Retry-After. Restart repeats stable event
+identities. Separate processes lease/compare-and-set the checkpoint. Paginated
+reconciliation pointers require operator inspection; caught-up polling does not
+imply every receipt applied or any notification sent. No API secrets or raw
+provider bodies are stored in the checkpoint. Production provider signatures,
+object mapping, polling retention and account/deployment acceptance remain the
+integration owner's work.
