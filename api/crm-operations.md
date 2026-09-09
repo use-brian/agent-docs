@@ -1150,3 +1150,38 @@ the prior details. Broader artifact and legacy resolution remain required work.
 Client-authored workflow replay keys produce `workflow_replay_dependency`.
 Automatic retirement preserves only absent keys or the server-generated CRM
 source-event key; a client key may itself contain personal content.
+
+## CRM import source retirement
+
+Owner/admin policy approval accepts optional
+`importSourceErasure: { receiptRetentionSeconds, heldSourceIds } | null` through
+the existing member privacy-policy command. Omission preserves the prior setting;
+null leaves source retirement unconfigured. Durations have no default. Holds are
+at most 250 distinct current-workspace source UUIDs and protect source bytes and
+job history. Machine credentials cannot approve this policy.
+
+A contact erasure can retire CRM-owned CSV bytes only when complete source
+lineage proves that every consumer job and every successful row belongs to the
+subject. Byte-identical staged copies are included even without their own row
+receipt; an unprocessed matching copy is a named dependency. Legacy or pruned
+consumer history, shared/unknown rows, incomplete jobs, failed rows and holds
+return named preview blockers. Adding a consumer or changing
+policy invalidates an earlier approval. General workspace Files still require
+separate copy resolution.
+
+Retirement clears CSV bytes, fingerprints, captured grants, job mappings and
+row/chunk/error copies. Source-key receipts retain their explicit policy expiry.
+While a receipt exists, source reads and same-key staging return `409` with
+`reason: import_source_retired`; never retry by changing the key to recreate an
+erased source. Completed import receipts expose `privacyErased` and
+`privacyErasedAt`, and resume returns that terminal result without executing rows.
+Members retain receipt visibility; a machine can read an erased job receipt only
+with the original still-authorized credential and the required import operation.
+
+A parser holding old bytes cannot commit work after retirement. Database parent
+admission also rejects late consumers and stale snapshots. Unknown live-source
+history blocks contact erasure throughout the workspace until resolved; absent
+attribution cannot exclude a subject. Housekeeping preserves all jobs backed by
+live sources and held source jobs, and does not remove source replay identity
+before its approved expiry. This contract does not prove deletion of external Files, backups or
+unattributed free text.
