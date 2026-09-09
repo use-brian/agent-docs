@@ -1037,8 +1037,8 @@ together; an exact replay by the same still-authorized member returns the
 content-free receipt with `duplicate:true`, without another deletion.
 
 Known copied-data domains that the current purge cannot clear are explicit
-blockers, including drafts, attributable tasks/links, source files,
-notification/decision payloads. Financial
+blockers, including shared drafts/tasks, exact subject references in saved
+segments, source files and notification/decision payloads. Financial
 references can also block deletion. Do not bypass these blockers or call
 a blocked preview successful erasure. They remain work in the full CRM
 assurance programme. The response status `crm_contact_purged` and its
@@ -1057,3 +1057,38 @@ metadata is also redacted before submission, membership or attendee references
 are removed. Editing an attributable audit row invalidates an earlier review.
 These redactions roll back with a failed purge and do not complete the other
 copied-data or recovery-journal requirements above.
+
+## Draft and task copies in privacy review
+
+Contact previews and exports include whole attributable draft families: a
+matching current or historical To/Cc/Bcc address selects the parent, every
+revision and session anchors. Erasure deletes an eligible unshared family.
+A different/null recipient or an address also bound to another contact returns
+`shared_or_ambiguous_draft`. Each exported projection/revision filters recipient
+arrays and redacts content if it lacks a subject recipient or has shared or
+ambiguous ownership; an independent earlier subject-only revision keeps its
+own content. Historical attachment ids/paths remain file dependencies.
+
+Task copies include CRM-attributed roots, descendants and connected
+supersession chains. Unshared sets and incident links are deleted atomically;
+shared task components return `shared_or_unresolved_task`, with their content
+and correction/sidecar payloads redacted in subject exports. A removed intake
+submission can still be owned through the generated task's exact retained
+contact attribute; unresolved or conflicting ownership blocks. A malformed
+cross-workspace cascade returns `cross_workspace_task_dependency`. Workspace
+CRM exports traverse the same complete task closure, excluding unrelated tasks.
+
+Task snapshots and all four entity-alias histories are minimized before
+canonical deletion. New task before-images require a live same-workspace
+parent. Shared segment predicates are dependencies identified through exact
+typed relationship UUID or complete base email values, including nested
+arrays/groups. They return `crm_copy_resolution_required`; configuration is
+preserved for owner resolution, with names/keys/predicate content redacted in
+subject exports. Incidental id text does not match. Decision source/artifact
+references use exact typed ids too. New copies invalidate a reviewed hash.
+
+The same checks protect legacy canonical purge. No copy deletion commits if a
+later dependency refuses erasure. Resolve retained dependencies and request a
+fresh preview; do not bypass a blocked result. This closes draft/task copy
+handling, not the remaining source, notification, financial, retention or
+restore-journal requirements of the CRM assurance programme.
