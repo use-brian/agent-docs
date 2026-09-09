@@ -1230,3 +1230,39 @@ receipt expiry; elapsed review time cannot silently widen deletion. CRM export
 includes safe run metadata and excludes approval hashes. Workspace reset clears
 runs but preserves policy. A retention receipt is neither whole-contact erasure
 nor an off-instance recovery journal.
+
+## Reviewed staged-file cleanup
+
+Owner/admin member sessions can review and retire eligible workspace Files used
+by completed CRM imports. These are human privacy administration commands;
+integration and Brain keys cannot approve them.
+
+- `POST /api/crm/:workspaceId/operations/privacy/file-cleanup-preview`:
+  `{ fileId, before }`. Returns `id`, `previewHash`, `expiresAt`, `policyVersion`,
+  domain counts and named blockers. The cutoff cannot be in the future.
+- `POST /api/crm/:workspaceId/operations/privacy/file-cleanup-execute`:
+  `{ previewId, previewHash, confirmed:true }`. Rejects changed data, policy,
+  owner membership, expired or blocked reviews without committing partial work.
+- `GET /api/crm/:workspaceId/operations/privacy/file-cleanups/:id`:
+  current cleanup receipt. Private storage locators and approval/lease tokens
+  never enter the returned receipt or CRM export.
+
+The current privacy policy must configure
+`importSourceErasure.receiptRetentionSeconds`. Every file consumer must be a
+terminal import older than the cutoff. File/contact holds, independent or
+foreign-workspace references, ingested files, read-only local-directory files
+and missing lineage block cleanup. Shared files are retained dependencies.
+
+A successful execution returns `queued`, not completed byte erasure. It retires
+the proven database copies and queues the exact object atomically. Workers use
+the Files resolver; states are `queued`, `leased`, `failed`, `completed`.
+Failed calls expose only `file_cleanup_failed`, retry with backoff and recover
+expired leases after restart. Duplicate execution reuses the same receipt;
+read its current state instead of authorizing another cleanup. Pending/failed
+cleanup blocks contact erasure throughout the workspace even after its index
+row has gone. Workspace reset preserves this work. Completion clears the
+locator; approved retention expires content-free receipts after their horizon.
+
+Completion proves live-object removal acknowledged by storage. Provider
+soft-delete, versions, backups and account/workspace teardown remain separate
+storage recovery and erasure operations, not implied by this receipt.
