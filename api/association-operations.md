@@ -382,3 +382,18 @@ imply every receipt applied or any notification sent. No API secrets or raw
 provider bodies are stored in the checkpoint. Production provider signatures,
 object mapping, polling retention and account/deployment acceptance remain the
 integration owner's work.
+
+
+## Fictional workflow recipes
+
+The OSS `scripts/crm/fixtures/association-workflows.json` provides five disabled
+recipes with canonical workflow definitions and sample inputs. Submission
+notification and managed outreach use frozen delivery commands; generic event
+registration keeps its stable source identity and cannot bypass order inventory;
+member onboarding reads effective access before creating an attributed task.
+Optional weekly digest prose has only CRM segment read tools and must follow
+pagination. Policy, catalog ids, mailbox/channel targets and assistant grants
+must be configured before enabling. Fake sample read outputs are test data,
+never a live authority source. See `docs/operations/crm-workflow-recipes.md` in
+the OSS tree for binding and replay instructions. Tool wiring and complete
+workflow/delivery acceptance remain separate from recipe schema validation.
