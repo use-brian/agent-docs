@@ -315,4 +315,50 @@ conflicts. Semantic duplicates retain evidence without repeated notifications
 or state-change effects. Bound recovery remains available after module disable.
 Refunds include checked-in registrations. Expired or impossible transitions
 remain errors; no stock is silently revived. This contract is payment admission;
-it does not by itself claim a durable webhook inbox or live provider acceptance.
+the normalized inbox contract below adds durable receipt handling, without claiming live provider acceptance.
+
+
+## Durable normalized provider receipts
+
+The order provider-event routes now commit a normalized inbox receipt before
+applying domain effects. Success includes `receipt` with id, state, attempts
+and safe target fields. Atomic application and receipt acknowledgement make an
+exact replay safe after a lost response. Changed input under the same
+workspace/provider/event identity returns HTTP 409 `idempotency_conflict`.
+A concurrent exact request may return 409 with
+`details.reason=provider_event_processing`, `receiptId` and `receiptState`;
+retry the identical input after processing. An error carrying a receipt does
+not assert that payment or membership changed. Inspect its state.
+
+`POST /provider-entitlement-events` accepts `provider`, `eventId`,
+`providerReference`, `providerPeriodId`, `occurredAt` and a canonical typed
+`grant_entitlement` or `update_entitlement` in `command`. Grant provider/object/
+period fields must match the envelope and specify a finite end. Update must
+match the existing provider object and period. Period-end cancellation changes
+renewal mode; immediate cancellation changes status. Terminal renewal creates
+a new period/grant with predecessor linkage. Older events cannot overwrite
+newer applied provider state. This generic membership path works when the
+Association commerce module is disabled. Legacy trusted-backend entitlement
+commands remain compatible but do not claim normalized webhook receipts.
+
+Scoped backends need `association.provider_events.write` for the provider and
+`crm.entitlements.write` for the plan. Orders retain the all-order-event ceiling.
+Each processing transaction checks current revocation and original resource
+ceilings. The worker uses saved execution authority, never an elevated system
+identity. An explicit authorized identical request can replace execution
+credentials after repairing a cause; original admission provenance stays frozen.
+
+`GET /provider-receipts` accepts opaque `cursor`, `limit` (1-100), optional
+`orderId`, `entitlementId`, and `state`. It returns `{receipts,nextCursor}`.
+States are `pending`, `processing`, `applied`, `retry`, `needs_reconciliation`.
+Member reads use workspace membership. Scoped reads require `association.read`;
+order event ceilings filter before pagination, and membership rows additionally
+require `crm.entitlements.read` for their plans. Payloads, hashes, execution
+credentials and lease tokens are excluded from these reads.
+
+Known transaction/connection failures retry with bounded backoff; each automatic
+cycle has at most eight attempts. Invalid evidence, late success, impossible
+transitions and revoked authority remain visible reconciliation cases. Resolve
+the cause and explicitly replay the same input to restart a cycle. Applied means
+canonical state committed; it never means a notification was sent. The trusted
+backend still verifies provider signatures before forwarding normalized input.
