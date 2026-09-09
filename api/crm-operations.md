@@ -1303,3 +1303,28 @@ identity and never consume present inventory. Replaying a historical import stil
 requires current admin authority. Generic participation updates cannot turn such
 a record into a commerce reservation. Shared CRM remains available with the
 Association module disabled.
+
+
+### Provider entitlement renewal
+
+Provider-backed grants and updates require a backend credential, matching trusted
+provider actor, or the entitlement reconciliation job. Humans and assistants can
+manage manual grants; they cannot manufacture provider-backed access. Scoped
+integrations need both `crm.entitlements.write` for the plan and
+`association.provider_events.write` for the provider. Revocation is rechecked on
+replay as well as new writes.
+
+Explicit provider periods use `providerPeriodId` and an optional `predecessorId`,
+with a finite `endsAt`. One provider object/period identifies one immutable grant
+request, including across different transport idempotency keys. Changed period
+payload returns `idempotency_conflict`. Extend active/pending grants through the
+existing update command. After a terminal grant, create a new period naming its
+same-workspace/contact/plan/provider predecessor, with a later start. A stale,
+foreign or active predecessor returns `provider_period_predecessor_invalid`.
+Terminal grants remain terminal and a predecessor can have only one successor.
+Legacy grants without period identities retain their original replay behavior.
+
+`renewalMode: "none"` with an active status and future end represents cancellation
+at period end. `status: "cancelled"` removes effective access immediately. Reads
+return period/predecessor lineage separately from raw status and effective access.
+Lineage is not proof of webhook verification or notification delivery.

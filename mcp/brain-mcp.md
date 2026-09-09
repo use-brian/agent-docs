@@ -223,3 +223,12 @@ to null for a complete audience, then recheck sendability at dispatch.
 Read raw `status` separately from `isEffective`; future-start and ended periods
 provide no current access. Continue with the same filters and `nextCursor`.
 Historical evaluation never authorizes present-day member pricing.
+
+
+`grantCrmEntitlement` accepts `provider_period_id` and `predecessor_id` for explicit
+provider renewals. Backend evidence authority is required for provider-backed
+writes; ordinary human/assistant actions continue to manage manual grants.
+`updateCrmEntitlement` extends an active grant in place. A terminal grant requires
+a new provider period, not a status reset. The same provider period is idempotent
+across transport keys, with changed business fields rejected. These tools do not
+verify an external provider webhook or prove a notification was delivered.

@@ -249,3 +249,14 @@ catalog pointers, capacity, used count and revision, with no attendee or payment
 payload. One subject/revision identity prevents duplicate emission on retry.
 Cancellation, expiry and capacity edits can create availability transitions.
 These events are durable workflow inputs, not proof that a notification was sent.
+
+
+### Membership renewal periods
+
+Compatibility membership input accepts `providerPeriodId` and `predecessorId`.
+Provider-backed writes require backend/provider authority, including direct
+compatibility stores. A terminal membership cannot be revived; renew it through
+a new idempotent provider period linked to its terminal predecessor. Active
+membership periods extend in place. The same period cannot create multiple grants
+through changed transport keys. See the CRM operations provider renewal contract
+for plan/provider scopes, cancellation timing, lineage and replay errors.
