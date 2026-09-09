@@ -1266,3 +1266,22 @@ locator; approved retention expires content-free receipts after their horizon.
 Completion proves live-object removal acknowledged by storage. Provider
 soft-delete, versions, backups and account/workspace teardown remain separate
 storage recovery and erasure operations, not implied by this receipt.
+
+## Automatic manual entitlement expiry
+
+Due manual grants now transition from active to expired through the generic CRM
+worker even when the Association module is disabled. The worker scans all due
+rows in bounded pages, locks/rechecks each grant at database time and emits one
+committed lifecycle event. A concurrent extension that wins the row lock is
+respected. Repeated scans, restart and two workers do not duplicate the change.
+
+Provider-managed, indefinite, future and terminal grants are untouched. Effective
+access still uses inclusive start/exclusive end and no grace period, so an
+outage cannot extend a provider-managed grant's access. Provider reconciliation
+remains responsible for its raw lifecycle state. Deployments may pause manual
+expiry with `CRM_ENTITLEMENT_EXPIRY_ENABLED=false` or `0`; this does not change
+the effective-access predicate.
+
+The internal due-expiry command is reserved for its system principal. External
+agents use the existing authorized grant/adjustment commands; they cannot invoke
+an expiry worker identity or mutate terminal grants back to active.
