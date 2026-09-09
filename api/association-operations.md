@@ -212,3 +212,23 @@ the effective-access predicate.
 The internal due-expiry command is reserved for its system principal. External
 agents use the existing authorized grant/adjustment commands; they cannot invoke
 an expiry worker identity or mutate terminal grants back to active.
+
+## Reservation expiry and requested shutdown
+
+Pending orders with an elapsed reservation deadline are cancelled by the OSS
+Association lifecycle worker; their reserved registrations are cancelled in the
+same transaction. The worker rechecks the order after locking it. A concurrent
+paid transition, renewed reservation, future/indefinite hold or terminal order
+is preserved. Expiry creates no payment or refund evidence and records one
+expiry audit. Repeated candidates are no-ops.
+
+A previously requested draining module becomes disabled once no pending orders
+remain. Restart or two workers cannot duplicate that versioned change, and a
+concurrent re-enable is respected. Home placement and saved assistant grants
+remain unchanged. Paid order history remains readable. An indefinite pending
+order stays a visible drain blocker until resolved through ordinary commands.
+
+`ASSOCIATION_LIFECYCLE_ENABLED=false` or `0` pauses this worker; default is enabled
+with `runWorkers` in both editions. The internal due-expiry command belongs only
+to its system principal. Agents use the existing authorized cancellation and
+provider-reconciliation paths, with their ordinary authority requirements.
