@@ -121,3 +121,11 @@ Every CRM row is an entity in the underlying graph. Save a memory about a contac
 - [Brain (entities & episodes)](./brain.md)
 - [Tasks](./tasks.md)
 - [Memory & knowledge](./memory-and-knowledge.md)
+
+
+Managed CRM email is available through native tools and scoped backend commands.
+Workspace CRM permission alone does not authorize a mailbox: the current account
+send grant, purpose policy and every recipient's sendability still apply. Durable
+receipts distinguish provider acceptance from confirmed delivery and preserve
+uncertain outcomes for review. Association enablement is independent of these
+generic CRM controls. See [managed delivery](../api/crm-operations.md#native-managed-delivery-tools).

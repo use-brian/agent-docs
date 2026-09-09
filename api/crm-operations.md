@@ -36,13 +36,12 @@ use explicit recipients. Interactive incoming-email replies retain their
 separate server-bound channel path. SMTP partial recipient acceptance requires
 reconciliation; do not resend the whole envelope automatically.
 
-Durable command and member/scoped-integration adapters are implemented behind
-an explicit server delivery port, which normal boot has not enabled at this
-checkpoint. Do not infer availability from the route catalog or a CRM write
-grant: an unbound deployment returns `delivery_unavailable`. Assistant/MCP
-delivery exposure remains pending native dispatch authority wiring.
+Shared boot binds durable sending for member/scoped-integration requests and
+native tools. An explicitly unbound custom deployment returns
+`delivery_unavailable`. Live mailbox configuration and transport qualification
+remain operator responsibilities.
 
-When enabled, `POST .../operations/deliveries` accepts a stable UUID
+`POST .../operations/deliveries` accepts a stable UUID
 `deliveryId`, exact `connectorInstanceId`, `purposeKey`, optional `templateKey`,
 `to`/`cc`/`bcc` arrays, `subject`, Markdown `body` and inline-base64
 `attachments` (`filename`, `mime`, `contentBase64`). The prefixes are
@@ -1337,3 +1336,27 @@ key/slug. Both tools require the owner/admin-granted configure capability plus
 CRM app/write permissions, including direct MCP calls. They retain assistant
 or credential identity and remain usable when Association is disabled. They
 cannot approve privacy/identity policy, create credentials or enable modules.
+
+
+## Native managed delivery tools
+
+`sendCrmMessage` accepts the same delivery fields as the POST body above, without
+`kind`, workspace or authority fields. `getCrmDelivery` accepts `{deliveryId}`
+and returns `{receipt}`. The native send returns the canonical command result
+(`record`, `created`, `duplicate`), preserving the stable delivery UUID.
+
+Discovery and direct invocation require `crm` plus `home_app:crm:write` for
+send, or `home_app:crm:read` for receipt inspection. Brain MCP read credentials
+never expose dispatch. The credential's bound primary assistant must retain
+its grants. The current credential, workspace membership when applicable,
+connector exposure and turn context, per-account send action and blocked policy
+are checked again at the provider boundary. IMAP and AgentMail require exact
+instance grants; AgentMail also requires its active assigned email channel.
+A legacy Gmail provider grant covers only the current primary mailbox.
+
+This command does not grant mailbox access or enable an Association module.
+Native chat/workflow sending requests approval; an explicit programmatic
+read/write request is its own write authorization. All recipients must pass the
+managed purpose policy at dispatch. `sent` proves provider acceptance only.
+Inspect `needs_reconciliation` under the original UUID; a fresh UUID may send
+a duplicate. No message is resent by receipt reads or exact replay.

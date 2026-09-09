@@ -247,3 +247,11 @@ The native catalog and exact object input envelopes are described in
 Generic saveCrmEntitlementPlan/saveCrmEvent use {plan}/{event}, need configure
 plus CRM write, and remain usable with Association disabled. No MCP tool can
 enable the module or assert a provider payment.
+
+
+Managed email uses native `sendCrmMessage` (CRM write set plus current mailbox
+send authority) and `getCrmDelivery` (CRM read set). Both retain the authenticated
+credential actor and bind the workspace's primary assistant. Read credentials
+cannot send. Exact replay returns a content-minimized receipt; an uncertain
+provider outcome must be reconciled under its original delivery id. See the
+[CRM delivery contract](../api/crm-operations.md#native-managed-delivery-tools).
