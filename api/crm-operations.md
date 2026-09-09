@@ -1285,3 +1285,21 @@ the effective-access predicate.
 The internal due-expiry command is reserved for its system principal. External
 agents use the existing authorized grant/adjustment commands; they cannot invoke
 an expiry worker identity or mutate terminal grants back to active.
+
+
+### Historical participation imports
+
+`record_participation` retains unconstrained manual/form/workflow participation.
+For a ticketed or capacity-limited event, new live participation returns a conflict
+with reason `association_order_required`; use Association checkout. A historical
+import requires `sourceKind: "import"`, `historicalImport: true`, a current human
+workspace owner/admin, and an event that has already ended. CSV mapping supports
+`participationHistoricalImport` with literal `true` or `false`. An integration key
+or workflow cannot claim human historical-import authority. Future/current event
+imports cannot use this exception.
+
+Historical records return `historicalImport: true`, preserve immutable source
+identity and never consume present inventory. Replaying a historical import still
+requires current admin authority. Generic participation updates cannot turn such
+a record into a commerce reservation. Shared CRM remains available with the
+Association module disabled.

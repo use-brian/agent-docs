@@ -232,3 +232,20 @@ order stays a visible drain blocker until resolved through ordinary commands.
 with `runWorkers` in both editions. The internal due-expiry command belongs only
 to its system principal. Agents use the existing authorized cancellation and
 provider-reconciliation paths, with their ordinary authority requirements.
+
+
+### Inventory admission and workflow boundaries
+
+Live ticketed or capacity-limited events require an Association order, including
+zero-price admission with explicit free confirmation. Event and ticket sales
+windows both apply; an ended event cannot accept a checkout. Capacity and member
+pricing are checked under transaction locks at database time. Confirmation of an
+expired hold is rejected, including after waiting for a concurrent writer.
+
+`association.inventory.sold_out` and `association.inventory.available` are
+committed CRM workflow events. Filter by event type and enumerated event/ticket
+keys; enable automated changes to receive lifecycle expiry events. Payloads carry
+catalog pointers, capacity, used count and revision, with no attendee or payment
+payload. One subject/revision identity prevents duplicate emission on retry.
+Cancellation, expiry and capacity edits can create availability transitions.
+These events are durable workflow inputs, not proof that a notification was sent.
