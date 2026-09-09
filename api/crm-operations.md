@@ -1038,7 +1038,8 @@ content-free receipt with `duplicate:true`, without another deletion.
 
 Known copied-data domains that the current purge cannot clear are explicit
 blockers, including shared drafts/tasks, exact subject references in saved
-segments, source files and notification/decision payloads. Financial
+segments, source files and workflow/decision payloads. Shared notifications
+remain dependencies; eligible notification copies retire as described below. Financial
 references can also block deletion. Do not bypass these blockers or call
 a blocked preview successful erasure. They remain work in the full CRM
 assurance programme. The response status `crm_contact_purged` and its
@@ -1090,5 +1091,40 @@ references use exact typed ids too. New copies invalidate a reviewed hash.
 The same checks protect legacy canonical purge. No copy deletion commits if a
 later dependency refuses erasure. Resolve retained dependencies and request a
 fresh preview; do not bypass a blocked result. This closes draft/task copy
-handling, not the remaining source, notification, financial, retention or
+handling, not the remaining source, workflow/decision, financial, retention or
 restore-journal requirements of the CRM assurance programme.
+
+## Retired notifications and CRM workflow sources
+
+CRM event delivery and Association notification rows can have terminal status
+`retired`, with `retiredAt` and `retiredFromStatus`. They remain evidence of the
+previous state, not deliverable work. Contact erasure clears attributed payloads,
+recipient/source references, provider identifiers and free-text errors before
+removing the source records. A prior `sending` notification has an uncertain
+external outcome; retirement does not prove recall or provider erasure. Shared
+notifications addressed to another contact return
+`shared_notification_dependency` and require resolution before erasure.
+
+The CRM worker leases ids and attempt numbers, then reloads a current unexpired
+lease under privacy admission immediately before dispatch. Obsolete attempts
+make zero dispatch calls; failure uses a fixed content-free message and bounded
+retry. Admission lasts through strict workflow enqueue and the delivery receipt.
+Retired rows cannot be rewritten or requeued. Delivered-only retention leaves
+retired evidence intact until its explicit retention policy is implemented.
+
+CRM-triggered workflow runs retain a same-workspace source binding even if their
+mutable input changes. A manual input cannot assert CRM provenance. New runs
+cannot use missing/retired events, including from stale transaction snapshots.
+Migration fails legacy non-terminal CRM runs with unavailable sources using
+`crm_privacy_source_unavailable`; it does not fabricate completed work. Bound
+sources cannot be pruned while run dependencies exist. Run/step lineage is now
+included in CRM privacy exports, with content redacted in both scopes. Those
+copies remain `crm_copy_resolution_required` blockers pending workflow and
+cross-run artifact cleanup. The full privacy programme is not complete.
+
+Legacy delivered-event retention skips workflow-referenced events and preserves
+their replay keys while pruning other eligible events in the same transaction.
+
+A legacy CRM run with an unavailable source cannot remove its remaining
+attribution by changing its trigger kind or typed input. Its retained copies
+continue to appear as review dependencies.

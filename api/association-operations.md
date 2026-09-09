@@ -179,3 +179,17 @@ expired, absent or malformed stored authority returns HTTP 401
 `integration_scope_denied`. A command admitted first finishes before revocation
 returns; a revocation that wins admission prevents the command. This does not
 cancel an already admitted command or widen the disabled-module recovery path.
+
+## Notification retirement
+
+`GET /api/association/notifications` accepts `status=retired` and preserves the
+`notifications` array plus cursor. Rows expose `retiredAt` and
+`retiredFromStatus`. Never dispatch a retired notification or resolve its erased
+recipient reference as a live contact. The previous `sending` state means the
+external result is uncertain; `sent` means it had been recorded sent before
+retirement. Retirement itself does not assert delivery, recall or refund.
+
+Canonical contact erasure clears attributable notification payloads, recipient
+and source references, provider ids and error text. Shared notifications for
+another contact block erasure. Retired rows cannot be resumed. External-provider
+reconciliation and erasure remain integration/operator responsibilities.
