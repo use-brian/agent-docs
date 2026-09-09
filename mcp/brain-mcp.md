@@ -232,3 +232,18 @@ writes; ordinary human/assistant actions continue to manage manual grants.
 a new provider period, not a status reset. The same provider period is idempotent
 across transport keys, with changed business fields rejected. These tools do not
 verify an external provider webhook or prove a notification was delivered.
+
+## Native Association and catalog permissions
+
+Association is an opt-in native app. The primary assistant needs association
+and home_app:association:read or home_app:association:write. Contact-bearing
+tools also need crm and its matching home_app:crm set. Module enablement and
+Home selection never grant these capabilities. Read credentials cannot call
+write tools even when the assistant has a write grant. Discovery and direct
+invocation share the same gate.
+
+The native catalog and exact object input envelopes are described in
+[Association operations](../api/association-operations.md#native-association-tools).
+Generic saveCrmEntitlementPlan/saveCrmEvent use {plan}/{event}, need configure
+plus CRM write, and remain usable with Association disabled. No MCP tool can
+enable the module or assert a provider payment.

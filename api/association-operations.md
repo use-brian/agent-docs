@@ -397,3 +397,28 @@ must be configured before enabling. Fake sample read outputs are test data,
 never a live authority source. See `docs/operations/crm-workflow-recipes.md` in
 the OSS tree for binding and replay instructions. Tool wiring and complete
 workflow/delivery acceptance remain separate from recipe schema validation.
+
+## Native Association tools
+
+The native catalog includes getAssociationModuleStatus, listAssociationTickets,
+saveAssociationTicket, listAssociationOrders, getAssociationOrder,
+createAssociationOrder, confirmFreeAssociationOrder, cancelAssociationOrder,
+listAssociationRegistrations, updateAssociationRegistration,
+listAssociationWaitlist, offerAssociationWaitlistPlace,
+listAssociationModuleBlockers and listAssociationProviderReceipts.
+
+Every tool requires the Association app and its read/write set. Order,
+registration, waitlist and provider receipt tools also require CRM and the
+matching set. These grants start off for all assistants and are independent of
+module state and Home visibility. Read MCP credentials see read tools only;
+execution rechecks current resolved grants. Unavailable permission is an error,
+not an empty collection. Follow every nextCursor with unchanged filters.
+
+createAssociationOrder takes {order} with the canonical order schema and stable
+idempotencyKey. saveAssociationTicket takes {eventId,ticket}; waitlist offer
+takes {offer} with submissionId and stable promotionId. get/cancel/free-confirm
+take {orderId}; registration update takes {registrationId,update}. Reuse an
+unchanged intended operation after uncertainty. A new id means a new intention.
+Free confirmation cannot settle a priced order. Module lifecycle and payment
+binding/assertion are human/backend-only operations, never native assistant
+tools. Disabled history and permitted recovery remain available.

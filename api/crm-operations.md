@@ -40,7 +40,7 @@ Durable command and member/scoped-integration adapters are implemented behind
 an explicit server delivery port, which normal boot has not enabled at this
 checkpoint. Do not infer availability from the route catalog or a CRM write
 grant: an unbound deployment returns `delivery_unavailable`. Assistant/MCP
-exposure remains pending the admission barrier.
+delivery exposure remains pending native dispatch authority wiring.
 
 When enabled, `POST .../operations/deliveries` accepts a stable UUID
 `deliveryId`, exact `connectorInstanceId`, `purposeKey`, optional `templateKey`,
@@ -1328,3 +1328,12 @@ Legacy grants without period identities retain their original replay behavior.
 at period end. `status: "cancelled"` removes effective access immediately. Reads
 return period/predecessor lineage separately from raw status and effective access.
 Lineage is not proof of webhook verification or notification delivery.
+
+## Generic catalog tools
+
+saveCrmEntitlementPlan takes {plan}; saveCrmEvent takes {event}. Read the existing
+plan/event catalog first, then use the declared canonical fields and stable
+key/slug. Both tools require the owner/admin-granted configure capability plus
+CRM app/write permissions, including direct MCP calls. They retain assistant
+or credential identity and remain usable when Association is disabled. They
+cannot approve privacy/identity policy, create credentials or enable modules.
