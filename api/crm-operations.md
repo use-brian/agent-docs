@@ -993,3 +993,57 @@ to other export facilities require their own authority; the workspace reset
 link is explicitly marked destructive and is not an export. Export completion
 does not imply erasure, retention policy, restore-journal or operational
 assurance completion.
+
+## Privacy operations and concurrent writes
+
+Canonical entity purge and CRM retention now acquire brief exclusive write
+admission for the workspace. An active writer makes the privacy operation
+refuse with `conflict`, reason `privacy_operation_busy`, before it mutates
+records. Retry the operation after that writer finishes. Conversely, a
+concurrent write to a guarded CRM table can be refused while privacy holds
+admission; the database reports SQLSTATE `55P03` with the fixed message
+`crm_privacy_operation_busy`. Transaction rollback leaves that write unapplied.
+Ordinary reads and writes in other workspaces remain independent.
+
+The mailbox admission transaction holds shared privacy admission through the
+provider call and receipt commit. A competing privacy operation refuses the
+send before provider invocation, including raw managed mailbox sends.
+
+This guard closes the write race needed by erasure/retention previews. It
+does not approve erasure, select retention periods, or prove complete copied
+data and recovery-journal coverage. Those remain separate requirements.
+
+## Owner-reviewed CRM contact erasure
+
+Use `POST /api/crm/:workspaceId/operations/privacy/erasure-preview` with
+`{contactId}` to create a review. The response includes `id`, `previewHash`,
+`expiresAt`, `policyVersion`, domain actions/counts, `blockers`, `scopeLimits`
+and `status` (`ready` or `blocked`). A preview lasts 15 minutes; this is an
+approval window, not a retention period. It stores no copied content.
+
+A current owner/admin human member must review the result, then call
+`POST /api/crm/:workspaceId/operations/privacy/erase` with `contactId`,
+`previewId`, `previewHash` and `confirmed:true`. The same creating member
+must execute it. Integration keys, assistants and system jobs cannot
+approve this operation. Never treat the hash as bearer authority.
+
+Execution revalidates the affected row versions and privacy policy under
+exclusive workspace write admission, then invokes the existing canonical
+purge. A stale, expired, mismatched or blocked preview returns a conflict
+(`privacy_preview_stale`, `privacy_preview_expired`,
+`privacy_preview_mismatch` or `privacy_preview_blocked`). Obtain and review
+a new preview when its inputs have changed. Consumption and purge commit
+together; an exact replay by the same still-authorized member returns the
+content-free receipt with `duplicate:true`, without another deletion.
+
+Known copied-data domains that the current purge cannot clear are explicit
+blockers, including drafts, attributable tasks/links, source files,
+notification/decision payloads and CRM Brain-history snapshots. Financial
+references can also block deletion. Do not bypass these blockers or call
+a blocked preview successful erasure. They remain work in the full CRM
+assurance programme. The response status `crm_contact_purged` and its
+`scopeLimits` describe a CRM contact purge, not whole-brain deletion, a
+legal certificate, or proof that backup copies and restore journals have
+been handled. Legacy null-workspace CRM history is attributed through its
+current canonical parent; new non-null snapshots cannot recreate a purged
+CRM parent.
