@@ -260,3 +260,31 @@ a new idempotent provider period linked to its terminal predecessor. Active
 membership periods extend in place. The same period cannot create multiple grants
 through changed transport keys. See the CRM operations provider renewal contract
 for plan/provider scopes, cancellation timing, lineage and replay errors.
+
+## Explicit intake-backed waitlist offers
+
+`GET /api/association/waitlist` returns `submissions` and `nextCursor`; continue
+until null. Optional `eventId` and `includeClosed=true` filter the list. The
+member and scoped integration Association routers expose the same paths under
+their own base. Integration reads require both event-scoped `association.read`
+and definition-scoped `crm.submissions.read`.
+
+A versioned `association_waitlist` intake definition has required, single-UUID
+option, submission-only `association_event_id` and `association_ticket_id` fields
+and an ordinary consent mapping. Original submission versions bind the target.
+`POST /waitlist/:submissionId/offer` accepts `promotionId` (stable UUID), optional
+`reservationMinutes` (1–120, default 20) and `useMemberPrice` (default false).
+Integration writes require both event-scoped `association.orders.write` and
+matching definition-scoped `crm.submissions.write`; current revocation applies
+even on replay.
+
+The offer uses the submission's existing person and ordinary stock reservation
+in one transaction. The response has `offer`, `created` and the linked order;
+201 means a new reservation/link, 200 means replay. Reusing a promotion UUID with
+changed input conflicts. Pending or paid offers prevent another promotion;
+a cancelled/failed/refunded offer permits a new explicit promotion UUID. Never
+retry an expired offer with a new identity without a deliberate staff action.
+Disabled modules reject new offers but permit history and exact replay. Offered
+means reserved, not notified or paid. Confirmation and sending are separate
+commands. No native waitlist status, FIFO promotion, timer or automatic charge
+is implied.
