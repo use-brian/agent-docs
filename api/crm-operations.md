@@ -1118,9 +1118,9 @@ cannot use missing/retired events, including from stale transaction snapshots.
 Migration fails legacy non-terminal CRM runs with unavailable sources using
 `crm_privacy_source_unavailable`; it does not fabricate completed work. Bound
 sources cannot be pruned while run dependencies exist. Run/step lineage is now
-included in CRM privacy exports, with content redacted in both scopes. Those
-copies remain `crm_copy_resolution_required` blockers pending workflow and
-cross-run artifact cleanup. The full privacy programme is not complete.
+included in CRM privacy exports, with content redacted in both scopes. Eligible
+local copies can retire as described below; active and artifact-bearing runs
+remain explicit dependencies. The full privacy programme is not complete.
 
 Legacy delivered-event retention skips workflow-referenced events and preserves
 their replay keys while pruning other eligible events in the same transaction.
@@ -1128,3 +1128,25 @@ their replay keys while pruning other eligible events in the same transaction.
 A legacy CRM run with an unavailable source cannot remove its remaining
 attribution by changing its trigger kind or typed input. Its retained copies
 continue to appear as review dependencies.
+
+## Workflow outcome copies in CRM erasure
+
+Privacy export and previews follow durable outcome-copy edges, including
+resumed runs that consumed multiple previous outcomes. Run/step content remains
+redacted in exports. A ready erasure preview can retire never-started runs and
+completed local-branch runs, clear their stored content, and delete step copies
+in the canonical contact-purge transaction. The retained receipt cannot resume
+or supply an outcome to a later run. Replay identity remains reserved.
+
+Blockers now name active/claimed execution, artifact-producing steps and
+attached approvals/wake-ups/blueprints, pre-migration lineage uncertainty, and
+shared input/source dependencies. A copied outcome does not authorize deleting
+another person's input. Creating another consumer invalidates an older preview.
+Workflow writes may briefly return a privacy-busy conflict while an erasure
+validates and commits. Missing or cross-workspace typed copy sources are refused.
+Late workflow audit writes are minimized after retirement; they cannot restore
+the prior details. Broader artifact and legacy resolution remain required work.
+
+Client-authored workflow replay keys produce `workflow_replay_dependency`.
+Automatic retirement preserves only absent keys or the server-generated CRM
+source-event key; a client key may itself contain personal content.
