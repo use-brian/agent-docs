@@ -1038,7 +1038,7 @@ content-free receipt with `duplicate:true`, without another deletion.
 
 Known copied-data domains that the current purge cannot clear are explicit
 blockers, including drafts, attributable tasks/links, source files,
-notification/decision payloads and CRM Brain-history snapshots. Financial
+notification/decision payloads. Financial
 references can also block deletion. Do not bypass these blockers or call
 a blocked preview successful erasure. They remain work in the full CRM
 assurance programme. The response status `crm_contact_purged` and its
@@ -1047,3 +1047,13 @@ legal certificate, or proof that backup copies and restore journals have
 been handled. Legacy null-workspace CRM history is attributed through its
 current canonical parent; new non-null snapshots cannot recreate a purged
 CRM parent.
+
+CRM history before-images and free-text mutation reasons are now redacted
+inside the canonical contact purge. The preview reports `brain_row_versions`
+as `redact`; minimized version receipts retain their workspace and erasure
+stamp, including legacy rows whose workspace was previously null. Other
+subjects and non-CRM primitives are unchanged. Indirect Association audit
+metadata is also redacted before submission, membership or attendee references
+are removed. Editing an attributable audit row invalidates an earlier review.
+These redactions roll back with a failed purge and do not complete the other
+copied-data or recovery-journal requirements above.
