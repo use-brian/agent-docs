@@ -288,3 +288,31 @@ Disabled modules reject new offers but permit history and exact replay. Offered
 means reserved, not notified or paid. Confirmation and sending are separate
 commands. No native waitlist status, FIFO promotion, timer or automatic charge
 is implied.
+
+## Provider binding and verified money
+
+Before external paid checkout, a trusted backend calls
+`POST /orders/:id/provider-binding` with `provider`, `providerReference`,
+`amountMinor` (safe nonnegative integer) and uppercase `currency`. They must
+match the canonical nonzero order. Binding a new object requires an enabled
+module and unexpired pending reservation. Exact replay is 200; initial binding
+is 201. An object cannot belong to two orders, and a bound identity cannot change.
+Use provider keys that distinguish accounts/environments when necessary.
+
+`POST /orders/:id/provider-events` now requires the same reference, amount and
+currency in addition to event id, target status and occurrence time. Older
+payloads omitting these facts are rejected. The backend verifies signatures
+and provider state before normalization; redirects are never proof. Only a
+successful cumulative full refund maps to `refunded`. Partial/pending/failed
+refunds remain provider-resolution work and cannot assert full refund.
+Zero-value orders use `confirm-free` without provider evidence.
+
+Both commands require backend payment authority. Scoped keys need
+`association.provider_events.write` with provider and all order-event selectors;
+revocation applies even to replay. Human/assistant payment assertions are denied.
+Exact normalized event replay is safe after timeouts; changed event-id reuse
+conflicts. Semantic duplicates retain evidence without repeated notifications
+or state-change effects. Bound recovery remains available after module disable.
+Refunds include checked-in registrations. Expired or impossible transitions
+remain errors; no stock is silently revived. This contract is payment admission;
+it does not by itself claim a durable webhook inbox or live provider acceptance.
