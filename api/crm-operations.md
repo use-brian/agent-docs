@@ -1185,3 +1185,48 @@ attribution cannot exclude a subject. Housekeeping preserves all jobs backed by
 live sources and held source jobs, and does not remove source replay identity
 before its approved expiry. This contract does not prove deletion of external Files, backups or
 unattributed free text.
+
+## Reviewed CRM retention
+
+Owner/admin member policy approval supports nullable `retention` with explicit
+positive age values (seconds), or null to leave a domain unconfigured:
+`resolvedSubmissionsSeconds`, `importReceiptsSeconds`, `deliveryReceiptsSeconds`,
+`auditSeconds`, and `financialRecordsSeconds`. `openSubmissions` is null or
+`{ afterSeconds, fields }`, with distinct fields from `subject`, `message`,
+`metadata`, and `notes`. Open-field redaction preserves submission status and
+contact identity. `scheduled` must be explicit; `intervalSeconds` is 60–86400.
+No age or legal basis is selected automatically.
+
+`holds` accepts at most 500 distinct `{ domain, id }` pairs for `contact`,
+`submission`, `order`, or `file`, validated in the current workspace. Holds
+also apply to canonical contact erasure and the legacy retention endpoint.
+Unchanged policy approval is a no-op; omission preserves the current retention
+policy and explicit null disables it. Import source holds remain in
+`importSourceErasure`.
+
+- `POST /api/crm/:workspaceId/operations/retention/dry-run`: `{ before }`.
+  Returns owner-bound id/hash, policy version, frozen cutoffs, actions/counts,
+  retained dependencies, a 15-minute expiry and `hasMore` for additional eligible
+  records beyond the bounded 500-record mutation batch per domain.
+- `POST /api/crm/:workspaceId/operations/retention/execute`:
+  `{ previewId, previewHash, confirmed: true }`. Rechecks current owner/admin
+  membership, policy and affected row versions. Stale/expired/blocked review
+  returns a conflict without mutation; request another review. Repeating a
+  completed execution returns the original receipt with `duplicate:true`.
+- `GET /api/crm/:workspaceId/operations/retention/runs`: common CRM pagination
+  with `runs` and `nextCursor`, showing content-minimized results and failures.
+
+These are human administration routes; integration credentials and assistants
+cannot approve or execute retention. The same selector/mutator serves the
+opt-in worker, governed by `runWorkers` and `CRM_RETENTION_ENABLED` (false/0
+stops scheduling). It rechecks the latest owner-approved policy and due time
+under workspace privacy admission. Two workers cannot apply the same due run.
+
+Reports distinguish erased fields from retained task/import/delivery copies,
+live source history, ambiguous sends, failed/undelivered events and financial
+or audit dependencies. Eligible terminal submissions retire replay receipts
+and minimize their audit details before deletion. Preview time also bounds
+receipt expiry; elapsed review time cannot silently widen deletion. CRM export
+includes safe run metadata and excludes approval hashes. Workspace reset clears
+runs but preserves policy. A retention receipt is neither whole-contact erasure
+nor an off-instance recovery journal.
