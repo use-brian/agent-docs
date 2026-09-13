@@ -236,6 +236,14 @@ Brian remains the agent harness and owns memory, context, tool policy,
 confirmations, execution, and persistence. ChatGPT/Codex quota and plan limits
 remain OpenAI's authority.
 
+Feed image placeholders let you draft first and generate later. Open a
+placeholder's options and choose Gemini 3.1 Flash Image or, in OSS, Codex
+(ChatGPT subscription). Codex requires an eligible connected ChatGPT plan and
+uses the pinned runtime's built-in image engine. Review the estimate and confirm
+explicitly before generation. Codex consumes subscription quota, whose exact
+usage cannot be quoted in advance, with no Brian image surcharge. Results stay
+as candidates until accepted; a provider failure never switches providers.
+
 For a custom OpenAI-compatible backend, add the endpoint connection once in
 **Settings -> Models**. Then create verified model profiles on that connection
 and optionally assign separate profiles to Brian's Standard, Pro, Max, and
