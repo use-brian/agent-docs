@@ -36,6 +36,12 @@ Doc editing is a context-injected skill, not a dedicated assistant. The default 
 - Draft pages auto-prune 30 days after their last touch; call "Save" to make a page permanent. Reads and edits bump the deadline.
 - Any accessible assistant can author on the Doc surface because the page tools are injected by the skill; you do not need a dedicated doc assistant.
 
+## External agent page edits
+
+Use the brain MCP `createPage` tool for a new page and `editPage` for an existing page. `editPage` accepts Markdown with lists, headings, tables, and prose; `append` adds to the end and `replace` replaces the body while keeping the title. Mixed list and prose content preserves its authored order. No list-free workaround is required on a deployment with the append-order fix.
+
+On a deployment with doc-sync, edits use the same collaborative document as the editor. `readPage` confirms stored content; it does not prove that a desktop or browser has completed live synchronization. If the editor shows “Reconnecting…”, check its sync connection before replacing the content again.
+
 ## Related
 
 - [Workflows](./workflows.md)
