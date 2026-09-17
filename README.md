@@ -38,6 +38,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 - [concepts/tools-and-connectors.md](concepts/tools-and-connectors.md): connectors, per-tool allow/ask/block policy, scheduled tasks
 - [concepts/workflows.md](concepts/workflows.md): step types, triggers, approvals, permission grants, cost
 - [concepts/doc-pages.md](concepts/doc-pages.md): the page surface chat assembles over workspace data
+- [concepts/office.md](concepts/office.md): templates, collaborative documents, presentations, spreadsheets, review, and supported file exchange
 - [concepts/custom-home-apps.md](concepts/custom-home-apps.md): build a static web app that renders inside a workspace and reads the brain through a scoped bridge; manifest, bundle, sandbox, consent
 
 ### Public API (REST)
