@@ -64,6 +64,19 @@ One account can own one or more workspaces, each owning the assistants and resou
 - Extra workspace: for genuinely distinct contexts (multiple companies, client isolation, opt-in personal brain). Each extra workspace is billed independently and needs its own paid plan.
 - Workspace-owned resources: assistants, memory, knowledge, connectors, channels, billing.
 
+## Private workspace links
+
+An authorized member can share a workspace address such as
+`https://brain.example/s/product`. Opening it still requires membership on that
+deployment; the link grants nothing and works independently of public-page or
+custom-domain settings. The alias stays stable when the workspace name changes,
+and old aliases continue to resolve after an explicit rename.
+
+Brian's `getInternalShareLink` command returns the confirmed workspace link
+when `pageId` is omitted. `setWorkspaceLinkAlias` changes the readable alias
+for an owner/admin. Use the command result as the link and never infer an alias
+from the workspace name.
+
 ## Notes for agents
 
 - Memory is per (user, assistant): your personal memories stay yours, while team-scoped facts are shared across the workspace. The KB is workspace-wide, readable by every member's assistants subject to clearance.

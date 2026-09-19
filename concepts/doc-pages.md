@@ -42,6 +42,21 @@ Use the brain MCP `createPage` tool for a new page and `editPage` for an existin
 
 On a deployment with doc-sync, edits use the same collaborative document as the editor. `readPage` confirms stored content; it does not prove that a desktop or browser has completed live synchronization. If the editor shows “Reconnecting…”, check its sync connection before replacing the content again.
 
+## Private member links
+
+Internal page links use a deployment-owned address such as
+`https://brain.example/s/product/roadmap`. They require the recipient to sign
+into that exact deployment and pass the normal workspace/page checks. They do
+not publish the page or change its grants. Renaming the page, workspace, or
+link alias does not break links already shared.
+
+The first-party Brian toolset exposes `getInternalShareLink` to ensure and
+return a confirmed link for the current workspace or a readable `pageId`.
+`setPageLinkAlias` changes a page alias when the actor has the existing
+page-share management authority. Never invent an alias or construct a pretty
+URL from a title: use the returned confirmed URL. These commands are Brian
+runtime tools; they are separate from the brain MCP page-authoring surface.
+
 ## Related
 
 - [Workflows](./workflows.md)
