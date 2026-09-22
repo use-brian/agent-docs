@@ -422,3 +422,43 @@ unchanged intended operation after uncertainty. A new id means a new intention.
 Free confirmation cannot settle a priced order. Module lifecycle and payment
 binding/assertion are human/backend-only operations, never native assistant
 tools. Disabled history and permitted recovery remain available.
+
+## Versioned website membership content
+
+The membership catalogue workflow saves drafts separately from published plan
+prices and content. The native tools `previewMembershipCatalogue`,
+`saveMembershipCatalogueDraft` and `publishMembershipCatalogue` use the same
+validated Association service as the admin UI. They require configuration
+authority and the Association app grants; publishing requires human confirmation.
+Save and publish pass the exact `expectedVersion`. On a conflict, reload the draft
+and review the new changes before trying again.
+
+Owner/admin HTTP clients use `/api/crm/{workspaceId}/association/membership-catalogue`:
+`GET /draft`, `POST /draft` with `{ expectedVersion, document }`, and
+`POST /publish` with `{ expectedVersion }`. Integration credentials cannot save or
+publish drafts. Website backends read
+`GET /api/crm/integration/association/membership-catalogue/{site}` with
+`association.read` and `crm.entitlements.read` capabilities, subject to their
+allowed plan scope. A reader reports receipt with `POST` to the same path plus
+`/observed`, carrying `{ revision }`.
+
+The document contains typed plan terms, stable plan keys, multilingual copy,
+optional per-field brand overrides, visibility and display order, supported
+application requirements, document links and membership-page sections.
+Publication validates required translations and references, binds canonical plan
+UUIDs, and atomically updates current plan prices and an immutable published
+revision. It does not change existing subscriptions or historical orders.
+Previously published identities must be retained; hide or close retired plans.
+Legacy direct writes to catalogue-managed plan terms are rejected.
+
+Website readers must consume the published revision without repository fallbacks.
+Draft edits cannot change live content. Featured offers derive from active,
+explicitly selected promotion records, including expiry, recurrence and usage
+conditions; public output never includes private codes. Checkout still validates
+the submitted code, current eligibility and price. Publication reports pending
+synchronization until the website reader acknowledges the revision; this does
+not mean already-open browser pages have refreshed.
+
+This contract requires the membership catalogue release and migration 557 on the
+server. Documentation publication does not assert that a hosted service has
+already deployed that release.
