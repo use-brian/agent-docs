@@ -356,3 +356,18 @@ load tests. These modes report the engineering matrix as unexecuted, even when
 qualification succeeds. See the OSS `docs/operations/crm-assurance-runbook.md`.
 Local success does not approve policy, live integrations, data cutover,
 off-instance recovery, staff acceptance or measured soak.
+
+### LinkedIn through Feed Cloud Link
+
+Unlinked OSS includes canonical LinkedIn drafting, conversion, approval and manual
+newsletter preparation/completion. Managed API publishing uses an approved paid
+Feed Cloud Link and the hosted service's official LinkedIn app. No BYO LinkedIn
+app credentials or native newsletter API are included.
+
+Cloud Link sends a revision-bound approved payload and transfers its authorized
+image bytes through reservation-scoped slots. Target aliases are bound to the
+link; do not substitute a hosted destination ID. Entitlement, link revocation and
+publishing permission are checked again before provider work. An uncertain
+network result leaves the local draft unresolved until an actual receipt or
+explicit operator reconciliation is available. Provider activation remains gated
+on hosted OAuth/product approval and live smoke evidence.

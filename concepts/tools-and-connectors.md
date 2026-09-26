@@ -132,3 +132,28 @@ its previous set selections. These controls are independent of workspace Home
 navigation and do not grant connector credentials or bypass tool confirmations.
 If an expected tool is unavailable, ask the user to enable the relevant app and
 tool set for that assistant instead of retrying an unavailable tool name.
+
+## LinkedIn Feed publishing
+
+LinkedIn publishing is a Feed capability, not a generic MCP connector. Choose an
+explicit personal or company Page destination on the canonical draft. A personal
+identity and several Pages can coexist; reconnecting does not replace the author
+of an approved draft. Personal workspace publishing requires the connector
+owner's explicit grant.
+
+Use the exact converted preview, then confirm the whole revision and authorize
+its public release before publishing. Publication tools accept the saved revision
+and its preview hash, never arbitrary replacement text. Source, target or image
+changes require new approval. Preserve all ordered images and alt text; link
+posts use their explicit link metadata and optional thumbnail.
+
+After an ambiguous send, inspect delivery status and check LinkedIn. Do not retry
+with a new key. The observed post URL can be recorded as operator-confirmed
+evidence through the same reconciliation command used by the UI.
+
+Native newsletter editions remain manual: prepare rich/plain text and the ZIP
+with cover/body images, publish in LinkedIn's editor, then explicitly record the
+actual edition URL. Copy/export/opening the editor never marks an edition posted.
+An optional promotional link post is a separate draft with its own approval.
+Managed provider activation stays disabled until app approvals and credentialed
+smoke tests are complete; capability responses are authoritative.
