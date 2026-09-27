@@ -46,3 +46,10 @@ ordinary department reach and the current execution scope. Read and mutation
 checks apply to the artifact and its persisted child records. Recheck the returned
 capabilities instead of treating an earlier read or retained artifact ID as
 continuing authority. Organization placement alone does not grant access.
+
+Template and resource metadata also depend on current access to their linked
+drafts, bundle files and declared resource dependencies. A retained version or
+resource ID does not bypass a revoked grant, private file, or held source.
+Template publication records its declared resource links atomically with its
+version and head; an inaccessible dependency prevents publication. Temporary
+read grants do not authorize library edits or publication.
