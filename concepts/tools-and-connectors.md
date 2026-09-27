@@ -312,3 +312,11 @@ Cached durable doc-media displays must honor `X-Brian-Media-Valid-For-Ms`
 This exposed response header bounds local display; it is not a storage capability
 and cannot authorize a later read. The server rechecks the source revision and
 current canonical read predicate before issuing it.
+
+This lifetime also applies to Feed and campaign previews and to byte-only reads.
+A durable media download starts on user action and verifies the same mounted
+viewer/workspace, current cache ownership and unexpired admission after reading
+the body. An invalidated or detached late response must not trigger a browser
+download. Object URLs remain cache-owned so downloading does not revoke an
+active preview. Legacy temporary-file preview capabilities are a separate path;
+this contract does not certify them.
