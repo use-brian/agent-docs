@@ -60,3 +60,10 @@ time from that lifetime, discard expired bytes, and clear retained projections
 when the viewer or workspace changes. An immutable resource hash never authorizes
 permanent caching. Each read rechecks the live artifact reference, current resource
 and durable file authority before returning bytes.
+
+Office SQL metadata lists, details, live snapshots, comments, suggestions, template
+routing and job/events reads return `X-Brian-Projection-Valid-For-Ms` with no-store
+responses. Revalidate retained metadata before that lifetime expires, including
+request time in the budget. A `409 office_projection_changed` means the read's
+content or authority changed before publication: discard any old projection and
+make a fresh read. It does not authorize retrying a mutation.
