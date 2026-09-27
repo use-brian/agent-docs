@@ -100,3 +100,14 @@ from the workspace name.
 Administrators can use `inspectScopeReview` to list metadata-only inventory for memories, entities, relationships, tasks, files, episodes, knowledge entries and knowledge chunks. `manageScopeReview` creates an explicit preview, applies up to 25 items per call, or cancels remaining work. Always use the saved review ID, current version and payload hash. An old-version retry returns recorded progress without replaying writes. After a lost response, inspect that review before choosing the next operation. Saved reviews are paginated in pages of 20: pass `nextReviewCursor` back as `reviewAfter` to `inspectScopeReview` for older jobs. Omit `reviewAfter` for the latest jobs. The inventory `after` cursor and exact `reviewId` selection are independent; the selected job remains available across history pages. Cursors are workspace-bound and unknown or foreign anchors fail without exposing their metadata. Data/policy changes can make remaining items stale; previously committed pages remain applied.
 
 The web path is Settings > Department access > Review existing data. General means no Team requirement; it does not lower clearance, remove personal/assistant visibility or remove Project restrictions. Assigning a Team preserves those other protections. Holding may hold known derived descendants. This path cannot release held content. The tools require a verified human with current owner/admin authority; an unattended assistant or API credential cannot substitute its owner. Coverage is incomplete, and neither a completed batch nor an empty per-kind inventory certifies strict isolation.
+
+
+Departmental inspection accepts `explain` with optional `memberId`, `assistantId`,
+`contextTeamId`, `contextProjectId`, `targetTeamId`, `action` (`read` or `edit`) and
+`sensitivity`. Only administrators may select another member. The result explains
+separate read/mutation ceilings and independent active grant paths; it does not
+bypass resource visibility or authorize edits. Unknown and unavailable directory
+references return the same error. `history:"events"` inspects the filtered audit
+with the same `after` / `expectedPolicyRevision` continuation protocol as requests
+and grants. Raw audit payloads and content are not returned. Both operations use
+the current verified human and server policy, not an assistant owner's authority.

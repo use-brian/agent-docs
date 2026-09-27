@@ -264,3 +264,14 @@ Legacy unclassified receipts are not exposed by these policies. This is a bounde
 implementation: full correction/rejection derivation, privileged audit consumers
 and complete model-input provenance remain unfinished. Departmental read-grant
 expansion and strict activation remain unavailable.
+
+
+Departmental inspection accepts `explain` with optional `memberId`, `assistantId`,
+`contextTeamId`, `contextProjectId`, `targetTeamId`, `action` (`read` or `edit`) and
+`sensitivity`. Only administrators may select another member. The result explains
+separate read/mutation ceilings and independent active grant paths; it does not
+bypass resource visibility or authorize edits. Unknown and unavailable directory
+references return the same error. `history:"events"` inspects the filtered audit
+with the same `after` / `expectedPolicyRevision` continuation protocol as requests
+and grants. Raw audit payloads and content are not returned. Both operations use
+the current verified human and server policy, not an assistant owner's authority.
