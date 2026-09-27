@@ -318,5 +318,13 @@ A durable media download starts on user action and verifies the same mounted
 viewer/workspace, current cache ownership and unexpired admission after reading
 the body. An invalidated or detached late response must not trigger a browser
 download. Object URLs remain cache-owned so downloading does not revoke an
-active preview. Legacy temporary-file preview capabilities are a separate path;
-this contract does not certify them.
+active preview.
+
+Temporary file-cache previews use authenticated no-store byte reads with the same
+current-source and display-lifetime checks. Both original and converted PDF reads
+require `workspaceId` and authentication; retained IDs or old `sig` values do not
+authorize them. The compatibility `/api/files/:id/preview-url` endpoint returns
+`{url, requiresAuth:true}`, an authenticated locator, never a signed capability.
+The browser uses separate original/PDF cache keys, purges on authority or identity
+changes, and discards expired or detached results. Conversion rechecks source
+revision and current permission before delivering bytes.
