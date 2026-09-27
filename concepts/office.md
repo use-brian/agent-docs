@@ -81,3 +81,10 @@ Identical authorized routing renewals preserve pending edits. A routing PUT
 acknowledgement does not extend read access: the browser performs a fresh bounded
 GET before displaying the saved routing. Late completions from an expired or
 replaced viewer/workspace cannot restore drafts or navigate from creation.
+
+
+The web activity panel renews both job details and events, including terminal
+jobs, and clears expired activity. Version-history previews, rename/copy prompts
+and pending actions belong to a current authorized version list. Expiry or viewer
+replacement clears that state; a late preview or copy response cannot restore it
+or navigate. Server preview/mutation authorization remains independently required.
