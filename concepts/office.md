@@ -88,3 +88,15 @@ jobs, and clears expired activity. Version-history previews, rename/copy prompts
 and pending actions belong to a current authorized version list. Expiry or viewer
 replacement clears that state; a late preview or copy response cannot restore it
 or navigate. Server preview/mutation authorization remains independently required.
+
+
+Offline packages and queued edits belong to the viewer and workspace that created
+them on the device. Account changes do not adopt another viewer's cached content
+or replay their edits. Separate non-extractable encryption roots protect each
+viewer/workspace partition, and pending storage work refuses changed identities.
+Unowned legacy ciphertext and its keys remain quarantined, without automatic
+replay or disclosure. Re-pin old cached packages through a current authorized
+request. Legacy journal recovery and current offline read/revocation authorization
+remain required follow-up work; storage partitioning alone does not complete the
+isolation rollout. Artifact and snapshot browser caches also include the viewer
+and workspace, with local editor/panel state reset on identity replacement.
