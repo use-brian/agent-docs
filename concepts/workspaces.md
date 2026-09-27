@@ -107,7 +107,7 @@ Departmental inspection accepts `explain` with optional `memberId`, `assistantId
 `sensitivity`. Only administrators may select another member. The result explains
 separate read/mutation ceilings and independent active grant paths; it does not
 bypass resource visibility or authorize edits. Unknown and unavailable directory
-references return the same error. `history:"events"` inspects the filtered audit
+references return the same error. The explanation includes current authorized assistant and Project choices. A null read/edit Team list means unrestricted Team reach; an empty list means General-only reach. Neither value bypasses other resource gates. `history:"events"` inspects the filtered audit
 with the same `after` / `expectedPolicyRevision` continuation protocol as requests
 and grants. Raw audit payloads and content are not returned. Both operations use
 the current verified human and server policy, not an assistant owner's authority.
