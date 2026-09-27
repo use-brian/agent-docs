@@ -127,3 +127,10 @@ conversation's server-held execution ceiling. Current human grants and a broader
 selected assistant cannot widen its read, edit, sensitivity or Project limits.
 The web preview describes current permissions; existing conversations can be
 narrower. Independent human grant paths do not override the final intersection.
+
+
+In Organization, select a person under People to inspect or change that person's
+access. Select a department under Departments for its membership, read bundle,
+directory and manager settings. Access holds requests, grants, renewal, audit and
+data review. These navigation changes use the same server authorization and saved
+review protocol as native operations.
