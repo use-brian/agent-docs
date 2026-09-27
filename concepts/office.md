@@ -109,5 +109,14 @@ panel refetches an authorized collection. Pending bulk decisions, queued-comment
 replay and comment-triggered job polling stop when their owning read expires.
 Write-capability loss also stops subsequent bulk actions. Offline read/recovery
 and shared mention-directory authorization remain separate required boundaries.
-Editor-local and live copies also remain a separate required closure; bounded
-panels alone do not certify the complete editor's retention policy.
+Artifact/selection, live and pinned-package copies remain a separate required
+closure; bounded discussion collections do not certify all editor retention.
+
+
+The document editor's comment and suggestion decorations now read the same bounded
+collections as their panels, including while the panels are closed. Detachment
+acknowledgements perform authorized readback and cannot refill an old local array.
+Delayed detachment stops when its read, viewer or editable artifact is no longer
+current. Local queued comments remain separate from fetched server comments, so
+closing/reopening an offline panel preserves local additions without extending
+server comment retention. Pinned-package authority remains independently required.
