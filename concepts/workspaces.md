@@ -120,3 +120,10 @@ required again at application. The legacy assistant PATCH adapter accepts only a
 clearance-only body with matching `X-Brian-Access-Review-Id` and
 `X-Brian-Access-Review-Hash` headers; raw workspace clearance PATCH is refused.
 A cancelled review makes no change. Saved-review replay is idempotent.
+
+
+Access explanations in a running conversation are also bounded by that
+conversation's server-held execution ceiling. Current human grants and a broader
+selected assistant cannot widen its read, edit, sensitivity or Project limits.
+The web preview describes current permissions; existing conversations can be
+narrower. Independent human grant paths do not override the final intersection.
