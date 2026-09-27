@@ -34,3 +34,15 @@ Office-suite fidelity, macros, external workbook links, pivot tables, or
 unsupported formula functions. Review and release remain separate from
 creating or editing a draft. A prepared draft is not proof that a file was
 shared or an external message was sent.
+
+
+## Department access
+
+A current temporary department read grant can make an Office artifact readable.
+It does not grant comment, edit, restore, sharing-management, or deletion rights,
+even when a stored Office role otherwise allows the operation. Its effective role
+is View until mutation scope is also available. Mutation also requires
+ordinary department reach and the current execution scope. Read and mutation
+checks apply to the artifact and its persisted child records. Recheck the returned
+capabilities instead of treating an earlier read or retained artifact ID as
+continuing authority. Organization placement alone does not grant access.
