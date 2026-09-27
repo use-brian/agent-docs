@@ -299,3 +299,10 @@ It contains only authorized department metadata, assignment references, visible
 people/assistants and linked org units, plus current admin capability, revision,
 expiry and the existing request-duration policy. It returns no emails, content or
 hidden counts. `registry` cannot be combined with `explain` or history selectors.
+
+
+Durable workspace-file text and byte reads recheck current authority and source
+revision after fetching storage, before returning content. A revoked, changed or
+unavailable source returns not-found. Doc-media GETs return authenticated no-store
+bytes for every backend, including `?redirect=0`; clients must not expect a signed
+storage URL. Images/downloads use a local object URL after the authorized read.
