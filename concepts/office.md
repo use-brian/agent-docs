@@ -100,3 +100,14 @@ request. Legacy journal recovery and current offline read/revocation authorizati
 remain required follow-up work; storage partitioning alone does not complete the
 isolation rollout. Artifact and snapshot browser caches also include the viewer
 and workspace, with local editor/panel state reset on identity replacement.
+
+
+Online comment and suggestion panels use bounded metadata reads. Expiry or
+identity/authority invalidation removes their content, drafts and editor highlight
+projections. A mutation acknowledgement does not extend that read lifetime; the
+panel refetches an authorized collection. Pending bulk decisions, queued-comment
+replay and comment-triggered job polling stop when their owning read expires.
+Write-capability loss also stops subsequent bulk actions. Offline read/recovery
+and shared mention-directory authorization remain separate required boundaries.
+Editor-local and live copies also remain a separate required closure; bounded
+panels alone do not certify the complete editor's retention policy.
