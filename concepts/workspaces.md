@@ -111,3 +111,12 @@ references return the same error. The explanation includes current authorized as
 with the same `after` / `expectedPolicyRevision` continuation protocol as requests
 and grants. Raw audit payloads and content are not returned. Both operations use
 the current verified human and server policy, not an assistant owner's authority.
+
+
+Workspace assistant clearance changes use the `assistant.clearance.set` command
+(`assistantId`, `clearance`) through the existing saved command review and apply
+protocol. Current workspace owner/admin or direct assistant-owner membership is
+required again at application. The legacy assistant PATCH adapter accepts only a
+clearance-only body with matching `X-Brian-Access-Review-Id` and
+`X-Brian-Access-Review-Hash` headers; raw workspace clearance PATCH is refused.
+A cancelled review makes no change. Saved-review replay is idempotent.
