@@ -107,6 +107,20 @@ Every CRM row is an entity in the underlying graph. Save a memory about a contac
 
 ## Notes for agents
 
+Entity mutations keep the authenticated user as the actor. An explicit viewer
+context cannot substitute another user, and an assistant execution must keep the
+same workspace. A mismatch is refused before any entity write.
+
+Current member Team reach and clearance are checked for existing entity edits,
+including user-only requests and composed writes. Alias conflict responses omit
+inaccessible entity IDs. Generic sensitivity edits cannot lower the existing
+classification: Review returns HTTP 409 with `scope_declassification_required`.
+This is an audited-release requirement, not a stale revision; do not retry the
+same downgrade with a refreshed revision. No fields or verification audit are
+changed by that refusal. Departmental rollout remains gated while the remaining
+writers, release workflow and complete derivation coverage are unfinished.
+
+
 - Change a deal's stage through `setDealPipelineStage` using ids returned by
   `listCrmPipelines`; `updateDeal` rejects the stage field. Use
   `advanceDealStage` only for a known default-legacy pipeline value.
@@ -115,6 +129,26 @@ Every CRM row is an entity in the underlying graph. Save a memory about a contac
 - There is no delete: close a deal with a catalog stage in the `lost` category;
   remove nullable values through ordinary field updates.
 - CRM rows are brain entities, so use the `links` param and `getEntity` to connect and retrieve related memories, tasks, and deals in one place rather than treating CRM as a separate store.
+
+Typed contact, company and legacy deal edits check current member Team reach,
+clearance and private visibility before reading the source attributes, including
+when composed into a larger transaction. A hidden or held source returns the
+same unavailable result before relationship validation. The final write still
+requires mutation authority. Graph projection/close paths and the complete CRM record/custom-field surface
+have not yet completed departmental isolation acceptance; runtime activation remains gated.
+
+Stable provider-identity saves now resolve, create and bind within one transaction.
+A binding failure or race rolls back the operation; it does not leave an unbound
+person or publish a hidden target id. Upsert no-ops require current-member source
+authority, and incoming sensitivity and Team/Project floors are retained.
+Typed relationship targets must be currently readable and have the right kind.
+Their sensitivity and Team/Project requirements join the destination. Fresh
+records also inherit private user/assistant restrictions; existing records must
+already carry a compatible private binding. Clearing a relationship
+does not reduce those protections. Brian retains independent mutation reach and
+sensitivity floors when forwarding CRM writes. A scope refusal is not permission
+to omit a relationship or change workspace to bypass it. Audited release and full
+derived provenance remain incomplete; runtime activation stays gated.
 
 ## Related
 
@@ -129,3 +163,41 @@ send grant, purpose policy and every recipient's sendability still apply. Durabl
 receipts distinguish provider acceptance from confirmed delivery and preserve
 uncertain outcomes for review. Association enablement is independent of these
 generic CRM controls. See [managed delivery](../api/crm-operations.md#native-managed-delivery-tools).
+
+Standalone contact and deal creation holds referenced records stable until its database transaction commits. A refused or failed commit rolls back the new record and emits no graph projection. Imported creation reuses its owning transaction. This guarantee does not yet cover every existing-record edit, concurrent membership change, or later reclassification of a source.
+
+Selecting a primary deal contact now checks current source and reference access through the canonical CRM writer before changing participant flags. Contact identity, inherited protection and primary flags commit together; a denial or failed commit leaves both representations unchanged. Clearing the primary retains the deal's existing protection. Full HTTP record-edit atomicity remains outside this guarantee.
+
+Secondary deal participant edits now check and lock the current deal and contact, preserve private visibility, and inherit contact protection before writing. Role edits preserve an existing primary flag. Removing the canonical primary contact clears it in the same transaction without lowering protection; a refused or failed command rolls back both relationship and deal changes. These checks also respect an ambient assistant mutation ceiling even if an explicit caller context is broader.
+
+Participant lists recheck current access to both deal and contact, excluding held, retracted, retired or otherwise hidden contacts even on legacy broader deal links. Participant write endpoints return HTTP 403 with code `scope_operation_denied` and a generic administrator-review message for scope refusals. Do not remove a relationship or change workspace to bypass a refusal.
+
+Custom-field updates now validate and lock the source, field catalog and supplied reference records within one transaction. Reference sensitivity and department/project protection carry into the destination; incompatible private references are refused, and clearing a reference does not lower existing protection. Even an empty patch requires mutation authority. Hidden references return a content-free scope refusal. This does not yet certify legacy references omitted from the patch, full record-creation composition or activity/delivery lineage.
+
+Archive/unarchive and the legacy stage writer now admit and lock the source inside their transaction. The selected stage and pipeline must remain live through commit; unknown or archived IDs make no change. Record, custom-field, archive and stage HTTP handlers map scope refusals to the same content-free HTTP 403 recovery contract. Route-level history/events and the operations-service stage implementation still need their own atomicity and authority verification.
+
+### Stage source authority
+
+Stage commands authorize the deal before catalog validation or an unchanged replay.
+Human/import callers require current workspace membership. Assistant/workflow calls
+require a complete bound execution context. Unbound credential-only machine calls
+currently fail closed; credential ownership does not substitute for member authority.
+Member and CRM-key operations REST adapters return HTTP 403 with `scope_operation_denied`
+and administrator-review guidance, without hidden source details. Successful stage,
+activity, audit and outbox writes share one transaction. This does not certify
+complete machine scope support or protected downstream history/event delivery.
+Brian stage tools preserve `scope_operation_denied` with the same recovery guidance.
+
+### Activity source checks
+
+Appending CRM activity requires current source mutation authority, including current membership and the caller’s independent mutation scope. Read-only access to a record does not grant activity writes. The activity REST endpoint returns an unavailable response if the record disappears before the write, or a content-free `403 scope_operation_denied` with administrator-review guidance for scope refusal. Timeline and report history queries recheck the current source; inaccessible contacts cannot contribute mailbox address matches. Brian custom-field store writes and their activity history now share one transaction. Historical snapshot protection, mailbox classification and complete downstream event authority remain unfinished.
+
+### Saved activity audience
+
+New CRM activity rows capture their source's sensitivity, department/project requirements and private visibility when written. Timeline and report history require access to both that saved audience and the current source. Broadening a record's audience does not broaden its earlier activity. A caller cannot override or lower the saved protection. Existing activity is marked as legacy, and strict classification withholds it until audited history review is implemented. This does not yet certify audit/outbox history, mailbox classification, history release or downstream event authority.
+
+### Event source admission
+
+CRM event workflow starts require the recorded actor to read the saved and current source audience before the run input is stored. Replaying an idempotency key does not bypass current access. Run and step reads retain the event floor, including through copied prior outcomes. Execution refuses a source that becomes inaccessible and withholds an in-flight result if access changes. Review Department access and start a new run after resolving an access failure; do not automatically retry an operation that may have run. Legacy, aggregate and inventory-event classification is not yet certified for strict mode.
+
+The event-delivery listing also requires a current member envelope. An integration credential's `crm.audit.read` grant currently receives HTTP 403 `not_authorized` with Department access guidance because persisted machine ceilings are not implemented yet. It cannot borrow the credential creator's role. Current owner/admin members can inspect minimized, terminal retirement receipts; these cannot restart delivery. The operations-audit list is a separate surface whose audience protection remains pending.

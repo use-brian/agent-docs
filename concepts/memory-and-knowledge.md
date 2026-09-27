@@ -63,3 +63,106 @@ Memory and KB are the two surfaces you see in chat. Beneath them sits the brain 
 - [Brain (entities & episodes)](./brain.md)
 - [Assistants](./assistants.md)
 - [Workspaces & sharing](./workspaces.md)
+
+When a member assistant derives a memory from canonical sources supplied by its caller, saveMemory preserves their restrictions and source links. A requested personal note stays personal even when the source is shared knowledge. A source change can withhold its dependent memories until review; stale source evidence is not permission to retry a write automatically. This applies to sources the current producer can identify and does not certify complete provenance across every input type.
+
+### Learning from scoped corrections
+
+Correction reflection uses versioned memory and brain verification receipts. It
+keeps personal, assistant, clearance, department and project restrictions, and
+separates incompatible audiences into different model batches. Editing a receipt
+or its target can hold previously learned patterns until reviewed or regenerated
+from current evidence. Legacy receipts without saved scope are withheld. This
+coverage does not yet certify whole-turn feedback, every correction-audit stream
+or procedural skill learning, and does not enable strict departmental activation.
+
+Retraction and soft-deletion reasons now use versioned correction receipts for
+reflection. Learned patterns retain the saved and current target audience;
+receipt/source changes or erasure invalidate their descendants. Older correction
+receipts without saved scope are excluded, and snapshot/detail blobs are not
+model inputs. This does not establish provenance for whole-turn negative feedback
+or enable strict departmental isolation before the rollout barrier is met.
+
+Department grant execution now carries separate read and mutation ceilings. A
+read-only grant can support an audience-protected derived memory without enabling
+source edits or live connector mutation. Canonical source RLS rechecks current
+member permissions, including grant expiry/revocation, even for human reads. The
+context picker can expose granted Teams without importing their foreign bundles.
+This is still behind the incomplete departmental rollout gate; do not assume all
+legacy endpoints or delivery/replay paths have completed acceptance.
+
+The assistant Memory API carries the viewer's read and mutation ceilings through
+edits, scope changes, verification and deletion. Read-only department access does
+not authorize source changes. Pending-review lists and counts use the viewer's
+scope before pagination. Personal scope changes retain the workspace partition;
+workspace IDs are not a privacy toggle. Complete departmental activation remains
+subject to the documented readiness barrier.
+
+Department management commands now cover Team creation, metadata/archive,
+read-package edits, membership and assistant audiences. Legacy Team and
+page-sharing membership endpoints use the same service. Ordinary membership
+changes preserve the current access mode; explicitly activating assigned mode
+requires an administrator and complete departmental readiness. Read-package edits
+change the ordinary membership package, including its existing mutation authority;
+they are distinct from approved temporary read-only requests. The Settings
+readiness display cannot treat v1 context checks alone as departmental readiness.
+
+Person permission review is available in Settings > Department access > People.
+`inspectWorkspaceAccess` returns a person's clearance, stored Team mode and separate
+current read/membership reach only to that person or an administrator. Broad legacy
+reach and owner/admin authority are displayed explicitly. `member.access.set` uses
+the same canonical service for the UI and native tool, requires the reviewed policy
+revision, and changes only an ordinary member's clearance and Team mode. It rejects
+stale reviews, privileged targets and returning to legacy mode. Transitioning to
+assigned mode requires complete departmental readiness. An unavailable release
+keeps that transition blocked; the form is not evidence of strict isolation.
+
+Department access tools now take an intent containing `command`, the inspected
+`expectedPolicyRevision`, and a UUID `idempotencyKey`. Preserve the exact intent
+when retrying. Confirmation prepares an immutable server review; execution consumes
+that review and cannot create one silently. Web clients prepare at
+`POST /api/workspaces/:workspaceId/access/command-review`, then apply
+`{type: "access.command.apply", reviewId, payloadHash}` through `/access/commands`.
+Reviews expire after fifteen minutes. Policy changes require a new review. A retry
+of an applied review returns current filtered access without repeating its changes;
+it does not replay an old privileged response. The legacy Team/assistant configuration and Team-kind page-sharing membership
+adapters require the same saved review: attach `X-Brian-Access-Review-Id` and
+`X-Brian-Access-Review-Hash` from the confirmed review. The shared CORS allowlist
+accepts both headers. The route target, operation and body must match the saved
+command; mismatch returns `access_review_changed` (409), including on replay.
+Missing/malformed proof returns `access_review_required` (409). Omitted membership
+`activateAssigned` is equivalent to false. Ordinary sharing-group membership
+retains its existing contract. These adapters never prepare or confirm implicitly.
+
+Retrying confirmation for an already-applied intent returns a receipt-only notice,
+without replaying old permission details. Confirmation and execution both retain
+the original intent identity, so a lost response does not require a new mutation.
+
+
+Organization mutations now use the same saved-review lifecycle with a separate
+intent: `{command, expectedRevision, expectedPolicyRevision, idempotencyKey}`.
+Read `getOrganizationChart` for the chart revision and administrator-only
+`initialization.policyRevision`. `updateOrganizationChart` prepares that intent
+for per-call confirmation and execution consumes its existing review. For HTTP,
+prepare at `POST /api/workspaces/:workspaceId/org-chart/command-review`, inspect
+the exact unit/placement effects, and apply `{type:"org.command.apply",reviewId,
+payloadHash}` at `/access/commands`. Raw `org.*` commands at the application
+endpoint return `access_review_required` (409). Both revisions, current administrator
+authority and the structural effects are rechecked. Stale revisions or changed
+effects require a new review. Keep the original intent/receipt for uncertain-result
+retries: a committed retry returns only the current filtered chart, and repeated
+confirmation returns a receipt notice without old privileged effects. Organization
+placement, reporting and accountability do not grant departmental data access.
+
+Department access overview now returns the newest 50 authorized requests/grants
+and independent `nextRequestCursor` / `nextGrantCursor` values. Continue with
+`GET /api/workspaces/:workspaceId/access/requests` or `/access/grants`, passing
+`after` and `expectedPolicyRevision` together; omit both to restart. Native
+`inspectWorkspaceAccess` uses `{history:"requests"|"grants",after,expectedPolicyRevision}`
+for the same service. Each page includes its policy revision, validity duration
+and next cursor, without a total. Authorization precedes cursor lookup and limit.
+A stale revision or unknown/inaccessible cursor returns `access_history_changed`
+(409): discard the page and inspect the newest records. A grant history does not
+become visible merely because the actor requested access for another beneficiary.
+Old-request confirmation uses a direct authorized lookup rather than the overview
+window. Mutation confirmation and application retain their saved-review contract.

@@ -89,3 +89,14 @@ from the workspace name.
 - [Assistants](./assistants.md)
 - [Memory & knowledge](./memory-and-knowledge.md)
 - [Channels](./channels.md)
+
+
+## Departmental access readiness (implementation in progress)
+
+`inspectWorkspaceAccess` returns the current server readiness along with visible departments, requests and grants. This release refuses new departmental delegation while the required enforcement is incomplete. `requestWorkspaceAccess`, manager capability additions and new read-grant approvals return `departmental_enforcement_incomplete`; changing client arguments or calling the shared approval endpoint cannot bypass that decision. Inspect existing settings, cancel or reject requests, reduce manager responsibilities and revoke grants through the normal commands. The web path is Settings > Department access, also reachable from Organization. Hierarchy changes do not change data permissions. Do not interpret these controls as certification that full strict departmental isolation is ready.
+
+## Existing data review (implementation in progress)
+
+Administrators can use `inspectScopeReview` to list metadata-only inventory for memories, entities, relationships, tasks, files, episodes, knowledge entries and knowledge chunks. `manageScopeReview` creates an explicit preview, applies up to 25 items per call, or cancels remaining work. Always use the saved review ID, current version and payload hash. An old-version retry returns recorded progress without replaying writes. After a lost response, inspect that review before choosing the next operation. Saved reviews are paginated in pages of 20: pass `nextReviewCursor` back as `reviewAfter` to `inspectScopeReview` for older jobs. Omit `reviewAfter` for the latest jobs. The inventory `after` cursor and exact `reviewId` selection are independent; the selected job remains available across history pages. Cursors are workspace-bound and unknown or foreign anchors fail without exposing their metadata. Data/policy changes can make remaining items stale; previously committed pages remain applied.
+
+The web path is Settings > Department access > Review existing data. General means no Team requirement; it does not lower clearance, remove personal/assistant visibility or remove Project restrictions. Assigning a Team preserves those other protections. Holding may hold known derived descendants. This path cannot release held content. The tools require a verified human with current owner/admin authority; an unattended assistant or API credential cannot substitute its owner. Coverage is incomplete, and neither a completed batch nor an empty per-kind inventory certifies strict isolation.

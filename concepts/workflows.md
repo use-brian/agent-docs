@@ -116,3 +116,47 @@ A workflow definition can carry `permission_grants: { action_kind, grant: 'allow
 - [Tools & connectors](./tools-and-connectors.md)
 - [Doc](./doc-pages.md)
 - [Brain (entities & episodes)](./brain.md)
+
+
+## Departmental run authority (implementation in progress)
+
+Member workflow runs capture an internal starting access ceiling before executing. It survives waits and approvals; later permission expansion cannot widen that run, and permission loss blocks resume. A resumed legacy run without a captured ceiling must be reviewed and started as a new run. Do not supply or edit this authority through workflow input or run variables. Assistant calls inherit the pinned ceiling. External-client workflows retain their API-key principal. Full authoring-time consent, deterministic-step transaction enforcement, history and delivery-audience checks remain unfinished, so this is not a claim of complete strict departmental isolation.
+
+Deterministic steps, approved tool invocations and delivery now recheck live member authority. If access changes during an operation, its result is withheld and the operation may already have executed: inspect its outcome before starting another run. These checks do not certify recipient audience permissions or transactional side-effect authorization.
+
+An old approval card cannot restart a failed or completed run, even if access is restored. Approval notifications also renew current authority before sending.
+
+## CRM wake-ups for goals
+
+A waiting goal can resume from a CRM event only when its recorded creator can read
+that event's saved and current source under the selected Team/Project. The server
+re-matches the stored event and atomically claims the current park generation.
+Duplicate or stale dispatch cannot consume a later wait. The event's restrictions
+continue to apply to the goal and its workflow history after resumption, including
+outcome-copy reads and execution lease renewal.
+
+Source permission loss blocks work without retries, host writeback or outcome
+delivery. An authorized viewer can use the goal's Review department access action
+to open workspace permission settings; this action neither grants access nor
+resumes work. Source receipts remain protective after source or goal deletion.
+Other native event families and complete unattended execution ceilings/consent
+remain under implementation; these changes do not activate strict departments.
+
+A department- or project-scoped goal can reuse a company-wide workflow. Execution intersects both scopes, and new writes retain their required department/project labels. Changing the goal context invalidates an existing run; editing workflow input cannot remove its saved goal binding. Direct application-role source reads also enforce the executing clearance, department and project ceilings. These safeguards do not enable strict departmental activation on their own.
+
+A workflow authority failure also blocks its owning goal. Failed carried runs are not silently replaced, and permission changes do not trigger automatic goal retries. Review the prior operation outcome before starting fresh work.
+
+Member workflow assistant calls now carry the trusted source evidence accumulated by the caller. The receiver checks that these sources still match and fit its access before using the question, and rechecks them during execution. Derived memory creates and updates preserve those source links. Missing, changed or inaccessible source context stops the request; do not retry it automatically. This does not yet certify event payloads or other inputs whose producers have not supplied canonical evidence.
+
+### CRM input source protection
+
+Member workflows resolve CRM input scope from saved event, copied-run and goal
+receipts. The original event audience and the current CRM record both constrain
+derived notes. Editing, holding or retiring a source can block execution or
+withhold an in-flight result; stale persisted evidence requires review and a new
+run rather than retrying effects. Legacy or aggregate events without complete
+source evidence are refused at execution. Input JSON cannot grant access or
+replace these bindings. This coverage does not certify all event families or
+complete departmental strict-mode activation.
+
+For an authorized failed run, the run-detail page offers **Review department access**. This opens workspace access settings; check the completed steps before starting a new run, since an interrupted operation may already have executed.

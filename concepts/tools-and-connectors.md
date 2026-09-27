@@ -133,6 +133,97 @@ navigation and do not grant connector credentials or bypass tool confirmations.
 If an expected tool is unavailable, ask the user to enable the relevant app and
 tool set for that assistant instead of retrying an unavailable tool name.
 
+## Organization directory operations
+
+Authenticated attended conversations can discover `getOrganizationChart` and
+`updateOrganizationChart`. The read returns only the human actor's permitted directory.
+The write uses the same typed commands and optimistic versions as Workspace >
+Organization, requires current workspace owner/admin authority and per-call human
+confirmation, and changes structure or directory visibility only. Department membership,
+clearance and content access are separate operations. Billing-owner identity does not
+authorize either operation. These administration tools do not currently accept unbound
+programmatic credentials or autonomous/callee identities.
+
+Workspace access operations: `inspectWorkspaceAccess`, `requestWorkspaceAccess`, and `manageWorkspaceAccess` use the same authority checks as Settings > Department access. They require a verified human in the current attended conversation. Read grants never confer mutation authority; decisions require the current reviewed policy revision and immutable request hash/version. Unbound programmatic credentials cannot invoke these administrative operations.
+
+Administrators can refresh the independent reviewer of a pending access request using `manageWorkspaceAccess` with `access.request.assign`. Manager changes reevaluate pending reviewers. A stale review must be inspected again before deciding; an unavailable independent reviewer leaves the request pending and unassigned.
+
+
+### Reviewed organization initialization
+
+Owners/admins can inspect the `initialization` metadata returned by
+`getOrganizationChart` and explicitly choose a person or assistant and one of their
+direct Team assignments. `updateOrganizationChart` accepts `org.initialize.subject`
+with `subjectId`, `kind`, `teamId`, `expectedRevision` and `expectedPolicyRevision`.
+Confirm the selected subject, primary placement and whether a members-only root
+unit must be created. Existing linked units are reused. Missing or stale assignments
+return `organization_conflict`; refresh and review again. No primary Team is guessed,
+no reporting/accountable relationship is inferred, and no data permission changes.
+Setup metadata is absent for non-admin callers. The web path is Organization >
+Use department assignments. This directory setup does not activate departmental
+read grants or strict isolation.
+
+### Departmental connector exposure
+
+A departmental read grant does not by itself make that department's live
+connector tools available. The server also requires mutation authority for the
+connector's entire scope. A tool's read-only description is not an exception.
+Do not retry through another connector or assistant to bypass unavailable scope.
+Native OCR jobs retain their initiating mutation ceiling when resumed; older
+jobs without that ceiling require a new preflight. Native CRM delivery checks
+its independent mutation ceiling before preparing the provider request.
+These checks are part of the isolation implementation; they do not indicate
+that strict departmental rollout is available.
+### Workspace file publication
+
+`fileAppend` publishes a new version and returns its new file ID. The old object
+remains unchanged for history. Use the returned ID or durable path for subsequent
+operations. Concurrent edits or a changed source scope return a conflict: read the
+current file before making a new edit; deleting the file is not conflict recovery.
+An unconfirmed publication returns `file_publication_uncertain` with
+`retrySafe: false`. Inspect the current file before retrying because the publication
+may already have succeeded. Read-only departmental reach does not authorize an
+append, metadata edit or deletion. Derived writes retain their accumulated scope
+and sensitivity. These protections do not activate the full departmental rollout.
+
+### Memory version IDs
+
+A successful `saveMemory` update returns the successor ID. Use that ID for the
+next edit; the previous ID identifies a retired version. Memory reads and save
+results carry server-owned source evidence outside the model-facing data. Do not
+supply source IDs, classification metadata or derivation fields in tool arguments
+to claim authority. This source tracking does not indicate that strict departmental
+activation or complete ordinary-save provenance is available.
+
+### Classification review impact
+
+Administrator classification previews include an immutable, content-free list of
+known descendant memories. Inspect the saved review before applying it; Brian's
+confirmation shows unique affected IDs and how many were already held. A changed
+dependency set requires a fresh preview. Earlier previews without impact evidence
+remain inspectable and cancellable but cannot apply. A selection may contain up
+to 100 sources and affect at most 500 known memories; use smaller batches when
+the limit is exceeded. Unknown lineage remains unverified, and these previews do
+not enable strict departmental activation.
+
+### Task mutation boundaries
+
+Task creation and updates require mutation authority; a departmental read grant
+alone cannot authorize them. Updates retain existing and known input sensitivity,
+Team/Project restrictions and private visibility. Incompatible private sources
+are refused. A duplicate create only reuses a task with matching content, scope,
+author and recorded provenance; active Project admission still applies.
+The server rechecks current member Teams for creation, deduplication, edits and
+child moves, even without an assistant context. An older assistant envelope cannot
+restore removed Team reach or clearance on a source edit. Inherited destination
+Teams also require current membership.
+Task updates return a successor ID. Use it for subsequent edits. If related
+records cannot be updated under current authority, the transaction rolls back
+and Brian asks you to refresh and review access before trying a new edit.
+History checks each version independently. Server-owned task source evidence
+tracks known inputs; it does not certify complete turn provenance or activate
+strict departmental rollout.
+
 ## LinkedIn Feed publishing
 
 LinkedIn publishing is a Feed capability, not a generic MCP connector. Choose an
@@ -157,3 +248,19 @@ actual edition URL. Copy/export/opening the editor never marks an edition posted
 An optional promotional link post is a separate draft with its own approval.
 Managed provider activation stays disabled until app approvals and credentialed
 smoke tests are complete; capability responses are authoritative.
+
+### Brain verification and deletion boundaries
+
+Generic Brain verification/deletion and assistant-memory confirmation require current
+source access and independent mutation authority. Read-only reach cannot confirm, delete or reject an entry.
+An inaccessible, absent or foreign entry returns the same not-found response;
+bulk deletion reports only entries actually deleted. A denied action creates no
+verification receipt, rejection tombstone or goal change.
+
+New verification receipts retain server-captured source restrictions. App-role
+receipt and corresponding journal reads require both current source access and
+that retained scope, so later declassification does not widen historical evidence.
+Legacy unclassified receipts are not exposed by these policies. This is a bounded
+implementation: full correction/rejection derivation, privileged audit consumers
+and complete model-input provenance remain unfinished. Departmental read-grant
+expansion and strict activation remain unavailable.

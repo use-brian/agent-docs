@@ -62,3 +62,10 @@ Every assistant belongs to a workspace: your company brain from day 1, even when
 - [Workspaces & sharing](./workspaces.md)
 - [Channels](./channels.md)
 - [Tools & connectors](./tools-and-connectors.md)
+
+
+## Departmental handoff enforcement (implementation in progress)
+
+The departmental-isolation implementation carries a server-owned access snapshot on interactive assistant handoffs. The receiver rechecks the initiating member and assistant and rejects changed authority before reading context. It cannot use a more privileged callee or its billing owner to widen the caller's clearance, Team grants or assistant visibility. Home-app handoffs retain the verified viewer and credential clearance cap. These fields are internal authority, never model-supplied arguments. Full unattended, replay and delivery enforcement remains unfinished; this is not a claim that strict departmental isolation is ready for activation.
+
+Snapshot-bound consults also recheck live caller and receiver authority at tool and response boundaries. Revocation invalidates the running context permanently. If an operation may already have executed, check its outcome before retrying; the server does not automatically replay it. These checks do not yet certify unattended execution or all delivery audiences.

@@ -1374,3 +1374,20 @@ backup requires a current encrypted journal checkpoint before sending resumes.
 This is an operator recovery procedure, not a CRM command or a replacement for
 provider/storage erasure. Earlier coverage, journal custody and retention need
 explicit privacy/deployment qualification.
+
+## Department scope for operation history
+
+Audit and event-delivery history require verified current member authority.
+Each returned record must satisfy both its saved source audience and the current
+source audience. Assistant/workflow contexts additionally need a complete bound
+execution scope. `crm.audit.read` alone is insufficient: credential-only callers
+receive `not_authorized` with Department access guidance until persisted machine
+ceilings are supported. This applies to both member and integration endpoints.
+
+Audit subject capture covers canonical brain records and persisted CRM contact
+relationships, including typed source references in audit details. New envelopes
+cannot be supplied or widened by callers. Legacy and unresolved audit/event
+families remain excluded from strict mode pending classification and review.
+Canonical privacy erasure leaves only a terminal administrative receipt; it does
+not release protected source content. Security envelopes are not exported as CRM
+content. These changes do not activate strict classification for a workspace.

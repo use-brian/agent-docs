@@ -79,6 +79,22 @@ Memory is one primitive in the brain: the layer that holds inferred behavioral f
 - Empty search results may be scope filtering rather than an empty workspace. Do not ask for or expose raw compartment keys; operators work with stable Team and Project ids.
 - Ingestion routing is per-connector-instance and first-match-wins; a connector set to `drop` or `scheduled` will not produce realtime brain rows.
 
+
+## Current member file edits
+
+Canonical file writes check the authenticated member's current Team reach,
+clearance and private visibility, including metadata edits composed inside a
+larger transaction. Creation and replacement check destination Team reach.
+Ordinary metadata edits and replacement refuse lowering an existing sensitivity
+floor; a reduction requires an audited release. Files API refusals use
+`read_only` with `reason: release_required`; Brian explains that no edit was
+applied, and must not retry by deleting and recreating the file. Review returns
+409 with `scope_declassification_required`, distinct from a stale revision.
+Current source restrictions and stricter segment floors survive these edits.
+This does not complete delivery-time authorization, all output provenance or
+the audited release workflow; departmental activation remains gated.
+
+
 ## Related
 
 - [Memory & knowledge](./memory-and-knowledge.md)
