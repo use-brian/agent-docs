@@ -72,3 +72,12 @@ Read lifetime annotations in the web client belong to the requesting viewer and
 are discarded on expiry or authority refresh. They are not stored in template
 routing or snapshot JSON. Refetch protected metadata after a viewer change; copying
 a prior read into another cache or command does not grant fresh authority.
+
+
+The template picker and editable routing inspectors apply these same bounded
+reads. Creation forms disappear when their template list expires; routing drafts
+are discarded on expired or changed authorization and on changed server routing.
+Identical authorized routing renewals preserve pending edits. A routing PUT
+acknowledgement does not extend read access: the browser performs a fresh bounded
+GET before displaying the saved routing. Late completions from an expired or
+replaced viewer/workspace cannot restore drafts or navigate from creation.
