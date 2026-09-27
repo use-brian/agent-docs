@@ -67,3 +67,8 @@ responses. Revalidate retained metadata before that lifetime expires, including
 request time in the budget. A `409 office_projection_changed` means the read's
 content or authority changed before publication: discard any old projection and
 make a fresh read. It does not authorize retrying a mutation.
+
+Read lifetime annotations in the web client belong to the requesting viewer and
+are discarded on expiry or authority refresh. They are not stored in template
+routing or snapshot JSON. Refetch protected metadata after a viewer change; copying
+a prior read into another cache or command does not grant fresh authority.
