@@ -53,3 +53,10 @@ resource ID does not bypass a revoked grant, private file, or held source.
 Template publication records its declared resource links atomically with its
 version and head; an inaccessible dependency prevents publication. Temporary
 read grants do not authorize library edits or publication.
+
+Office resource byte responses use authenticated no-store delivery and the
+`X-Brian-Media-Valid-For-Ms` header. Clients must subtract request/body-transfer
+time from that lifetime, discard expired bytes, and clear retained projections
+when the viewer or workspace changes. An immutable resource hash never authorizes
+permanent caching. Each read rechecks the live artifact reference, current resource
+and durable file authority before returning bytes.
