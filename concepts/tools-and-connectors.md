@@ -306,3 +306,9 @@ revision after fetching storage, before returning content. A revoked, changed or
 unavailable source returns not-found. Doc-media GETs return authenticated no-store
 bytes for every backend, including `?redirect=0`; clients must not expect a signed
 storage URL. Images/downloads use a local object URL after the authorized read.
+
+Cached durable doc-media displays must honor `X-Brian-Media-Valid-For-Ms`
+(after subtracting the full request time) and purge on identity/authority changes.
+This exposed response header bounds local display; it is not a storage capability
+and cannot authorize a later read. The server rechecks the source revision and
+current canonical read predicate before issuing it.
