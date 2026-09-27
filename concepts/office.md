@@ -109,8 +109,8 @@ panel refetches an authorized collection. Pending bulk decisions, queued-comment
 replay and comment-triggered job polling stop when their owning read expires.
 Write-capability loss also stops subsequent bulk actions. Offline read/recovery
 and shared mention-directory authorization remain separate required boundaries.
-Artifact/selection, live and pinned-package copies remain a separate required
-closure; bounded discussion collections do not certify all editor retention.
+Bounded discussion collections alone do not certify all editor retention. Cold
+pinned-package authority remains a separate required closure.
 
 
 The document editor's comment and suggestion decorations now read the same bounded
@@ -120,3 +120,14 @@ Delayed detachment stops when its read, viewer or editable artifact is no longer
 current. Local queued comments remain separate from fetched server comments, so
 closing/reopening an offline panel preserves local additions without extending
 server comment retention. Pinned-package authority remains independently required.
+
+
+Online artifact and snapshot reads also expire. List-page rows used for immediate
+editor chrome keep the original collection deadline. Live working snapshots do
+not renew that deadline, and the editor removes its content, selection and
+presentation state when either read loses authority. Successful command and
+initialization responses require a fresh bounded GET before their content is
+shown; a delayed acknowledgement cannot restore access. Once online ownership
+has been established, a previous device package cannot bypass expiry or denial.
+Cold offline authorization/recovery and canonical collaboration delivery remain
+required independent boundaries; this adapter does not complete the rollout.
