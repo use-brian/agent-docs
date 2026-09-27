@@ -291,3 +291,11 @@ conversation's server-held execution ceiling. Current human grants and a broader
 selected assistant cannot widen its read, edit, sensitivity or Project limits.
 The web preview describes current permissions; existing conversations can be
 narrower. Independent human grant paths do not override the final intersection.
+
+
+Use `inspectWorkspaceAccess` with `registry:true` for the department editor's
+current registry snapshot (HTTP: `GET /api/workspaces/:workspaceId/access/registry`).
+It contains only authorized department metadata, assignment references, visible
+people/assistants and linked org units, plus current admin capability, revision,
+expiry and the existing request-duration policy. It returns no emails, content or
+hidden counts. `registry` cannot be combined with `explain` or history selectors.

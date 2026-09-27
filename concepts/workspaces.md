@@ -134,3 +134,11 @@ access. Select a department under Departments for its membership, read bundle,
 directory and manager settings. Access holds requests, grants, renewal, audit and
 data review. These navigation changes use the same server authorization and saved
 review protocol as native operations.
+
+
+Use `inspectWorkspaceAccess` with `registry:true` for the department editor's
+current registry snapshot (HTTP: `GET /api/workspaces/:workspaceId/access/registry`).
+It contains only authorized department metadata, assignment references, visible
+people/assistants and linked org units, plus current admin capability, revision,
+expiry and the existing request-duration policy. It returns no emails, content or
+hidden counts. `registry` cannot be combined with `explain` or history selectors.
