@@ -173,6 +173,8 @@ Use `captureMode: "routed"` when an integration is forwarding message-shaped wor
 
 Profiles are workspace-owned and reusable. Each profile has one partition policy (`connection`, `user`, `session`, or `subject`) and an ordered first-match-wins rule list. Rules may match every event, keywords, actor, role, or scalar metadata and route to `drop`, `scheduled`, or `realtime`. Connection rules and assistant defaults are selected, never merged.
 
+Each routed rule also chooses how its audience is bound. `inherit` uses the selected assistant's explicit or administrator-reviewed default. `explicit` uses the rule's exact Team and Project selection; an empty explicit selection intentionally means Workspace General. In a strict workspace, a legacy or unavailable binding is preserved as a held queued receipt and is not extracted. A later configuration edit does not silently release that held payload.
+
 For every routed call:
 
 - Generate a stable `eventId` from the source message. Reusing it on a retry returns the existing receipt instead of appending twice.
@@ -181,7 +183,7 @@ For every routed call:
 - Treat `subjectId` and metadata as opaque routing/provenance labels. They do not select a workspace, assistant, or security principal.
 - Do not set `decompose: false`; flat-memory mode is only available with immediate capture.
 
-A queued result means the event was durably appended. It does not mean extraction ran yet. The profile's cron window or the 32k-token size bound flushes a batch keyed by workspace, assistant, rule, partition, and firing time. Brian orders that window and makes one extraction call for the whole batch. MCP does not passively observe another product's transcript: the connected client must call `ingestToBrain` for each message it chooses to submit.
+A queued result means the event was durably appended. It does not mean extraction ran or that the item is currently eligible to run. The profile's cron window or the 32k-token size bound flushes an eligible batch keyed by workspace, assistant, rule, partition, and firing time. Brian orders that window and makes one extraction call for the whole batch. MCP does not passively observe another product's transcript: the connected client must call `ingestToBrain` for each message it chooses to submit.
 
 ### CRM operations tools
 
