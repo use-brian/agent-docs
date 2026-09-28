@@ -221,8 +221,9 @@ Brian-read PDF, while CRM delivery admits one locked mailbox and prepared outbou
 action without exposing mailbox reads. Both retain their initiating mutation
 ceiling and current policy checks; older OCR jobs without that ceiling require a
 new preflight.
-These checks are part of the isolation implementation; they do not indicate
-that strict departmental rollout is available.
+These checks remain mandatory after strict activation. Readiness and connector
+eligibility do not activate a workspace; activation is a separate saved and
+confirmed owner/admin command after complete inventory review.
 
 Structured PDF extraction is two-step. `prepareDocumentExtraction` performs the
 cheap exact-file and connector-health preflight and returns the maximum bytes/pages,
@@ -246,7 +247,8 @@ An unconfirmed publication returns `file_publication_uncertain` with
 `retrySafe: false`. Inspect the current file before retrying because the publication
 may already have succeeded. Read-only departmental reach does not authorize an
 append, metadata edit or deletion. Derived writes retain their accumulated scope
-and sensitivity. These protections do not activate the full departmental rollout.
+and sensitivity. These protections apply in every classification mode and do not
+activate strict mode by themselves.
 
 ### Memory version IDs
 
@@ -254,8 +256,8 @@ A successful `saveMemory` update returns the successor ID. Use that ID for the
 next edit; the previous ID identifies a retired version. Memory reads and save
 results carry server-owned source evidence outside the model-facing data. Do not
 supply source IDs, classification metadata or derivation fields in tool arguments
-to claim authority. This source tracking does not indicate that strict departmental
-activation or complete ordinary-save provenance is available.
+to claim authority. This source tracking is part of the strict-readiness coverage
+manifest. It does not activate strict mode by itself.
 
 ### Classification review impact
 
@@ -265,8 +267,9 @@ confirmation shows unique affected IDs and how many were already held. A changed
 dependency set requires a fresh preview. Earlier previews without impact evidence
 remain inspectable and cancellable but cannot apply. A selection may contain up
 to 100 sources and affect at most 500 known memories; use smaller batches when
-the limit is exceeded. Unknown lineage remains unverified, and these previews do
-not enable strict departmental activation.
+the limit is exceeded. Unknown lineage remains held or requires explicit review.
+A completed current inventory contributes to readiness, but activation remains a
+separate saved and confirmed owner/admin command.
 
 ### Task mutation boundaries
 
@@ -283,8 +286,8 @@ Task updates return a successor ID. Use it for subsequent edits. If related
 records cannot be updated under current authority, the transaction rolls back
 and Brian asks you to refresh and review access before trying a new edit.
 History checks each version independently. Server-owned task source evidence
-tracks known inputs; it does not certify complete turn provenance or activate
-strict departmental rollout.
+tracks known inputs. The complete isolation manifest also verifies turn evidence;
+neither mechanism activates strict mode by itself.
 
 ## LinkedIn Feed publishing
 
@@ -323,9 +326,10 @@ New verification receipts retain server-captured source restrictions. App-role
 receipt and corresponding journal reads require both current source access and
 that retained scope, so later declassification does not widen historical evidence.
 Legacy unclassified receipts are not exposed by these policies. This is a bounded
-implementation: full correction/rejection derivation, privileged audit consumers
-and complete model-input provenance remain unfinished. Departmental read-grant
-expansion and strict activation remain unavailable.
+implementation: full correction/rejection derivation and privileged audit consumers
+remain outside these verification operations. Departmental read grants and strict
+activation remain governed by current server readiness, complete inventory review
+and the separate confirmed activation command.
 
 
 Departmental inspection accepts `explain` with optional `memberId`, `assistantId`,
