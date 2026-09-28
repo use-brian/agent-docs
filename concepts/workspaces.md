@@ -91,9 +91,17 @@ from the workspace name.
 - [Channels](./channels.md)
 
 
-## Departmental access readiness (implementation in progress)
+## Departmental access readiness
 
-`inspectWorkspaceAccess` returns the current server readiness along with visible departments, requests and grants. This release refuses new departmental delegation while the required enforcement is incomplete. `requestWorkspaceAccess`, manager capability additions and new read-grant approvals return `departmental_enforcement_incomplete`; changing client arguments or calling the shared approval endpoint cannot bypass that decision. Inspect existing settings, cancel or reject requests, reduce manager responsibilities and revoke grants through the normal commands. The web path is Organization > Access. Settings links to the same Organization home, whose Structure, People, Departments and Access sections cover directory and access administration. Departments is the UI name for the existing Team registry; it does not introduce another audience type. Hierarchy changes do not change data permissions. Do not interpret these controls as certification that full strict departmental isolation is ready.
+`inspectWorkspaceAccess` returns the current server readiness along with visible departments, requests and grants. New departmental delegation remains unavailable whenever any deployed enforcement, schema or current-inventory prerequisite is incomplete. `requestWorkspaceAccess`, manager capability additions and new read-grant approvals then return `departmental_enforcement_incomplete`; changing client arguments or calling the shared approval endpoint cannot bypass that decision. Inspect existing settings, cancel or reject requests, reduce manager responsibilities and revoke grants through the normal commands. The web path is Organization > Access. Settings links to the same Organization home, whose Structure, People, Departments and Access sections cover directory and access administration. Departments is the UI name for the existing Team registry; it does not introduce another audience type. Hierarchy changes do not change data permissions.
+
+Readiness never activates a workspace automatically. A current owner/admin must use
+the saved, confirmed `workspace.classification.set` operation after the complete
+inventory has been reviewed. The server rechecks readiness, policy and inventory in
+the applying transaction. Stale review, missing source binding or changed authority
+refuses without changing classification. Deployment compatibility and real-data
+review remain operator responsibilities even when the binary reports enforcement
+version 2.
 
 ## Existing data review (implementation in progress)
 
