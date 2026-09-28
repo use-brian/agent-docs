@@ -378,6 +378,7 @@ turns on by itself. Set them in `.env` or under `~/.usebrian/`.
 | X search | `XAI_API_KEY` | xAI Grok fallback plus the `xSearch` tool |
 | Google Maps | `GOOGLE_MAPS_SERVER_API_KEY` | Place search, weather, and walking/driving routes through Maps Grounding Lite; use a dedicated server-only key restricted to that API |
 | Model fallback | `FALLBACK_PROVIDER_ENABLED=true` + `ANTHROPIC_API_KEY` | Keep running if Gemini is unavailable |
+| Decision classifier | `TYPESAFE_API_KEY` | Register the optional TypeSafe Jev transport for small typed decisions. The key alone enables no route: all operations remain LLM-only until the deployment injects an operation-specific, version-matched recorded evaluation profile. Begin with bounded shadow sampling; synthetic profiles cannot activate production. |
 | Google connector | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Calendar, Gmail, Drive via your own OAuth app |
 | Notion connector | `NOTION_CLIENT_ID` / `NOTION_CLIENT_SECRET` | Notion via your own OAuth app |
 | Fathom connector | `FATHOM_CLIENT_ID` / `FATHOM_CLIENT_SECRET` | Fathom via your own OAuth app |
