@@ -43,6 +43,12 @@ A synced source can run a maintenance agent (Studio -> Knowledge -> Self-maintai
 
 Ingestion runs in four stages: Conversation (every channel feeds the same pipeline; voice notes are transcribed on arrival) -> Extract (a background pass distils stable facts from each turn; mentions of yourself become identity candidates, mentions of others become entity candidates) -> Consolidate (a light pass dedups near-duplicates against existing memory and KB; a deep pass synthesises narratives, prunes stale rows, and adjusts confidence) -> Land (each row lands with tags, source, and a pointer to its episode).
 
+### Durable application and recovery
+
+Extraction success and application success are separate. A successful extraction freezes a normalized plan before derived entities, edges, memories, tasks, and finalization receipts are applied. Each item records a durable outcome, so a partial database or policy failure is visible instead of being mislabeled as a complete learning pass.
+
+Studio -> Events shows incomplete application work. An authorized owner or administrator can confirm a retry there. Retry resumes only pending or retryable failed items from the same frozen plan; it does not rerun extraction, classifiers, embeddings, provider probes, or paid model work, and already-applied items are not written again. Held and rejected items remain intentional outcomes. Archived source episodes stay archived. Older episodes without a ledger are reported as `legacy_untracked`, never assumed complete.
+
 ## How the brain answers
 
 Every turn fans in identity, relevant memories, knowledge base, tools and connectors, and the recent session, then composes one prompt (system prompt + selected context + tool catalogue + your turn). The model runs at the Standard / Pro / Max tier set in the chat header, or at a metered pay-per-use model profile when the workspace picked one (metered picks always pass an estimate-and-confirm step and bill 5 credits plus actual model cost). Background work (extraction, embedding, classifiers) always runs Standard. The reply streams back to your channel and the loop begins again at Extract.
