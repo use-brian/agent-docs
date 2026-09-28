@@ -82,6 +82,39 @@ shown in management UI; raw compartment keys are never part of the MCP
 contract. OAuth-issued Brain credentials are currently workspace-wide subject
 to their normal clearance ceiling.
 
+## Agent configuration
+
+The Brain MCP control plane is bound to the workspace primary assistant. Its
+read tools are discoverable normally; its configuration writes appear only
+when a workspace owner or admin has enabled **Agent configuration** on that
+assistant and the credential has `read_write` scope. Revocation takes effect on
+the next request. The agent cannot grant this capability to itself, raise its
+clearance, change billing, or approve a staged write.
+
+Call `listConnectors` before configuring an integration. It returns both
+visible configured instances and registry-backed catalog rows for official
+connectors that are not connected yet. Catalog rows have
+`availability: "available"`, `connected: false`, and `instanceId: null`; never
+treat one as an active credential. `authorizationHandoff` says whether Agent
+configuration can prepare the connector's browser-consent flow, and
+`connectPath` identifies its workspace Studio destination.
+
+For a supported OAuth connector such as Google Calendar, call
+`requestConnectorAuthorization({ provider: "gcal" })`. If the provider is
+already connected, the result identifies the visible instance and work can
+continue. Otherwise it returns `human_authorization_required`, an absolute
+`connectUrl`, and a canonical action id. Present the URL to the human. The human
+still performs provider login, account selection, scope review, and consent;
+OAuth codes and tokens never enter the tool result. Brain MCP is stateless, so
+after the user reports completion, call `listConnectors` again and continue
+only when a matching row is actually connected. Do not retry the authorization
+preparation tool as a substitute for that verification.
+
+Interactive Use Brian web chat uses the same preparation tool but can preserve
+the live task through the consent detour: it renders a Connect action, verifies
+the returned instance and workspace exposure server-side, and resumes the
+original session. That automatic session resume is not an MCP push event.
+
 ## Connect Claude Code
 
 One command. Replace the key with your own:
