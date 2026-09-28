@@ -118,6 +118,16 @@ Three modes per tool:
 
 Read tools default to Allow; write and destructive tools default to Ask. You can change the defaults per assistant.
 
+The same candidate-tool, assistant capability, connector grant, scope, and
+Allow/Ask/Block binding is applied before model execution in web chat,
+messaging channels, public API turns, and assistant-to-assistant calls.
+Scheduled workflows and direct workflow tools carry the same validated live
+authority. A credential owner or billing owner is attribution only and does
+not become the acting principal or widen tool access. Delegated and nested
+work can retain or narrow its caller's access, never broaden it; if authority
+changes during a run, start a new request instead of retrying through another
+surface.
+
 For Gmail, Company Email (IMAP), and Assistant Email send/draft tools, this configured policy is authoritative once the separate action grant also admits the tool. Ask freezes the exact recipients, subject, body, and attachments for confirmation; Allow executes without that pause; Block refuses. A sensitivity label or audit classifier may annotate the approval/audit record but does not add a hidden veto after admission. The action can still fail for an objective reason such as an unreadable attachment, size limit, invalid sender, expired credential, or provider rejection.
 
 ### Tool policy matrix
