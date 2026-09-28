@@ -1,15 +1,16 @@
 ---
 title: Office
-description: Create, review, and refine documents, presentations, and spreadsheets with Brian.
+description: Create, review, and refine documents, presentations, spreadsheets, and short-lived PDF editing sessions with Brian.
 canonical: https://usebrian.ai/docs/office
-tags: [office, documents, presentations, spreadsheets]
+tags: [office, documents, presentations, spreadsheets, pdf, signing]
 ---
 
 # Office
 
 Office is a first-party workspace surface for Documents, Presentations, and
-Spreadsheets. It is available in the open-source core. Hosted services and
-model access depend on the deployment configuration.
+Spreadsheets, plus import-only PDF editing sessions. It is available in the
+open-source core. Hosted services and model access depend on the deployment
+configuration.
 
 ## Feature walkthroughs
 
@@ -78,6 +79,58 @@ Office-suite fidelity, macros, external workbook links, pivot tables, or
 unsupported formula functions. Review and release remain separate from
 creating or editing a draft. A prepared draft is not proof that a file was
 shared or an external message was sent.
+
+## Edit, fill, and sign a PDF
+
+PDF editing is a short-lived, owner-only session rather than a durable Office
+file. The user must explicitly choose **Edit in Office** or ask Brian to edit,
+fill, or sign a PDF attachment. Admission accepts unsigned, unencrypted PDFs up
+to 15 MiB and 100 pages. The session expires 24 hours after creation and does
+not appear in Office Files, workspace Files, search, ingest, or Brain retrieval.
+
+Supported operations include common AcroForm fields, text/date/checkmark/image
+overlays, moving or resizing overlays created in the session, and page rotate,
+reorder, or delete. Existing painted page text cannot be rewritten. OCR,
+redaction, certificate signing, signature verification, PDF/A, PDF/UA, and
+editing an already digitally signed PDF are not supported.
+
+`openPdfEditingSession` accepts only attachment IDs from the current turn after
+an explicit edit/fill/sign request. It returns a ready editor URL, version,
+expiry, bounded field/page targets, immutable source hash, and an opaque
+signature resource ID when a signature image was supplied. It does not accept
+arbitrary URLs or storage paths and does not create PDFs from scratch.
+
+Ordinary changes use `reviseOfficeArtifact` with explicit target IDs. Brian may
+fill fields, add non-signature overlays, and perform page operations, but it may
+not guess coordinates. A flat PDF with no empty signature widget requires the
+user to open the editor and drag the exact signature rectangle first.
+
+`placePdfSignature` is the only Brian signature-placement tool. It always
+requires a one-time attended confirmation and never offers a persistent
+approval. The confirmation shows the exact page and rectangle plus a protected
+preview and says that the result is an image-based signature, not a
+certificate-based digital signature. Scheduled jobs, workflows,
+inter-assistant calls, and other unattended contexts cannot sign. If owner,
+expiry, source hash, version, target, or signature resource changes before
+approval executes, the operation fails with
+`pdf_signature_approval_stale` and makes no change.
+
+Admission errors use stable recovery codes:
+
+- `pdf_too_large`
+- `pdf_too_many_pages`
+- `pdf_encrypted`
+- `pdf_unsupported_feature`
+- `pdf_existing_digital_signature`
+- `pdf_malformed`
+- `signature_image_invalid`
+- `source_unavailable`
+
+**Download PDF** produces a validated flattened copy: its form fields are no
+longer editable. **Save to Files** copies one validated flattened release into
+normal durable workspace storage. The source copy, signature image, snapshots,
+previews, releases, and editable session are automatically erased at expiry;
+only an explicitly saved durable copy survives.
 
 
 ## Department access
