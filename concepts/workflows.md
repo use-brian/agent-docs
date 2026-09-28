@@ -124,7 +124,17 @@ Member workflow runs capture an internal starting access ceiling before executin
 
 Workflows and confirmed goals also persist the attended author's internal ceiling before they can run in the background. Chat proposals freeze it before approval; authenticated builder, scheduling, configuration and goal-confirmation actions capture the same boundary. A schedule row, target assistant, credential owner, approver or billed account cannot replace that author. Existing workflows/goals that predate this envelope must be explicitly reviewed and re-saved or confirmed before unattended execution. Goal runs satisfy both the goal and workflow envelopes. These fields are server-owned and are never accepted from workflow input, run variables or API request bodies. History and delivery-audience checks remain unfinished, so this is not a claim of complete strict departmental isolation.
 
-Deterministic steps, approved tool invocations and delivery now recheck live member authority. If access changes during an operation, its result is withheld and the operation may already have executed: inspect its outcome before starting another run. These checks do not certify recipient audience permissions or transactional side-effect authorization.
+Workflow channel delivery carries the run's accumulated sensitivity, Team and
+Project evidence. The target is checked before a known delivery-bound assistant
+call starts and again immediately before persistence or push. An exact current
+personal-channel session can prove one member recipient. Restricted output to a
+group or otherwise unverifiable external conversation requires an owner/admin-
+approved audience binding for that exact conversation on the selected channel
+integration. A missing, expired or too-narrow binding records
+`delivery_audience_unverified` and sends nothing. Bot credentials, the workflow
+author and the billed account do not prove recipient access.
+
+Deterministic steps, approved tool invocations and delivery now recheck live member authority. If access changes during an operation, its result is withheld and the operation may already have executed: inspect its outcome before starting another run. Delivery also checks current recipient authority; these checks do not make external side effects transactionally atomic.
 
 An old approval card cannot restart a failed or completed run, even if access is restored. Approval notifications also renew current authority before sending.
 

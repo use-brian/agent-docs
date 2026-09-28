@@ -148,6 +148,15 @@ human, while assistant email sends from the assistant's own address.
 
 In Telegram, Slack, and Feishu/Lark groups, the bot only responds when @mentioned by default. Anonymous group members get session-only context. Chat works, but no personal memories are written about them. The WeChat iLink bot has no group support; the self-hosted WeChat desktop personal-account bridge supports groups and defaults to @-mention gating.
 
+Bot credentials and inbound sender policy do not prove who can read an outbound
+group conversation. Public workflow/relay output can use the normal destination.
+Before restricted output can be sent to a group or other unverifiable external
+conversation, a workspace owner/admin must approve an exact audience binding for
+that conversation, including its maximum clearance and allowed Teams/Projects.
+The server records the approver/time and rechecks the binding, current admin role,
+expiry and assistant routing at send time. Without that proof the result is
+`delivery_audience_unverified` and no message is persisted or sent.
+
 ## Notes for agents
 
 - Channels are workspace-owned. Connecting a bot does not attach it to an assistant until you route the channel to one.
