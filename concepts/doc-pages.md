@@ -1,5 +1,5 @@
 ---
-title: Doc
+title: Pages
 description: A Notion-style page surface where chat assembles renderable, brain-bound views over workspace primitives.
 tags: [concepts, doc]
 canonical: https://usebrian.ai/docs/doc

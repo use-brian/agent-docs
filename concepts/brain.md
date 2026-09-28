@@ -1,5 +1,5 @@
 ---
-title: Brain (entities & episodes)
+title: Brain data model
 description: The structured graph of entities, edges, and immutable episodes beneath memory and the knowledge base.
 tags: [concepts, brain]
 canonical: https://usebrian.ai/docs/brain

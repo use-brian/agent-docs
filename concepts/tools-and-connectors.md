@@ -1,5 +1,5 @@
 ---
-title: Tools & connectors
+title: Connectors & schedules
 description: Connectors expose third-party APIs as per-tool-governed capabilities; scheduled tasks let the assistant run jobs on its own.
 tags: [concepts, tools]
 canonical: https://usebrian.ai/docs/tools
