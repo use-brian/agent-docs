@@ -157,6 +157,12 @@ The server records the approver/time and rechecks the binding, current admin rol
 expiry and assistant routing at send time. Without that proof the result is
 `delivery_audience_unverified` and no message is persisted or sent.
 
+The same rule applies to interactive replies. The active channel connection,
+current member/session authority and final evidence are rechecked before model
+generation, streamed edits, persistence and the adapter send. Revocation stops
+later output; an unverified group receives zero restricted tokens and no outbound
+call.
+
 ## Notes for agents
 
 - Channels are workspace-owned. Connecting a bot does not attach it to an assistant until you route the channel to one.
