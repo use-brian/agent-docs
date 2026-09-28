@@ -9,6 +9,76 @@ canonical: https://usebrian.ai/docs/tasks
 
 Tasks are the universal verb of the brain: every commitment, follow-up, and unit of work the assistant should keep track of. They live in the same database as memories and CRM rows, so the assistant reads, writes, and reasons over them without crossing a service boundary.
 
+## Feature walkthroughs
+
+These are illustrative, step-by-step examples. They are not claims that a run, send, or publication has occurred.
+
+### Create and assign
+
+Give a piece of work a clear outcome, owner and due date.
+
+1. Open Tasks in your workspace, then open Brian's chat dock. Use an assistant with the Tasks capability.
+2. Ask Brian to create the example below. Replace Friday with your intended date and check the resolved due date.
+
+   > Example request: Create a task called Prepare launch brief, assigned to me, due Friday. The description should say: draft the audience, launch message and checklist. Done means the brief is ready for review.
+
+3. Open the task to review its title, description, assignee and due date. Adjust any field before moving on.
+
+**What to check:** One task describes what needs doing and how you will know it is finished. Assignment tracks ownership; it does not start autonomous work.
+
+### Organize your task list
+
+Use filters, views and Projects to find the work that matters now.
+
+1. Open Table, then Filter. Choose an assignee and one or more statuses.
+2. Open View to choose grouping and sorting. Switch to Board for a visual view of the same work.
+3. Open a task and select an existing Project if it belongs to one. Clear a filter pill to widen the list again.
+
+**What to check:** Table and Board show the same matching tasks. Values within one filter use OR; different filters use AND. A Project organizes work without granting access.
+
+### Track progress
+
+Move work through its status and bring completed work back when needed.
+
+1. Open a task's status field and choose In progress when work starts.
+2. Use Blocked for an obstacle or In review when the result needs checking. Add the relevant context to the description.
+3. Choose Done when the outcome is complete. To revisit it, enable Show completed in View and change it back to Todo.
+
+**What to check:** The same status appears on the row and board card. Marking a task Done records completion; it does not prove that an external action happened.
+
+### Break work into subtasks
+
+Keep smaller deliverables attached to the task they support.
+
+1. Create or open the parent task. Give Brian its exact title, and clarify which record you mean if several match.
+2. Ask for concrete subtasks with the parent relationship made explicit.
+
+   > Example request: Under Prepare launch brief, create two subtasks: draft the audience summary and review the launch checklist. Link both to that parent task.
+
+3. Ask Brian to list the parent's subtasks and check each title, owner and due date.
+
+**What to check:** The smaller tasks link to the intended parent in the same workspace. Update their statuses as each deliverable is finished.
+
+### Review suggestions and rules
+
+Decide which commitments extracted from conversations should become tasks.
+
+1. Open Suggestions in Tasks. Expand a candidate to read its source, evidence and reason for being held.
+2. Choose Add it to accept. Use Add and edit for corrections, or Not a task with a reason to dismiss.
+3. Use Always add similar only when that source should create matching tasks automatically. Review these rules from the Tasks settings action.
+
+**What to check:** Accepted suggestions become tasks. A suggestion alone is not a task; Always add similar changes how future matching candidates are handled.
+
+### Clean up the backlog
+
+Archive finished work or reject unwanted tasks deliberately.
+
+1. Apply a cleanup filter such as Done not archived, Unassigned or Stale over 30d.
+2. Select the intended rows. Use Select all matching only after checking the filtered scope, then choose Archive.
+3. For work that should never have been a task, use Delete and provide a reason if you want to teach a rule. Review the confirmation before proceeding.
+
+**What to check:** Archive hides work from normal lists without teaching a rejection rule. Delete with a reason can affect future task creation; these actions are different.
+
 ## Everyday workflow
 
 1. **Capture the work.** Ask Brian to create a task with a clear title, a due date, and an assignee when needed.
@@ -23,17 +93,18 @@ Longer prose belongs in the dedicated `description` field on `saveTask` and `upd
 
 ## Status
 
-Five states:
+Six states:
 
 | Status | Meaning |
 |---|---|
 | `todo` | Open, not started. |
 | `in_progress` | Being worked on. |
+| `in_review` | Ready for review. |
 | `blocked` | Waiting on something. |
 | `done` | Completed. |
 | `archived` | Soft-deleted; excluded from `listTasks` by default. |
 
-There is no `deleteTask` in v1: soft-delete via `status='archived'` covers it without confirmation prompts.
+Archive keeps a task out of normal lists. Reasoned rejection is separate: `rejectTask` can teach task-creation rules. Bulk updates and archiving require confirmation in chat.
 
 ## Assignees
 
@@ -54,9 +125,9 @@ content into General.
 
 ## Chat tools
 
-Six tools, on for every primary and standard assistant by default, off for `kind='app'` assistants (like the Threads distribution app). Toggle the whole group from Assistant Settings -> Capabilities -> Tasks. The same allow/ask/block enum lives on the underlying capability, so future promotion to ask-mode needs no migration.
+Task tools are enabled for primary and standard assistants by default, and disabled for specialist app assistants unless granted. Manage the capability from Assistant Settings → Capabilities → Tasks. Current caller and workspace restrictions still apply.
 
-`saveTask` · `getTask` · `listTasks` · `updateTask` · `closeTask` · `reopenTask`
+`saveTask` · `getTask` · `listTasks` · `updateTask` · `closeTask` · `reopenTask` · `bulkUpdateTasks` · `archiveTasks` · `rejectTask` · `saveTaskRule` · `listTaskRules` · `deleteTaskRule`
 
 ## How a task gets created
 
@@ -77,7 +148,7 @@ Workspace Tasks are durable forward-commitments, visible only when the current T
 
 ## Notes for agents
 
-- To remove a task, set `status='archived'` (or call `closeTask`); there is no delete. Archived tasks are hidden from `listTasks` unless you ask for them explicitly.
+- `closeTask` marks work done; `archiveTasks` hides it from default lists. Use reasoned rejection only when the user intends to reject the work and teach future creation rules. These are different operations.
 - Assign a task by resolving the teammate through `listWorkspaceMembers` first; `assignee_id` references a workspace membership, not a global user id, and clears if that member leaves.
 - Use stable Project ids rather than `project:<name>` tags. A task has at most one Project, and assigning it never grants access.
 - Any non-core field (priority, estimate, ordering) belongs in the `attributes` JSONB bag; do not expect dedicated columns for them. `description` is the exception with a dedicated tool field: pass it directly instead of writing the key yourself.

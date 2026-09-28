@@ -9,6 +9,43 @@ canonical: https://usebrian.ai/docs/tools
 
 Tools give your assistant the ability to do things, not just talk. Connectors expose third-party APIs (Google Calendar, Gmail, Notion, GitHub, and more). Scheduled tasks let the assistant run jobs on its own.
 
+## Feature walkthroughs
+
+These are illustrative, step-by-step examples. They are not claims that a run, send, or publication has occurred.
+
+### Connect a service
+
+Give Brian access to an account you use for work.
+
+1. Open Studio → Connectors and choose the service you want to connect.
+2. Complete its sign-in or credential setup and check the account and permissions being granted.
+3. Return to Brian and try a small read-only request from that service. If it is unavailable, check the connection and the assistant's tool permissions.
+
+**What to check:** Brian can read the intended account through the connected service. Available actions depend on the connector and the assistant's grants.
+
+### Control tool permissions
+
+Decide what Brian may do automatically and what needs review.
+
+1. Open the assistant's Tools settings and locate the connected service's actions.
+2. Set the relevant action to Allow, Ask or Block. Start with Ask for an action whose result you want to review.
+3. Request that action and inspect the approval if one is required. Check its inputs before allowing it.
+
+**What to check:** Allow permits the action within its other rules, Ask requires review, and Block prevents it. A connector connection alone does not grant every action.
+
+### Schedule recurring work
+
+Run an assistant request at a chosen time and destination.
+
+1. Tell Brian what to do, how often, the timezone and where the result should be delivered.
+2. Ask Brian to show the saved schedule. Check the next run, instructions, assistant and destination.
+
+   > Example request: Every Monday at 9:00 AM Asia/Hong_Kong, summarize my open tasks in this chat. Show me the saved schedule and next run time.
+
+3. Inspect a run result, then pause or remove the schedule when it is no longer needed.
+
+**What to check:** A scheduled job runs an assistant turn and may consume credits. A task due date only tracks a commitment; it does not create a timer.
+
 ## Everyday workflow
 
 1. **Connect a service.** Open Studio → Connectors, choose a service, and complete its connection setup.

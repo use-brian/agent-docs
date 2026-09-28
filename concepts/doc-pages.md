@@ -9,6 +9,46 @@ canonical: https://usebrian.ai/docs/doc
 
 Doc is a Notion-style page surface where chat assembles renderable views over your workspace primitives. It is the inbound counterpart to the outbound Feed surface: Doc marshals tasks, CRM rows, files, deals, and research findings into pages you can drag, save, and revisit. The whole app lives at `app.usebrian.ai` under a separate deployable.
 
+## Feature walkthroughs
+
+These are illustrative, step-by-step examples. They are not claims that a run, send, or publication has occurred.
+
+### Create a page
+
+Turn a request into a readable workspace page.
+
+1. Open Page in your workspace and start a draft. Open the page's Brian chat dock.
+2. Describe the page you want, the source material to use and the audience it should serve.
+
+   > Example request: Create a launch brief page with an audience summary, key message and checklist. Use the information in this conversation and mark any missing details.
+
+3. Inspect the page itself. Ask Brian to correct a section or edit the blocks directly before saving.
+
+**What to check:** The result lives on the page, with headings and useful context. Missing source material should be identified, not filled with invented facts.
+
+### Refine and organize
+
+Change a section without losing the structure around it.
+
+1. Open an existing page and locate the section you want to improve.
+2. Use the chat dock to name the section and requested change, or edit and reorder its blocks directly.
+3. Check the result on the page. Use subpages when a topic needs its own space, then save the page you want to keep.
+
+**What to check:** The relevant section changes and the surrounding page still makes sense. Page authoring works with the selected workspace assistant; it does not require a special Page assistant.
+
+### Build a live view
+
+Keep a page connected to current tasks or CRM records.
+
+1. Open a page and identify the exact workspace data you want to display.
+2. Ask for a live data view, including the filter and grouping you need.
+
+   > Example request: Add a live view of my open tasks, grouped by status. Include a short introduction explaining what this view shows.
+
+3. Open the page again after the underlying records change. Check that the data block reflects current accessible records.
+
+**What to check:** Bound data refreshes when the page opens. Surrounding explanation is authored content and should be reviewed when the meaning changes.
+
 ## Everyday workflow
 
 1. **Ask for a page.** Try “show my tasks this week” or “show the pipeline by stage” in chat.

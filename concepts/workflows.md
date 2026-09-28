@@ -9,6 +9,40 @@ canonical: https://usebrian.ai/docs/workflows
 
 A workflow is a workspace-scoped DAG that fuses the brain with action. Author it in chat ("when a Threads draft is approved, post it, wait 24 hours, then ask the brand specialist to summarize engagement") or in the web builder (the Workflow tab in the app). The runtime knows about assistants, memory, and tools, so an `assistant_call` step inherits the workspace's brain at the moment it runs.
 
+## Feature walkthroughs
+
+These are illustrative, step-by-step examples. They are not claims that a run, send, or publication has occurred.
+
+### Build a workflow
+
+Turn a repeatable process into an explicit sequence of steps.
+
+1. Open the workflow builder or describe the process to Brian. Start with a manual trigger so you can inspect it before scheduling.
+2. Choose the assistant or tool for each step and connect the outputs that later steps need. Add a wait or branch only where the process needs one.
+3. Review the saved workflow and run a small example. Inspect each step's status and output.
+
+**What to check:** The run shows what actually happened at each step. A saved workflow is a definition, not evidence that it has already run.
+
+### Choose a trigger
+
+Start the same workflow manually, on a schedule or from an event.
+
+1. Open the workflow's trigger settings and choose the trigger that fits the process.
+2. For a schedule, check its timezone and timing. For a webhook or event, select the intended source and any matching conditions.
+3. Save the trigger, then inspect a real matching run. Check the run history before assuming a source event triggered work.
+
+**What to check:** The trigger starts the workflow under its configured conditions. A scheduled run and a manual run use the same workflow steps.
+
+### Review approvals and runs
+
+Understand a pause, approve the intended action and inspect the outcome.
+
+1. Open the run and locate the step waiting for approval or reporting a failure.
+2. Read the exact action and inputs. Approve only if correct, or reject and revise the workflow; grant continuing permission only when you intend future matching runs.
+3. Return to the run and check the resumed step's output and any delivery receipt. Verify earlier effects before retrying a failed run.
+
+**What to check:** Approval authorizes the named action; it does not guarantee success. Runs may consume credits and repeated runs can repeat external effects.
+
 ## Everyday workflow
 
 1. **Choose what starts the work.** Define the workflow in chat or the builder, then choose a manual, scheduled, webhook, or event trigger.

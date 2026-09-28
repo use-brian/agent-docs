@@ -11,6 +11,50 @@ Office is a first-party workspace surface for Documents, Presentations, and
 Spreadsheets. It is available in the open-source core. Hosted services and
 model access depend on the deployment configuration.
 
+## Feature walkthroughs
+
+These are illustrative, step-by-step examples. They are not claims that a run, send, or publication has occurred.
+
+### Documents
+
+Create a draft, then revise a specific passage with Brian.
+
+1. Open Office → Files → New and choose an admitted document template. Enter the outcome and audience. If none is available, create and publish a template in Templates first.
+2. Open the generated document, select a passage and ask Brian for a specific revision, such as making it shorter while preserving the facts.
+3. Review the proposed change and apply it when it is right. Check the rest of the document and use history or Undo if needed.
+
+**What to check:** The selected content changes through the same document editing controls. Review facts and unresolved issues before exporting or sharing.
+
+### Presentations
+
+Build slides from a brief and refine the right slide or object.
+
+1. Open Office → Files → New and choose an admitted presentation template. Describe the audience, purpose and source material.
+2. Review the generated slides. Select the slide or object you want Brian to revise.
+3. Ask for a focused change, review it, then inspect the deck in presentation view before release.
+
+**What to check:** The deck uses editable, supported slide content. Check layout, evidence and reading order; generation is not approval to publish.
+
+### Spreadsheets
+
+Create a workbook and make changes to a selected range.
+
+1. Open Office → Files → New and choose an admitted spreadsheet template. Describe the columns, source data and calculations needed.
+2. Select the relevant cells or range before asking Brian to format or revise them. Check formula inputs and outputs.
+3. Review and apply the proposed changes. Inspect totals and representative rows before exporting.
+
+**What to check:** The workbook remains editable. Unsupported formulas, macros and external workbook links are outside the supported file-exchange path.
+
+### Templates, collaboration and files
+
+Reuse an approved structure and exchange supported Office files.
+
+1. Open Templates. Upload a supported DOCX, PPTX or XLSX, or generate a template from guidance; review it in the template editor before publishing.
+2. Create an artifact from that template. Give collaborators the appropriate View, Comment or Edit access and resolve the changes you need.
+3. For import or export, inspect the compatibility and release checks. Resolve hard blocks and review warnings before confirming the output.
+
+**What to check:** A published template is a versioned starting point. File exchange supports a defined subset, not arbitrary Office-suite fidelity; inspect the actual output.
+
 ## Start from a template
 
 Open Office from Home. Upload a supported DOCX, PPTX, or XLSX template or

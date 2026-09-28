@@ -9,6 +9,63 @@ tags: [feed, content, social, publishing, campaigns, email]
 
 Feed is your workspace for content marketing. Keep ideas, your publishing plan, drafts, feedback, and results together, with Brian helping you write in your company's voice.
 
+## Feature walkthroughs
+
+These are illustrative, step-by-step examples. They are not claims that a run, send, or publication has occurred.
+
+### Set the voice
+
+Give each channel a consistent audience, tone and boundaries.
+
+1. Open Feed and select or create the brand assistant and the channels you want to prepare content for.
+2. Open Company → Voice. Define the shared audience and tone, then add channel-specific guidance where needed.
+3. Review and save the voice. Use a draft to check how the guidance reads in practice, then refine it.
+
+**What to check:** The saved voice guides future drafts. Planning and writing do not require a connected publishing account.
+
+### Plan content
+
+Turn a monthly goal into ideas and calendar slots.
+
+1. Open Plan and choose the month you want to work on.
+2. Tell Brian the goal and ask for a proposed plan. Review the topics and accept the plan you want to keep.
+
+   > Example request: Propose a plan for next month: explain our product through two practical posts per week. Keep the topics specific and leave every post unpublished.
+
+3. Choose an idea and use Plan it or Draft now. Open a planned slot and use Draft this when you are ready to write.
+
+**What to check:** Ideas have a purpose and a place in the calendar. A date on the calendar does not authorize publication.
+
+### Draft and collaborate
+
+Write the post, then refine the exact passage that needs work.
+
+1. Choose New post or start from a planned idea. Add a private brief with the goal and source material.
+2. Use Refine for a concrete change. Switch between Edit and Preview to inspect the actual post.
+3. Select text to leave a comment or request a suggestion. Review changes, use history or Undo when needed, and replace unfinished placeholders.
+
+**What to check:** The saved draft contains the copy you intend to review. A private brief guides Brian and is not the public post.
+
+### Review and approve
+
+Separate editorial checks from permission to publish.
+
+1. Run Review and inspect the findings and which checks were actually covered. Resolve issues or make a deliberate judgment.
+2. Submit for approval. If you edit a Needs review draft, save the changes before approving its final revision.
+3. Check the destination account and delivery mode. Connected approval can publish and requires the public-release confirmation; manual approval leaves the post Ready.
+
+**What to check:** Review findings are advice, not approval. Approve only the saved revision and intended destination; check the receipt before assuming the post is live.
+
+### Publish and record the result
+
+Finish the connected or manual path and keep a real receipt.
+
+1. For a connected destination, inspect the publish result and its actual post URL. Reconcile an uncertain result before trying again.
+2. For a manual destination, copy or export the approved content and publish it in that platform yourself.
+3. Return to Feed and use Mark as posted with the actual public URL. For a LinkedIn newsletter, prepare and upload the edition manually before recording its URL.
+
+**What to check:** A posted receipt points to the real publication. Export, calendar placement and a ready draft do not count as a successful publish.
+
 ## Everyday workflow
 
 1. **Set the voice and plan.** Describe your audience and tone, then turn ideas into planned posts. A calendar date alone does not publish.

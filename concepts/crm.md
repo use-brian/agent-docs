@@ -7,7 +7,67 @@ canonical: https://usebrian.ai/docs/crm
 
 > Human-readable version: https://usebrian.ai/docs/crm
 
-CRM in Use Brian is people, companies, and deals: the durable graph of who the team talks to, where the relationship stands, and what it is worth. It is first-party, so the brain reads and writes contacts the same way it reads memories: same brain graph, no translation layer. Attio and HubSpot are sync targets, not the primary surface.
+CRM in Use Brian is people, companies, and deals: the durable graph of who the team talks to, where the relationship stands, and what it is worth. It is first-party, so the brain reads and writes contacts the same way it reads memories: same brain graph, no translation layer. An external CRM connection is not required.
+
+## Feature walkthroughs
+
+These are illustrative, step-by-step examples. They are not claims that a run, send, or publication has occurred.
+
+### Contacts and companies
+
+Build a relationship record with the right person and organization.
+
+1. Open CRM and choose People. Search for the email first to avoid creating a duplicate.
+2. Ask Brian to save this fictional contact, or use the create action. Save the person even if the company is not known yet.
+
+   > Example request: Save a contact named Morgan Example with email morgan@example.com. Create or find Example Studio and link the contact to it.
+
+3. Open the record and check its email and linked company. Add a relationship note when you have useful context.
+
+**What to check:** The person is searchable and linked to the intended company. Company and deal history only exposes data you are allowed to read.
+
+### Deals and pipelines
+
+Track an opportunity, its value and its next stage.
+
+1. Open Deals, choose a pipeline and create an opportunity linked to a person or company.
+2. Enter its amount, currency and expected close date. Select a stage from that pipeline.
+3. Move it to the next stage using the stage control or board. Supply any fields required by the destination stage.
+
+**What to check:** The deal appears in the chosen stage. Reports group totals by currency; they do not silently convert unlike currencies.
+
+### Views and custom fields
+
+Adapt CRM to the information your team needs to track.
+
+1. Filter a collection and choose the columns and sort order you need. Save the view to return to that layout.
+2. If you are a workspace owner or admin, open CRM configuration and add a typed field for the relevant record kind.
+3. Fill that field on a record, then filter or display it in your view. Configure pipelines and stages from the same settings area when needed.
+
+**What to check:** Your saved view is personal. Field definitions and pipelines are workspace configuration; changing them does not replace everyone else's column layout.
+
+### Activity and email drafts
+
+Read relationship context and review a message before it is sent.
+
+1. Open a person's timeline. Review notes and any email history available from your own connected mailbox.
+2. Ask Brian to save a follow-up draft, then open its CRM draft link and inspect the recipient, subject, body and attachments.
+
+   > Example request: Save an email draft to morgan@example.com with subject Launch brief follow-up. Thank them for the discussion and ask when they can review the brief. Do not send it.
+
+3. A saved draft does not send. When you request sending and an actual approval is required, review the exact saved revision in the email-review screen before Approve and send.
+
+**What to check:** Draft-only entries remain unsent. Approval can send the reviewed message; verify the actual delivery result before retrying.
+
+### Import, duplicates and archive
+
+Bring records in with review, then keep the collection tidy.
+
+1. Open the CRM import action and upload a CSV. Map the columns and run the preview before confirming the import.
+2. Inspect invalid rows and duplicates. Correct the file or mapping, then confirm the intended import and check the job's result.
+3. Use duplicate review to compare records before merging. Archive records you no longer need; use the archive filter to find and restore them.
+
+**What to check:** Only the confirmed import is applied. Merge and archive are distinct operations; review the chosen records and the available undo or restore action.
 
 ## Everyday workflow
 
@@ -50,9 +110,7 @@ instant. Reports group amounts by currency and never silently convert them.
 Every assistant with the `crm` capability gets the record CRUD surface plus the
 catalog-backed operations allowed for that assistant. `updateDeal` does not
 accept a stage. Use `listCrmPipelines` followed by `setDealPipelineStage`.
-`advanceDealStage` is a default-pipeline compatibility tool. There are no
-delete tools in v1; close a deal by selecting a stage whose category is `lost`
-and clear nullable fields through the normal update tools.
+`advanceDealStage` is a default-pipeline compatibility tool. Mark a lost opportunity with the appropriate lost-category stage. Archive and restore are separate record-lifecycle operations; a lost deal is not deleted.
 
 `saveContact` / `getContact` / `listContacts` / `updateContact` · `saveCompany` / `getCompany` / `listCompanies` / `updateCompany` · `saveDeal` / `getDeal` / `listDeals` / `updateDeal` / `advanceDealStage` · `listCrmFields` / `setCrmCustomFields` · `listCrmPipelines` / `setDealPipelineStage`
 
