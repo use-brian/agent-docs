@@ -143,7 +143,7 @@ Two rules matter when you integrate:
 |---|---|---|
 | `sessionId` | string | Echo of the session id (or the default if you did not pass one). |
 | `messageId` | string | Stable id of the stored assistant turn. |
-| `reply` | string | The assistant's reply text. |
+| `reply` | string | The final assistant reply. It excludes text from intermediate tool-calling turns and any draft retracted by grounding checks; a validated assistant question is returned as ordinary reply text. |
 | `model` | string | Which model produced the reply (e.g. `gemini-3-flash-standard` for Standard, `gemini-3-flash-preview` for Pro, `gemini-3.8-flash` for Max, `gemini-3-pro-research` for Research). Since the model registry, deployments may also serve metered pay-per-use models (e.g. `qwen3.7-plus`, `deepseek-v4-pro` via DashScope); those ids appear here verbatim, and the billing tier is recorded separately from the model id, so do not infer pricing from the model string. |
 
 ## Streaming with SSE
@@ -167,7 +167,7 @@ event: done
 data: {}
 ```
 
-Authentication, validation, assistant, and budget failures found before streaming starts retain their normal non-2xx JSON response. If the provider fails after the SSE response opens, the stream emits `error` with the ordinary error slug and optional detail, then `done`, then closes. A client must not treat EOF without both `turn_complete` and `done` as a successful turn.
+Authentication, validation, assistant, and budget failures found before streaming starts retain their normal non-2xx JSON response. If the provider fails after the SSE response opens, the stream emits `error` with the ordinary error slug and optional detail, then `done`, then closes. SSE is the live display stream and can include text emitted before a later tool call or grounding correction; the completed JSON `reply` uses final-turn selection instead. A client must not treat EOF without both `turn_complete` and `done` as a successful turn.
 
 Use `fetch()` and a `ReadableStream` reader for POST-returning SSE. Browser `EventSource` cannot send this POST body or the bearer header. Preserve the response's `Cache-Control: no-cache, no-transform`; proxies that transform or compress SSE may buffer it into one final chunk.
 
