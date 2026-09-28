@@ -18,6 +18,7 @@ AGPLv3, OSI- and FSF-approved open source with a network-copyleft clause: run a 
 
 ## Prerequisites
 
+- Git
 - Node 22+
 - pnpm 10+
 - Either an eligible ChatGPT subscription or one supported model credential.
@@ -34,16 +35,107 @@ AGPLv3, OSI- and FSF-approved open source with a network-copyleft clause: run a 
   runtime, the chat message archive, and a host that can run the WeChat Linux
   client with `SYS_PTRACE` and `seccomp=unconfined`.
 
-## Quickstart
+## Local setup
+
+This is the main starting path. It uses the embedded PGLite database and does
+not require Docker. Model requests still go to the selected provider; enabled
+connectors and search providers can make outbound requests too. The human guide
+includes real screenshots of the provider controls, Chat, and Connectors.
+
+### 1. Download and install
+
+Check `node --version`, `pnpm --version`, and `git --version` first. Then:
 
 ```bash
 git clone https://github.com/use-brian/use-brian.git
 cd use-brian
 pnpm install
-pnpm dev                    # choose ChatGPT or an API-key backend; opens your browser
 ```
 
-There is no step three.
+Resolve installation errors before continuing. Keep subsequent commands in the
+same repository directory. LibreOffice is optional for PDF export; ffmpeg and
+ffprobe are needed for recordings, not the first text conversation.
+
+### 2. Run the launcher
+
+```bash
+pnpm dev
+```
+
+Use an interactive terminal and leave it open. A fresh setup asks for a model
+provider and display name: choose 1 for ChatGPT sign-in or 2 for a Gemini API
+key. Saved configuration can skip these prompts. The launcher builds packages,
+prepares the embedded database, and starts the API, document sync, web app and
+local bridges. Wait for the startup URLs before starting another instance.
+
+### 3. Connect the provider
+
+For ChatGPT, open the workspace menu, then **Settings → Models → Providers**.
+Complete **Sign in with ChatGPT** or **Use device code**. This backend is Beta
+and depends on the subscription's quota and availability. A Gemini key entered
+in the launcher is used directly. Vertex AI and DashScope use `.env` settings;
+OpenAI-compatible endpoints can be added in the app. See the repository's
+[model backends](https://github.com/use-brian/use-brian#model-backends).
+
+### 4. Verify a first conversation
+
+The launcher normally opens the local app and signs in the local owner. If the
+browser does not open, visit:
+
+```text
+http://localhost:3003/api/auth/local-session
+```
+
+The local owner flow does not need hosted Google or email sign-in. Open Chat,
+send a short request, and verify that Brian replies. A loaded page or listening
+port alone does not prove that the provider works.
+
+### 5. Add tools when needed
+
+Open **Studio → Connectors** or **Studio → Channels**. Self-hosted OAuth
+connectors may need an operator-owned provider application, its credentials and
+correct redirect URLs before Connect can succeed. Use the repository's
+[environment reference](https://github.com/use-brian/use-brian/blob/main/.env.example).
+Review the assistant's connector permissions separately from the account connection.
+
+### 6. Stop, back up and update
+
+Ctrl-C stops the launcher; `pnpm dev` restarts it. For the default local setup:
+
+- `~/.usebrian/config.json`: settings and generated secrets.
+- `~/.usebrian/brain`: embedded database.
+- `~/.usebrian/files`: uploaded files.
+
+Stop Brian before copying the complete `~/.usebrian` directory for a consistent
+embedded-database backup. Include custom storage paths and protect the secrets.
+For an unmodified checkout, update with:
+
+```bash
+git pull --ff-only
+pnpm install
+pnpm dev
+```
+
+Review and preserve source changes before updating a modified checkout.
+
+### Troubleshooting
+
+- A launcher waiting for input needs an interactive terminal; check the provider,
+  key and display-name prompts.
+- Default ports are app 3003, API 4000, document sync 8080, embedded database
+  54329. Stop an earlier Brian instance; `USEBRIAN_API_PORT` can resolve an API
+  conflict. Do not stop unrelated services blindly.
+- If the UI opens without a reply, check provider connection, credentials, quota,
+  and terminal errors.
+- `DATABASE_URL` selects external PostgreSQL and skips embedded setup. Provision
+  that database and apply OSS migrations before boot; setting the URL is not
+  sufficient.
+
+A public server additionally needs persistent storage, process supervision,
+HTTPS, authentication, backups and correctly configured app/API/document-sync
+origins. Do not expose the local-owner entry point as public sign-in. See the
+[container reference](https://github.com/use-brian/use-brian#container-images)
+and the production deployment section below.
 
 ## Production single-machine deployment
 
@@ -108,9 +200,9 @@ to `/ext`. If `BROWSER_RELAY_HOST` is omitted, the relay remains disabled.
 
 ## Storage
 
-The store defaults to an embedded PGLite database under `~/.usebrian/`: nothing
-to install or run besides Node. Point `DATABASE_URL` at a local Postgres if you
-prefer a container.
+The default embedded PGLite database lives at `~/.usebrian/brain`. External
+PostgreSQL is supported through `DATABASE_URL`; provision it and apply OSS
+migrations separately. See the local backup and configuration steps above.
 
 ## Chat message archive
 

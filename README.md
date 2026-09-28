@@ -23,9 +23,15 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 | Discover outcome-led Use Brian showcase specifications | [showcases/README.md](showcases/README.md), [showcases/catalog.json](showcases/catalog.json) |
 | Explain pricing or credit errors (429) | [operations/pricing-and-credits.md](operations/pricing-and-credits.md) |
 | Build an app that runs inside a user's workspace | [concepts/custom-home-apps.md](concepts/custom-home-apps.md) |
+| Set up a hosted workspace | [hosted-setup.md](hosted-setup.md) |
 | Self-host the open-source core | [self-hosting.md](self-hosting.md) |
 
 ## Index
+
+### Getting started
+
+- [hosted-setup.md](hosted-setup.md): hosted sign-in, workspace setup, first conversation, optional tools and channels
+- [self-hosting.md](self-hosting.md): local installation, model connection, checks, backups, updates, and server reference
 
 ### Concepts
 
@@ -64,7 +70,6 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 
 - [operations/pricing-and-credits.md](operations/pricing-and-credits.md): plans, credits, tiers, overage, limits
 - [operations/privacy-and-data.md](operations/privacy-and-data.md): what is stored, retention, third parties
-- [self-hosting.md](self-hosting.md): the AGPLv3 open-source core, local quickstart
 
 ### Showcases
 
