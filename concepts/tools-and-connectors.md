@@ -174,6 +174,19 @@ jobs without that ceiling require a new preflight. Native CRM delivery checks
 its independent mutation ceiling before preparing the provider request.
 These checks are part of the isolation implementation; they do not indicate
 that strict departmental rollout is available.
+
+Structured PDF extraction is two-step. `prepareDocumentExtraction` performs the
+cheap exact-file and connector-health preflight and returns the maximum bytes/pages,
+processing warning, selected connector, and fixed OCR operation set; it does not
+upload the PDF or start OCR. `startDocumentExtraction` always needs a one-operation
+human confirmation, including when its tool policy is Allow. ASK also confirms,
+BLOCK refuses, and approval is never persistent. Temporary read reach may preflight
+and inspect completed evidence while current, but cannot start/background OCR,
+publish its evidence archive, create an Office proposal, or accept one. Those
+paths require current mutation reach for the exact source, current connector or
+destination authority, and fresh evidence after every remote response. An
+uncertain submission is not retry-safe; prepare a new extraction instead.
+
 ### Workspace file publication
 
 `fileAppend` publishes a new version and returns its new file ID. The old object
