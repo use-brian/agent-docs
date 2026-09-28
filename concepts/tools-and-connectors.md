@@ -168,10 +168,16 @@ read grants or strict isolation.
 A departmental read grant does not by itself make that department's live
 connector tools available. The server also requires mutation authority for the
 connector's entire scope. A tool's read-only description is not an exception.
-Do not retry through another connector or assistant to bypass unavailable scope.
-Native OCR jobs retain their initiating mutation ceiling when resumed; older
-jobs without that ceiling require a new preflight. Native CRM delivery checks
-its independent mutation ceiling before preparing the provider request.
+Generic custom HTTP, CLI, and official-provider catalogs have no verified
+provider-root adapter, so they are available only to a company-wide turn. A
+matching Team/Project label does not make their full provider catalog safe, and
+the server withholds it before discovery or credential loading. Do not retry
+through another connector or assistant to bypass unavailable scope. Native OCR
+and CRM delivery are explicit fixed-operation exceptions: OCR receives one exact
+Brian-read PDF, while CRM delivery admits one locked mailbox and prepared outbound
+action without exposing mailbox reads. Both retain their initiating mutation
+ceiling and current policy checks; older OCR jobs without that ceiling require a
+new preflight.
 These checks are part of the isolation implementation; they do not indicate
 that strict departmental rollout is available.
 
