@@ -9,6 +9,12 @@ canonical: https://usebrian.ai/docs/workflows
 
 A workflow is a workspace-scoped DAG that fuses the brain with action. Author it in chat ("when a Threads draft is approved, post it, wait 24 hours, then ask the brand specialist to summarize engagement") or in the web builder (the Workflow tab in the app). The runtime knows about assistants, memory, and tools, so an `assistant_call` step inherits the workspace's brain at the moment it runs.
 
+## Everyday workflow
+
+1. **Choose what starts the work.** Define the workflow in chat or the builder, then choose a manual, scheduled, webhook, or event trigger.
+2. **Connect the steps.** Combine assistant calls, tool calls, waits, and branches in the order the work should happen.
+3. **Review a run.** Check step outputs and approval requests. Grant ongoing permission only for actions you want the workflow to repeat.
+
 ## Step types
 
 Workflows are built from four step types. Sequential by default; `branch` steps route down one arm; `wait` steps pause the run and resume on a scheduler tick.

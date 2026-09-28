@@ -9,6 +9,12 @@ canonical: https://usebrian.ai/docs/doc
 
 Doc is a Notion-style page surface where chat assembles renderable views over your workspace primitives. It is the inbound counterpart to the outbound Feed surface: Doc marshals tasks, CRM rows, files, deals, and research findings into pages you can drag, save, and revisit. The whole app lives at `app.usebrian.ai` under a separate deployable.
 
+## Everyday workflow
+
+1. **Ask for a page.** Try “show my tasks this week” or “show the pipeline by stage” in chat.
+2. **Open and refine.** Follow the page link, then ask for changes in the chat dock. Your current assistant can do the editing.
+3. **Save what you need.** Save the page to keep it. Its data blocks refresh from current workspace records when you return.
+
 ## Chat is the page author
 
 You do not open Doc to write a page; you tell the doc assistant what you want to see ("my tasks this week", "the Q3 pipeline by stage", "everything in the brain about Acme"). The assistant emits a `renderView` tool call, which creates a draft page server-side and streams a deep-link pill back into the chat. Click the pill to open the full page in Doc; the chat dock stays open in the bottom-right so you can refine without leaving.

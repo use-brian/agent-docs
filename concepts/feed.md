@@ -9,6 +9,12 @@ tags: [feed, content, social, publishing, campaigns, email]
 
 Feed is your workspace for content marketing. Keep ideas, your publishing plan, drafts, feedback, and results together, with Brian helping you write in your company's voice.
 
+## Everyday workflow
+
+1. **Set the voice and plan.** Describe your audience and tone, then turn ideas into planned posts. A calendar date alone does not publish.
+2. **Write with Brian.** Create a post, add a private brief, and refine the draft. Review suggestions before accepting them.
+3. **Review the destination.** Check the saved version and account before approving. Connected approval can publish; manual delivery needs a separate handoff.
+
 ## Open Feed and choose your channels
 
 Open Feed from Home in your workspace. On your first visit, create a brand assistant and choose the channels you write for. You can start planning and drafting without connecting a social account.

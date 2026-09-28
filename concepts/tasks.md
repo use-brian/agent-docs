@@ -9,6 +9,12 @@ canonical: https://usebrian.ai/docs/tasks
 
 Tasks are the universal verb of the brain: every commitment, follow-up, and unit of work the assistant should keep track of. They live in the same database as memories and CRM rows, so the assistant reads, writes, and reasons over them without crossing a service boundary.
 
+## Everyday workflow
+
+1. **Capture the work.** Ask Brian to create a task with a clear title, a due date, and an assignee when needed.
+2. **Keep its status current.** Move work from todo to in_progress to done. Use blocked when something prevents progress.
+3. **Review and follow up.** Ask for outstanding tasks or reopen unfinished work. Archive tasks you no longer need.
+
 ## Shape of a task
 
 A v1 task is intentionally narrow: `title`, `status`, optional `assignee`, optional due date, `tags`, an optional stable Project, an optional `parent` for sub-tasks, and a free-form `external_ref` for synced rows. There are no typed priority / description / estimate columns; sprint estimation and ordering go into a single `attributes` JSONB bag. Tasks belong to one workspace, can carry Team audience requirements, and carry zero or one Project in v1.

@@ -9,6 +9,12 @@ canonical: https://usebrian.ai/docs/crm
 
 CRM in Use Brian is people, companies, and deals: the durable graph of who the team talks to, where the relationship stands, and what it is worth. It is first-party, so the brain reads and writes contacts the same way it reads memories: same brain graph, no translation layer. Attio and HubSpot are sync targets, not the primary surface.
 
+## Everyday workflow
+
+1. **Record the relationship.** Ask Brian to save a contact and their company so future conversations have the right context.
+2. **Track an opportunity.** Create a deal with its amount and expected close date, then keep the stage up to date.
+3. **Connect the follow-up.** Link tasks and relevant memories to the relationship so the next action stays close to the context.
+
 ## Entity-backed, not a separate store
 
 CRM is not a separate database. Every contact (person), company (organization), and deal (opportunity) is a node in the same brain graph as your memories and tasks. The universal fields remain fixed, while each workspace may add bounded typed fields: text, number, date, boolean, single-select, multi-select, or a reference to another visible CRM entity. `tags` remain lightweight labels on contacts and companies; they are not a substitute for structured deal or relationship fields. `external_ref` is a free-form JSONB passthrough for synced rows.

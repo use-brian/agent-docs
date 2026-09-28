@@ -9,6 +9,12 @@ canonical: https://usebrian.ai/docs/tools
 
 Tools give your assistant the ability to do things, not just talk. Connectors expose third-party APIs (Google Calendar, Gmail, Notion, GitHub, and more). Scheduled tasks let the assistant run jobs on its own.
 
+## Everyday workflow
+
+1. **Connect a service.** Open Studio → Connectors, choose a service, and complete its connection setup.
+2. **Choose what Brian can do.** Use the assistant's Tools tab to control access. Set each action to allow, ask, or block.
+3. **Schedule recurring work.** Ask for a recurring job and check its schedule. Use workspace Tasks for commitments you want to track.
+
 ## Connectors (MCP)
 
 Connect a service from Studio -> Connectors. Each connector exposes a set of tools (for example Google Calendar exposes `googleCalendarCreateEvent`, `googleCalendarListEvents`, etc.). After connecting, you decide which tools each assistant can use from the assistant's Tools tab. Workspace Files, Office, and Computer Use are first-party built-in primitives (no external account); most of the rest authenticate via OAuth or a personal access token.
