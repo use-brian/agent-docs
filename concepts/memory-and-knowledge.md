@@ -72,16 +72,21 @@ Correction reflection uses versioned memory and brain verification receipts. It
 keeps personal, assistant, clearance, department and project restrictions, and
 separates incompatible audiences into different model batches. Editing a receipt
 or its target can hold previously learned patterns until reviewed or regenerated
-from current evidence. Legacy receipts without saved scope are withheld. This
-coverage does not yet certify whole-turn feedback, every correction-audit stream
-or procedural skill learning, and does not enable strict departmental activation.
+from current evidence. Whole-turn negative feedback keeps the exact assistant turn,
+its initiating message, tool/read inputs and recalled memories in the same versioned
+lineage. Procedural skill proposals likewise require a persisted canonical transcript
+window, partition model inputs by the exact audience and preserve that evidence for
+approval-time revalidation. Legacy receipts and unclassified skill inputs are withheld.
+Workflow-origin procedural review remains unavailable until workflow definitions and
+step outputs expose canonical scope receipts. This does not enable strict departmental
+activation.
 
 Retraction and soft-deletion reasons now use versioned correction receipts for
 reflection. Learned patterns retain the saved and current target audience;
 receipt/source changes or erasure invalidate their descendants. Older correction
 receipts without saved scope are excluded, and snapshot/detail blobs are not
-model inputs. This does not establish provenance for whole-turn negative feedback
-or enable strict departmental isolation before the rollout barrier is met.
+model inputs. Strict departmental isolation remains disabled until the complete
+rollout barrier is met.
 
 Department grant execution now carries separate read and mutation ceilings. A
 read-only grant can support an audience-protected derived memory without enabling
