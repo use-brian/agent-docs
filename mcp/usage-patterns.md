@@ -43,6 +43,16 @@ A `read`-scoped credential does not expose the write tools. Calling one fails. D
 
 Every brain operation over MCP bills at the memory-op rate: `0.1` credits per operation, drawn from the workspace credit pool. No full chat loop runs unless you ask an assistant a question. See [Pricing and credits](../operations/pricing-and-credits.md).
 
+## Create or edit a workflow in two calls
+
+Workflows are written through a proposal, never directly. An agent-scoped credential with the configure grant sees `proposeWorkflow`, `createWorkflow`, and `updateWorkflow`.
+
+1. Call `proposeWorkflow` with the name, definition, and trigger (plus `workflowId` for an edit). It validates everything and returns a `proposalReceipt` string. Nothing is written yet.
+2. Show the proposal to your user and get an explicit yes.
+3. Call `createWorkflow` (or `updateWorkflow` for an edit) with `{ "proposalReceipt": "<the exact string>" }`.
+
+An MCP call carries no session history, so the receipt must be passed back: calling with `{}` fails with "A validated proposalReceipt is required". The receipt is signed by the server. Pass it byte for byte; an edited, truncated, or re-encoded receipt is rejected and you must propose again. Never resend workflow fields to the write call.
+
 ## Notes for agents
 
 - A duplicate write is cheap to make and expensive to clean up: the search-first pass costs `0.1` credits and prevents graph rot.
