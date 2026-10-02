@@ -55,7 +55,7 @@ The channel sends proactive and scheduled messages, interactive confirmation car
 
 Passive group ingestion is separate from chat replies. A tenant administrator must grant `im:message.group_msg`, subscribe and publish the app for all group messages, and approve the change. Then a workspace owner or admin enables individual observed groups in Studio -> Events. Nothing is ingested from a group until that per-group opt-in is present. Feishu uses the same routing, scheduled digest, Episode, and brain-extraction pipeline as Slack; addressed messages stay on the interactive chat path so they are not distilled twice.
 
-To attach channel conversations to personal memory, open Settings -> Account -> Connected accounts -> Feishu / Lark, generate a six-character code, and send it to Brian in Feishu/Lark. Without this link, each sender remains an isolated channel identity with session history but no personal memory consolidation.
+Brian matches a Feishu/Lark sender to their Use Brian account automatically when the Feishu email equals the sign-in email. This needs the app to hold a contact-read scope (`contact:contact.base:readonly` or `contact:contact:readonly_as_app`) and `contact:user.email:readonly`, published in a new app version; Studio -> Channels -> the Feishu channel shows workspace admins whether email matching is on and which scopes are missing. When the emails differ, open Settings -> Account -> Connected accounts -> Feishu / Lark (or the "You on this channel" section of the channel), generate a six-character code, and send it to Brian in Feishu/Lark. Until a sender is matched or connected, they are a guest: session history only, with no workspace access, tasks, or personal memory.
 
 ## WhatsApp Cloud API
 
