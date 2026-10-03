@@ -160,3 +160,22 @@ Workspace Tasks are durable forward-commitments, visible only when the current T
 - [Brain (entities & episodes)](./brain.md)
 - [Tools & connectors](./tools-and-connectors.md)
 - [CRM](./crm.md)
+
+
+## Task lifecycle scope and bulk failures
+
+Status, assignee and due-date-only task edits preserve the target task's existing
+classification, visibility, Teams and Project. The bulk tools also preserve these
+for their structured priority change, which merges only that task's own attributes.
+Reading several Projects in one conversation does not move every edited task into
+all of them. Canonical mutation-access checks still apply. Content, parent and
+dependency edits retain their full evidence scope; the one-Project task limit is
+not relaxed.
+
+A bulk result with any failed row is an error, even when other rows committed.
+Successes and failures are listed separately, with failed task IDs and causes.
+Verify current state, address the cause, and retry only unresolved tasks when
+appropriate. Do not repeat the whole batch or switch tools to bypass the failure.
+
+Omitting a bulk status filter includes completed tasks. Keep the user's requested
+status filters or resolved IDs when recovering; do not broaden the selection.
