@@ -53,6 +53,13 @@ If you do not want to manage your own bot, the official @use_brian_bot works for
 
 The channel sends proactive and scheduled messages, interactive confirmation cards, reactions, images, and files. Outbound files are capped at 20 MiB. Short audio is transcribed before the reply; long or costly media processing still requires the web app's estimate-and-confirm flow. Feishu China and international Lark use different API domains, so choose the platform that issued the credentials.
 
+Interactive Feishu/Lark replies support streaming cards with a live tool-progress
+timeline. Grant `cardkit:card:write` and publish/approve the app version to enable
+CardKit. Without that permission, Brian falls back to editable rich-text posts.
+The final approved answer replaces the progress card; private reasoning and
+speculative text preceding tool calls are never streamed. Long answers,
+attachments, and confirmation actions retain their normal follow-up delivery.
+
 Passive group ingestion is separate from chat replies. A tenant administrator must grant `im:message.group_msg`, subscribe and publish the app for all group messages, and approve the change. Then a workspace owner or admin enables individual observed groups in Studio -> Events. Nothing is ingested from a group until that per-group opt-in is present. Feishu uses the same routing, scheduled digest, Episode, and brain-extraction pipeline as Slack; addressed messages stay on the interactive chat path so they are not distilled twice.
 
 Brian matches a Feishu/Lark sender to their Use Brian account automatically when the Feishu email equals the sign-in email. This needs the app to hold a contact-read scope (`contact:contact.base:readonly` or `contact:contact:readonly_as_app`) and `contact:user.email:readonly`, published in a new app version; Studio -> Channels -> the Feishu channel shows workspace admins whether email matching is on and which scopes are missing. When the emails differ, open Settings -> Account -> Connected accounts -> Feishu / Lark (or the "You on this channel" section of the channel), generate a six-character code, and send it to Brian in Feishu/Lark. Until a sender is matched or connected, they are a guest: session history only, with no workspace access, tasks, or personal memory.
