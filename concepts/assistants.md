@@ -69,3 +69,17 @@ Every assistant belongs to a workspace: your company brain from day 1, even when
 The departmental-isolation implementation carries a server-owned access snapshot on interactive assistant handoffs. The receiver rechecks the initiating member and assistant and rejects changed authority before reading context. It cannot use a more privileged callee or its billing owner to widen the caller's clearance, Team grants or assistant visibility. Home-app handoffs retain the verified viewer and credential clearance cap. These fields are internal authority, never model-supplied arguments. Workflow/goal authoring and durable chat replay now retain their attended caller ceiling independently from schedule, approval, credential and billing identities. Compaction/history and complete delivery-audience enforcement remain unfinished; this is not a claim that strict departmental isolation is ready for activation.
 
 Snapshot-bound consults also recheck live caller and receiver authority at tool and response boundaries. Revocation invalidates the running context permanently. If an operation may already have executed, check its outcome before retrying; the server does not automatically replay it. Unattended workflow and goal execution additionally intersects the saved authoring ceiling with live run and callee authority. These checks do not yet certify every replay/history input or all delivery audiences.
+
+## Department placement
+
+Add Assistant offers Entire workspace or one department. Department placement
+limits discovery and use to current members of that department; workspace roles
+and direct assistant grants do not override it. The creator must be a workspace
+admin/owner and an owner of the selected department. Existing assistants remain
+workspace-wide. Reader assignments and the default home department are separate
+from this audience and do not change it.
+
+Department assistants support private member conversations. Public chat links,
+external API keys, channel assignments, shared conversations and cross-assistant
+connections are refused until those surfaces support the same audience boundary.
+Internal API access still requires the acting member's current department access.
