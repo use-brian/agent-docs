@@ -228,3 +228,22 @@ shown; a delayed acknowledgement cannot restore access. Once online ownership
 has been established, a previous device package cannot bypass expiry or denial.
 Cold offline authorization/recovery and canonical collaboration delivery remain
 required independent boundaries; this adapter does not complete the rollout.
+
+## Departmental document protection
+
+Office offers prompt-only Document creation with an explicit department (or
+General) and sensitivity. Current membership and clearance are checked by the
+server, including when generated output is published. Prompt-only generation
+uses no implicit company retrieval or templates. Template/source generation
+continues to require its supported provenance adapter; a department choice does
+not bypass that requirement.
+
+Use `getOfficeClassification` to inspect one reachable artifact and obtain its
+classification revision. After explicit approval, `restrictOfficeClassification`
+accepts that revision, an optional department ID, and sensitivity. It adds
+protection while preserving existing source and department restrictions. Owners
+and admins still need department membership. Stale revisions, active generation,
+and insufficient clearance are refused. Sharing roles do not override these
+checks. Undo cannot remove a protection or lower sensitivity; broader sharing
+requires a separately reviewed derivative. Existing canonical snapshots and
+exports remain behind the current artifact boundary.
