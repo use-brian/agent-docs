@@ -247,3 +247,11 @@ and insufficient clearance are refused. Sharing roles do not override these
 checks. Undo cannot remove a protection or lower sensitivity; broader sharing
 requires a separately reviewed derivative. Existing canonical snapshots and
 exports remain behind the current artifact boundary.
+
+## Failed spreadsheet imports and invoice fields
+
+A failed template upload can be retried on its existing unedited draft. Inspect `getOfficeArtifact` for the failed job and typed import diagnostics, then use `retryOfficeTemplateImport` with the artifact and failed job IDs only when the user requests recovery. An optional accessible `fileId` explicitly replaces the source. The retry is idempotent and refuses edited or superseded drafts. It does not publish the template.
+
+Spreadsheet templates use explicit typed tokens for customer data and fixed line-item slots. Preserve formulas and branding. Missing required facts return `needs_input` with `material_fact_missing`; the user can answer the displayed question to resume the same generation. Do not infer payment terms from sample cells. Optional blank references need blank-safe template formulas.
+
+Generated artifacts and exported files inherit template/evidence department and sensitivity restrictions within the caller's access ceiling. This does not enable template-derived generation in workspaces whose ready-mode admission adapter supports only prompt-only documents. Invoice PDF release selects one worksheet and retains other sheets only as hidden calculation dependencies.
