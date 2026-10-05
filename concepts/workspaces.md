@@ -13,12 +13,29 @@ Workspaces turn an assistant into a shared resource. Sharing lets your assistant
 
 A workspace is the unit of brain identity, billing, and membership: a company brain from day 1, even when you are the only member. One workspace is auto-created when you sign up (named from the business you tell us about during onboarding). Inviting teammates later does not migrate anything; the same workspace just gains new members. A workspace owns its assistants, memories, knowledge base, connector instances, and channel installs. Memory is per (user, assistant): team-scoped facts are shared across the workspace, while personal memories stay yours.
 
+## One workspace lifecycle
+
+All workspaces use the same permissions and lifecycle, including the workspace
+created at signup. There is no Personal workspace type. An owner can transfer
+any workspace to an existing member using
+`POST /api/workspaces/:workspaceId/transfer-ownership` with `{ newOwnerUserId }`.
+The former owner becomes an admin; the recipient becomes owner. Hosted ownership
+caps still apply. Billing state stays on the workspace, including the existing
+payment method until the new owner changes it.
+
+The owner can delete any workspace, including their last, through the normal
+confirmed deletion flow. This never merges workspaces or moves data between them.
+Account default routing is a nullable preference, not a workspace permission.
+Private connector fallback requires continued ownership of that default; it
+stops after transfer instead of choosing another workspace automatically.
+The ingestion source-list field `ownedDefault` describes that routing preference;
+clients must not infer it from a workspace type or membership alone.
+
 ## Workspace data reset
 
 The owner-only `DELETE /api/workspaces/:workspaceId/data` route resets the
 workspace's learned/produced content while preserving its identity, members,
-assistants, connector configuration, settings and policies. It also works for a
-Personal workspace. This is a destructive workspace reset, separate from a
+assistants, connector configuration, settings and policies. It works for every workspace. This is a destructive workspace reset, separate from a
 contact erasure request; it clears intake replay history. Retained address
 suppression survives the reset; missing required suppression policy or key
 material blocks it with a structured 409. Existing user review
@@ -150,3 +167,10 @@ It contains only authorized department metadata, assignment references, visible
 people/assistants and linked org units, plus current admin capability, revision,
 expiry and the existing request-duration policy. It returns no emails, content or
 hidden counts. `registry` cannot be combined with `explain` or history selectors.
+
+## Default assistant name
+
+A workspace named Acme gets a primary assistant named Acme Brian. Generated
+workspace suffixes are removed: Sam's workspace becomes Sam Brian. Existing
+primary names matching the old default are upgraded; custom names are preserved.
+A primary still using its generated name follows subsequent workspace renames.
