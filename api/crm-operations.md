@@ -960,6 +960,12 @@ current `crm.privacy.export` grant. This grant is independently required even
 when the key can read ordinary CRM records. Revoked credentials fail admission;
 Association being disabled does not prevent privacy exports.
 
+A full workspace export is all or nothing: if any record it would include
+(CRM records, raw imports, intake receipts, audit rows, campaign recipients and
+the other covered families) is outside the caller's departments, or a key's
+binding and its issuer's current access, the export is refused with
+`not_authorized` rather than silently omitting it.
+
 The response is `application/x-ndjson` with `Cache-Control: no-store`. Consume it
 as UTF-8 lines, preserving each record line's exact bytes and trailing newline:
 
