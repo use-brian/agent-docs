@@ -405,3 +405,21 @@ authorize them. The compatibility `/api/files/:id/preview-url` endpoint returns
 The browser uses separate original/PDF cache keys, purges on authority or identity
 changes, and discards expired or detached results. Conversion rechecks source
 revision and current permission before delivering bytes.
+
+
+## Browser download protection
+
+`browserReadDownload` requires interactive approval and saves a supported completed download as a durable file. Saving preserves the original browser task's private ownership, department and Project labels, and source evidence. Approval does not broaden access. The file remains after the browser task stops.
+
+The host binds the exact active task before transferring bytes. Task replacement, revoked human or assistant access, a changed profile, or unavailable source evidence refuses the save. A stronger human caller cannot replace the original assistant's authority. Automatic cloud download saves use the same source-preserving file admission; failed publication marks task completion failed. Legacy tasks without complete history and invocation-only origins still require supported qualification/recovery paths; do not treat a refusal as a successful save or retry an uncertain operation blindly.
+
+Browser saves also guard the retained task history at publication. If an in-memory task is currently saving a download, a competing task action can return a retry-safe busy result. Wait for that save to finish and check the action result before retrying. A refusal at new-input admission occurs before dispatch; a later bookkeeping refusal does not prove that no browser operation ran.
+
+
+## Association operational scope
+
+Association order, registration and membership reads and commands preserve both saved source protection and current source access. Department permission does not override the executing assistant's Project or assistant-visibility limits. Lists and totals omit records outside those limits; direct access and writes refuse them. A source becoming less restricted does not broaden an existing operational record. A lower General clearance does not lower a separate authorized department clearance.
+
+New Association operational records retain their source protection and use canonical destination admission. A General source is not an explicit choice to publish operational data in General: an active department context is added, or the writer's home department applies when neither source nor context supplies one. Existing records keep their saved protection on retries. Missing destination authority refuses creation atomically. Unbound legacy provider credentials remain unavailable under v2 until a supported binding is established.
+
+Discounted membership checkout reservation, replay and provider binding require the contact's current access and the checkout's saved protection. Provider settlement preserves that protection in the membership, including after the contact becomes less restricted. Receipt replay renews membership access. Legacy checkouts without trustworthy source evidence are unavailable under v2 pending recovery; a provider reference or receipt ID alone does not authorize access.

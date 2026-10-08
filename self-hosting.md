@@ -464,3 +464,8 @@ publishing permission are checked again before provider work. An uncertain
 network result leaves the local draft unresolved until an actual receipt or
 explicit operator reconciliation is available. Provider activation remains gated
 on hosted OAuth/product approval and live smoke evidence.
+
+
+Browser relay connections require current profile ownership, workspace membership and department access, even after pairing. Set `BROWSER_AUTHORITY_API_URL` in the relay environment to the deployment's API origin. HTTPS is required except for loopback HTTP in single-machine installations. Missing configuration or an unavailable authority API refuses connection admission and closes existing connections on renewal. The API must provide `POST /api/browser-extension/authority` before updating the relay. Ordinary user access tokens cannot call this browser-token endpoint. The relay checks each command and result plus idle connections every 15 seconds, with a five-second authority-request timeout; already dispatched remote effects cannot be recalled.
+
+When the relay closes with authorization code 4401, extension and desktop clients stop the active task and wait for explicit recovery rather than repeatedly reconnecting with the rejected credential. Restore access and choose Connect again, or pair a newly authorized profile. Ordinary network interruptions retain the existing reconnect behavior.

@@ -179,3 +179,10 @@ appropriate. Do not repeat the whole batch or switch tools to bypass the failure
 
 Omitting a bulk status filter includes completed tasks. Keep the user's requested
 status filters or resolved IDs when recovering; do not broaden the selection.
+
+
+## Inspect task protection
+
+Task visibility depends on current department access, sensitivity and any private partition. Workspace membership alone does not grant access. Projects organize tasks; no Project is not the same as General department scope.
+
+Use `getTask` after creation to inspect the saved `sensitivity`, `compartments` and `project_ids`. An empty `compartments` array means General department scope, still subject to sensitivity and private visibility. A null protection field means the store did not report it; do not infer a classification. Creation retains inherited source protection. Use the canonical context/classification workflow for changes rather than treating a Project edit as an access change.

@@ -160,6 +160,8 @@ A workflow definition can carry `permission_grants: { action_kind, grant: 'allow
 
 ## Departmental run authority (implementation in progress)
 
+Chat-authored workflows, scheduled work and goals retain the authoring turn's department limits, including its department context, credential binding and clearance cap. Later grants do not expand that saved consent. If the original access expires or is revoked, start a new reviewed request under current permissions; do not retry by supplying broader authority fields.
+
 Member workflow runs capture an internal starting access ceiling before executing. It survives waits and approvals; later permission expansion cannot widen that run, and permission loss blocks resume. A resumed legacy run without a captured ceiling must be reviewed and started as a new run. Do not supply or edit this authority through workflow input or run variables. Assistant calls inherit the pinned ceiling. External-client workflows retain their API-key principal.
 
 Workflows and confirmed goals also persist the attended author's internal ceiling before they can run in the background. Chat proposals freeze it before approval; authenticated builder, scheduling, configuration and goal-confirmation actions capture the same boundary. A schedule row, target assistant, credential owner, approver or billed account cannot replace that author. Existing workflows/goals that predate this envelope must be explicitly reviewed and re-saved or confirmed before unattended execution. Goal runs satisfy both the goal and workflow envelopes. These fields are server-owned and are never accepted from workflow input, run variables or API request bodies. History and delivery-audience checks remain unfinished, so this is not a claim of complete strict departmental isolation.
@@ -212,6 +214,79 @@ replace these bindings. This coverage does not certify all event families or
 complete departmental strict-mode activation.
 
 For an authorized failed run, the run-detail page offers **Review department access**. This opens workspace access settings; check the completed steps before starting a new run, since an interrupted operation may already have executed.
+
+For approvals tied to a chat session, workspace membership or assignment as approver does not grant access to that session's private or departmental content. The queue and badge omit approvals whose source session you cannot currently read. Preview, revision and response lookups return not found after access is revoked or the required source is deleted; do not retry a stale approval automatically. This protection covers session-backed approvals; other source families still require their own authority checks.
+
+Workflow-step approvals also inherit the current read restrictions of their referenced run and step. An inaccessible or mismatched parent removes the card and badge count. Web and channel decision dispatch rechecks that visibility and the assigned approver before claiming the decision; an unavailable result leaves the row unsettled and must not be retried as a fresh operation automatically. This closes the approval bypass of existing parent policies, not a complete certification of v2 workflow history or all event-source rules.
+
+HTTP decision endpoints return 404 if approval authority is lost during dispatch. Channel replies direct you to review current status and access on the approvals page; supplying a fuller ID cannot restore lost access.
+
+For CRM-sourced workflow history in v2 workspaces, the saved event audience and current source both use current department membership and per-department clearance. Public General clearance does not cap a Confidential department edge, and owner/admin roles do not replace an edge. Removing or expiring an edge can hide an old run even after its live CRM source was released to General. Explicit workflow execution limits and credential restrictions still apply. This repair does not certify history for other event-source families or migrate every legacy execution envelope.
+
+### Workflow run department context floor
+
+All user-scoped workflow history, including non-CRM runs, steps and copy edges, must satisfy the run's captured department context and that of every recorded source-run ancestor. The current workflow definition's selected department may restrict access further. These operational rows have no independent sensitivity column: this additional gate checks department membership at the public tier; existing CRM/source sensitivity and execution ceilings remain authoritative and compose with it. General operational metadata retains workspace-member visibility, and Projects remain a retrieval lens.
+
+Migration 679 captures run context from its canonical workflow on insert, rejects mismatched supplied bindings, and prevents changing the captured department array or moving a run to another workflow/workspace. Clearing a deleted department foreign key does not clear the saved array. Existing inconsistent group/array evidence fails closed; the migration does not fabricate historical ownership. The v2 read policy uses current human/assistant grants, credential bindings and expiry, and preserves the legacy workspace path. This is run-history protection; workflow-definition editing, non-CRM source provenance and execution-side admission remain separately required.
+
+### Workflow outcome-copy department admission
+
+Migration 680 shares the run-history department predicate with trusted outcome-copy admission. A copy insert checks both the consumer and source ancestry as the consumer's recorded actor, constrained by any active assistant/binding context. Missing department access refuses the edge, including a duplicate insert attempt after revocation. The actor-parameter helper is private; the public read wrapper remains bound to transaction identity. The canonical outcome reader checks the same gate before returning content or enrichment, even when the edge already exists, and returns no auxiliary outcome when department admission is denied. It renews this admission after enrichment, immediately before commit; a late denial rolls back the new lineage edge. It keeps newest-terminal ordering and does not fall back to an older accessible outcome. Legacy execution-envelope conversion and independent blueprint/source classification remain separate requirements.
+
+### Outcome enrichment source admission
+
+The canonical outcome reader admits the latest blueprint enrichment through its own canonical review-source envelope, current member/assistant scope, sensitivity, department bindings and held state. The record is locked while its fields are read. An inaccessible latest enrichment withholds the entire auxiliary result and rolls back the new copy edge; it never substitutes an older record or exposes an unreviewed partial handoff. Immediately before commit, renewal includes both runs' CRM/goal source authority and the selected blueprint envelope in addition to the run department contexts. This closes the existing enrichment bypass; durable blueprint provenance in downstream execution evidence and legacy execution-envelope conversion remain tracked separately.
+
+### Durable blueprint copy evidence
+
+A workflow copy receipt saves the exact canonical blueprint source envelope selected at copy time. The database captures it, never a caller-supplied envelope. JSON null proves no enrichment was selected; SQL null marks historical receipts with unknown enrichment and fails closed until an explicit recovery path exists. Receipts remain immutable. Reusing a receipt requires the currently selected enrichment to match the captured envelope; a newer or changed record cannot silently replace the consumed source.
+
+Workflow input evidence traverses copy ancestry and includes each captured blueprint source. Missing, held, deleted or changed sources refuse execution. Canonical derived writes retain that source's sensitivity, departments, projects and visibility. Blueprint edits/deletion hold existing derived descendants and reject stale writes. This applies to human-triggered and agent-triggered executions through the same canonical reader and evidence resolver. It does not claim complete workflow definition mutation or legacy recovery coverage.
+
+The executor records auxiliary outcome lineage before resolving its execution scope. This ensures the first step receives the copied blueprint evidence and does not discover a new causal source only during authority renewal. Run-history reads also enforce captured enrichment authority through copy ancestry.
+
+A persisted `workflow_cancelled` failure terminates the run's execution authority. New operations and fresh resume attempts are refused; a result completing across cancellation is withheld because an already-started effect may have occurred. Inspect the existing outcome before retrying. Ordinary step-failure reporting keeps its existing behavior.
+
+Workflow-origin browser tasks retain the originating run's actor, context and authority/source fingerprints. Cold continuation revalidates that exact run through canonical workflow authority; changed evidence, cancellation or lost source access requires inspection and a fresh start. A replacement invocation or broader owner grant cannot supply the old task's authority. Workflow downloads also retain the canonical workflow source and every required parent receipt, with authority renewed in the file transaction. Unattended credential issuance remains separate.
+
+A legacy browser task with an acting-assistant ceiling but no saved source evidence cannot resume, even from a new authorized invocation. Use the task-bound discard path and start a new task with current source evidence; the old task is not automatically reclassified.
+
+Live workflow execution renews current workflow/run department visibility as well as CRM source visibility. Explicit execution Project and assistant-visibility limits also constrain saved and current source evidence under permission v2; department access does not bypass those limits.
+
+Copied prior outcomes retain their accumulated source protection, including private sources and explicit Project and assistant restrictions. Changed or missing retained evidence prevents reuse. A fresh run can omit an unverifiable historical prior outcome instead of treating it as unprotected context.
+
+Prior-outcome copying validates accumulated evidence against the current member and ambient execution ceiling before returning content. A denied copy returns no auxiliary outcome and does not add a receipt. Authorized content edits remain usable under current-envelope audience checks; a reclassification outside the receiver's access is withheld.
+
+Workflow history filters captured accumulated evidence before returning run rows, steps or counts. Copied-run history retains the saved evidence/version requirement. This includes independent private, Project and assistant limits and current source reclassification checks; authorized per-department tiers still apply. History without an explicit valid accumulated envelope is withheld, with the original run data retained. Return to the independently accessible workflow and check earlier actions before explicitly starting a fresh run; the old run is neither relabeled nor replayed.
+
+Persisted cancellation terminates workflow execution authority even when the run's history is unavailable under current content permissions. Hidden history is never evidence that cancellation did not occur.
+
+A manual-run HTTP request may finish execution but lose permission to return its result. The endpoint then returns HTTP 409 with `error: run_result_unavailable` and `operationMayHaveExecuted: true`, without result or step content. Check current workflow history and any completed effects before deciding whether to run again; do not automatically retry this response.
+
+The browser source binds to the initial accumulated evidence saved before the first step executes, including causal input and context write floors. Normal initialization does not invalidate the new task. Cold continuation still requires the exact explicit saved envelope; missing or stripped evidence requires recovery rather than reconstruction from current permissions.
+
+A browser task started in a later step binds the accumulated evidence successfully saved for that step, including protected reads from earlier steps. Previously retained task descriptors are not updated to match later evidence; their exact-evidence renewal requirement remains in effect.
+
+Canonical workflow-derived file admission retains independent saved source restrictions and requires exact upstream dependency receipts. Changes to a causal source or cancellation of an upstream copied run invalidate dependent files. Workflow-origin browser downloads use this complete dependency admission and a deferred grant-expiry boundary; failed authority renewal prevents publication.
+
+Workflow enrichment can participate as an exact upstream dependency of a derived file. Enrichment changes invalidate dependent files. Reading enrichment uses the admitted department's tier even when General clearance is lower, while explicit execution Project limits and current membership still apply.
+
+
+Task-triggered workflows inherit the task event's saved visibility, sensitivity, departments and Projects, including the previous task version when an update contains previous values. Dispatch requires the saved workflow author's current bounded access; execution also checks the executing assistant. Later relabeling or deletion does not erase the original event restrictions. A missing historical source receipt requires a new task lifecycle event, not rewritten event labels.
+
+Task-source access also gates automatic storm pauses. An event the saved workflow author cannot read cannot pause that workflow; authorized storm protection still applies.
+
+Knowledge lifecycle events include the canonical source version. Saved restrictions continue to apply after the entry changes or is deleted. Missing historical source receipts require a new canonical event; names, paths and tags are not public merely because the event omits the body.
+
+Primitive event titles, paths, tags and task lifecycle fields must match the write-time receipt. Unknown payload fields or substituted metadata are rejected before a run or storm pause is committed. Older runs lacking metadata verification stay unavailable; they are not certified by replaying source IDs.
+
+Page-triggered runs require the canonical page-event receipt and matching title, action, actor and watched-page identity. The workflow author must pass both saved and current private/Teamspace/department restrictions before queue insertion or storm pause. Run input and history retain immutable original and observed protection after page changes or deletion. Missing historical receipts require a new canonical event; hand-authored page labels do not establish authority.
+
+
+Page-trigger-derived files retain the original page and Teamspace access boundary in their provenance. Renaming or copying the file does not remove it. Extracted text follows the same boundary; losing membership hides the file and its text, while regaining authorized membership restores access. Missing dependency evidence prevents publication rather than producing an unprotected output. Other page-derived output families remain under implementation and must not be treated as generally supported yet.
+
+
+The canonical file writer expands required provenance from the exact source snapshots it receives. File tools do not need to reconstruct hidden page dependencies. If a source page has become more restrictive, a new derived file inherits the admitted stricter boundary; later sharing or deletion does not remove that observed restriction.
 
 ## Department-context workflows
 
