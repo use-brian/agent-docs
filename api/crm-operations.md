@@ -1391,3 +1391,167 @@ families remain excluded from strict mode pending classification and review.
 Canonical privacy erasure leaves only a terminal administrative receipt; it does
 not release protected source content. Security envelopes are not exported as CRM
 content. These changes do not activate strict classification for a workspace.
+
+
+### Erasure subject departmental authority (2026-10-06)
+
+Owner/admin status does not grant access to a protected contact. Contact erasure preview creation must prove the caller's current canonical department grant before inspecting counts and again before returning the preview. Migration 676 saves the subject's inherited protection floor on the preview, without retaining its name, address or a new source-ID list. Execution checks both that saved floor and the live subject before destructive review. A consumed receipt checks the saved floor against current authority even though the contact has been erased; losing the department edge denies replay. A legacy preview without a saved floor fails closed under department v2. This implements the subject boundary only: floors of additional linked records, workspace-wide retention/export and file-cleanup authority still require their own complete coverage.
+
+### Erasure linked Association protection (2026-10-06)
+
+Contact erasure reviews also check every attributed Association order, membership, sponsorship allocation/invitation, offline rescue and registration selected by the canonical privacy coverage predicates. Each record must satisfy its saved scope, live source and parent authority checks before any domain counts are returned. The preview scope combines the subject and these record/source floors, so declassifying the contact does not weaken historical operational protection. Execution rechecks the linked records, and consumed receipt replay retains their combined floor after those rows are erased. Unclassified legacy operational rows fail closed under v2. A saved preview whose floor omits any currently required linked-record scope is stale and cannot be consumed; an older subject-only preview cannot produce a less-protected receipt. This does not yet certify the other CRM, import, workflow, file, audit or outbound record families.
+
+### Read-only erasure review renewal (2026-10-06)
+
+The member endpoint `GET /api/crm/:workspaceId/operations/privacy/erasure-previews/:previewId` reads an existing erasure review without creating a new preview or executing a purge. Only the original reviewing owner/admin can read it. Current owner/admin membership and the saved combined department floor are mandatory on every read. An unconsumed review additionally checks current subject and linked-record authority; a changed floor makes the review stale. A consumed review returns only its minimized receipt after checking the saved floor, without requiring the deleted subject or exposing historical domain counts. Responses are non-cacheable. This is the canonical renewal/recovery path for the staff UI; mutation confirmations and exact-preview execution remain unchanged. The erasure staff UI now renews this read through the shared bounded protected projection; denied or stale reads evict its review/receipt display. Retention and file-cleanup reviews require separate coverage.
+
+### Contact privacy export department admission (2026-10-06)
+
+Contact-scoped privacy-v2 exports apply the same subject and attributed Association operational authority as erasure reviews before emitting a header. The shared `privacy-subject-authority.ts` helper preserves saved order, membership, sponsorship, rescue and registration floors plus live source protection. Source read locks last until the snapshot finishes, so reclassification cannot invalidate that source snapshot mid-export. Department grants are renewed outside the repeatable-read snapshot before each yielded record and before the success manifest; revoked access aborts without a complete manifest. A credential's export operation alone does not establish a department identity: unbound integration callers fail closed for contact exports under department v2, while explicitly legacy workspaces retain their old grant contract. Existing domain projections, redactions and checksums remain unchanged. This covers contact/Association authority only; workspace-wide exports, legacy JSON export and the independent floors of other CRM/import/workflow/file/outbound families remain outstanding.
+
+
+Contact export coverage inventory explicitly excludes source-scope/authority snapshots and scheduler execution bindings; these are authorization evidence rather than CRM content. Website catalogue and site-content draft/revision tables are explicitly excluded from this CRM slice: their typed website documents have no canonical CRM subject attribution and require the website content facility. Each excluded table and column remains declared in the coverage manifest, so schema changes cannot silently escape review.
+
+### Workspace privacy export root protection (2026-10-06)
+
+Workspace privacy-v2 export is a complete declared slice, not a silently filtered list. Before its header, a paged preflight checks every included CRM person/company/deal scope, every Association order/registration/membership/rescue/sponsorship allocation/invitation, and every saved erasure-review scope. Current canonical department grants apply even to workspace owners. An inaccessible record refuses the whole bundle; erased subjects cannot weaken surviving receipt protection. Historical CRM root rows retain their stored protection, while unresolved held scopes fail closed. The combined floor is renewed outside the export snapshot before records and the final manifest, as for contact exports. Unbound integration callers fail closed in department-v2 workspaces; legacy workspaces keep their existing grant contract. This extends root and Association coverage; independent activity/import/workflow/file/outbound floors and legacy JSON exports remain required before complete export sign-off.
+
+
+### Legacy JSON export root protection (2026-10-06)
+
+The legacy operations JSON export accepts a validated actor context, checks current owner/admin membership, and reads its tables in one repeatable-read transaction. It uses the same full-workspace CRM/Association/saved-review preflight as privacy-v2 and renews the combined department floor outside the snapshot before returning its buffered response. Denial returns no partial bundle. Its existing JSON schema and projections remain compatible; responses are non-cacheable. This closes the legacy bypass for those roots, not the independent activity/import/workflow/file/outbound scope gaps tracked above.
+
+
+### Privacy activity protection (2026-10-06)
+
+Department-v2 privacy exports and erasure reviews preserve each included CRM activity's saved audience independently of its current contact/company/deal. The canonical coverage predicates select activity pages; the gate locks each selected row, requires captured and non-held evidence, and checks both the immutable activity floor and current source. A source reclassification cannot lower historical activity protection. Contact reviews include these floors in the immutable preview and consumed receipt; a previously created review with a weaker floor becomes stale. Workspace and contact exports renew the combined floor before delivery. Legacy JSON does not include activity records, but conservatively shares the complete CRM preflight. Legacy/unresolved activity evidence is denied under v2 until explicit recovery exists. Workflow/import/file/outbound families still need their own coverage.
+
+
+### Department-v2 activity and current-member parity
+
+Activity RLS applies the canonical current department grant to both saved history and live CRM source in v2 workspaces. Department-specific clearance can exceed the member's base clearance; base clearance never substitutes for a missing or weaker department edge. Current assistant limits, context department, credential bindings, private visibility and mutation restrictions remain effective. Projects are organizational context, not a v2 read boundary. Legacy workspaces retain their prior activity predicate. The shared current-member source SQL helper follows the same v2 member floor for its CRM and other canonical source consumers, while retaining the legacy branch only for explicitly non-v2 workspaces. Missing current membership always denies. The app-role SQL path uses the boolean `department_member_source_allows` adapter; the underlying per-actor grant-map function remains private.
+
+
+### Event privacy scope survives retirement
+
+CRM event receipts retain a minimal immutable `privacy_scope` containing only the resource audience, with no source identity, name, payload or version. Migration 678 derives it from captured source evidence for existing non-retired events and new events. Canonical retirement clears the source pointer as before but preserves this audience. Under v2, exports and erasure review authority check the saved event audience plus its current source until retirement; retired receipts require the saved audience without the deleted source. Missing legacy evidence fails closed rather than becoming General. The ordinary retired-event read path applies the same saved floor. Explicitly legacy workspaces keep their existing minimized-receipt rule. Source-less historical recovery, workflow lineage beyond these events and other privacy families remain separate requirements.
+
+
+### Retired CRM event receipt audience
+
+Canonical event retirement retains a minimal immutable `privacy_scope` audience and clears source identity as before. In department-v2 workspaces the retired receipt read path checks this saved floor, including current assistant and binding limits; workspace ownership is not a department override. Old retired events without evidence fail closed under v2. Non-retired events still require saved and current source authority. CRM exports and erasure reviews share this floor; see `features/crm-operations.md`, "Event privacy scope survives retirement". This does not certify every workflow's independent definition, execution or copy-lineage authority.
+
+### CRM event protection through workflow copy ancestry
+
+Privacy authority uses the canonical workflow copy set, then walks its immutable source-run ancestry with cycle-safe traversal. Every directly attached CRM event and every event attached through a source goal contributes its saved audience and current-source restrictions to export and erasure-review authority. This includes another contact's event copied into a selected consumer. The combined review floor and stream renewal preserve those restrictions after the exported contact's direct sources change. Retired events use their minimal immutable audience. This closes CRM-event ancestry coverage; independent workflow authoring/context, non-CRM inputs and legacy unrecorded lineage remain separate audit requirements.
+
+### Workflow context and blueprint privacy floors
+
+Privacy export and erasure-review authority covers every run in the canonical selected copy set and its upstream ancestry. It includes the immutable run department/project context and current workflow definition context, all attributed workflow/research blueprint records, and the saved blueprint envelope on each copy receipt. Blueprint records are locked and checked for held or unavailable scope. A copied envelope keeps its original audience after source declassification; the live source may add protection. Unknown historical capture or a missing live blueprint fails closed rather than omitting a protected contribution. Scans use bounded pages.
+
+These floors participate in contact, workspace and legacy export preflight, stream authority renewal, stale-review detection and immutable erasure receipt scope. They add to CRM event ancestry protection. Independent import/file/audit/outbound protection and trusted integration binding remain separate requirements.
+
+### Canonical copy inventory privacy authority
+
+The privacy gate checks each selected task, entity link and workspace file against its own canonical scope, independently of the CRM contact or company. Selection uses the same coverage predicates as export, after canonical copy attribution is prepared. Reads use bounded pages and hold source locks for the enclosing transaction. Held or missing source metadata refuses the operation; redacting file names or payloads does not waive authority for the remaining inventory. The combined floor applies to export admission and renewal and to saved erasure reviews/receipts. This includes import staging files and draft attachments selected by the canonical coverage inventory. It does not yet establish independent raw import-source, audit or outbound-envelope classification.
+
+### File cleanup department admission and saved receipts
+
+Workspace owner/admin status is necessary but does not override the source file's department. Preview checks the canonical file and each attributed import consumer entity before inspecting counts. Migration 682 saves their combined minimal audience on the immutable cleanup review, without retaining a new source-ID list. Execution and unqueued review reads check the saved floor and current file/consumer protection; a changed floor requires a new review. Authority renews immediately before preview return and index deletion. Missing or held sources fail closed; unknown historical review scope is unavailable under department v2.
+
+After queue commit the file index is absent. Receipt reads and duplicate execute recovery check the saved audience against current authority, so revoked readers cannot recover cleanup details. The storage worker completes the already committed deletion; queue commit is the authorization boundary, and later access loss does not resurrect deleted index data or cancel physical cleanup. Workspace privacy exports include saved cleanup receipt floors. Explicit legacy workspaces retain their prior access behavior. Independent audit-history and raw import-source classification, review UI renewal and retention command authority remain separate requirements.
+
+### Scheduled retention approver revocation
+
+Saved policy approval does not grant permanent execution authority. Each scheduled run must resolve the approving user against current owner/admin membership before selecting affected records or mutating them. The membership row is locked for the transaction, serializing a concurrent role downgrade or removal with the admitted run. A revoked approver causes a failed run with the existing fixed failure code and no affected-record summary; no retention mutation commits. An authorized owner/admin can recover by explicitly approving the current policy. An explicit save of an unchanged scheduled retention policy creates a new policy version under the current approver only when the prior approver no longer has owner/admin membership. Unchanged approvals otherwise remain no-ops. This membership check is necessary in both legacy and department-v2 workspaces; it does not replace the still-required per-record department authority and saved receipt floors.
+
+Canonical contact source loading normalizes UUID letter case before deduplication and matching database snapshots. Uppercase and lowercase spellings of the same contact do not change department authority or invalidate a legitimate held-contact review.
+
+### Retention canonical source floors
+
+Manual and scheduled retention use the same candidate selector and authority collector. For submission candidates, their contact's canonical scope is required; missing contacts fail closed. Financial order and offline-rescue candidates preserve their saved and live Association source floors. Domain-event candidates preserve their saved privacy audience and current source, and file-cleanup candidates preserve their immutable receipt audience. The collector visits every candidate contributing to reported counts, including retained rows and rows beyond the 500-row mutation limit, using bounded pages. It does not infer authority from owner/admin status or silently omit protected candidates.
+
+Migration 683 records the combined minimal canonical audience on each retention review and receipt. This floor is immutable, participates in the review fingerprint, and is rechecked before execution or duplicate receipt recovery. Selection is reevaluated for fresh source restrictions, and current grants renew before disclosure or mutation. Scheduled runs act as the current saved approver. Run history uses the app-role RLS gate on the saved floor; workspace privacy export includes the same floor. Explicit legacy workspaces preserve existing behavior; old reviews without provable scope are unavailable under department v2. Failed scheduled runs retain only the existing fixed failure code with an empty affected-record summary and a General public floor.
+
+This closes the listed canonical source families, not independent raw import, delivery-envelope, audit-history or expired intake/suppression classification. Those remaining families and the legacy retention endpoint require their own authority work; a saved canonical floor must not be described as complete retention coverage. UI authority renewal remains required as well.
+
+### Legacy retention actor and canonical source admission
+
+The confirmed legacy retention endpoint passes its authenticated operations context into the canonical pruning function; a workspace ID alone is not execution authority. The function parses the context, verifies current owner/admin membership under a transaction lock, and checks selected submission-contact and domain-event source audiences with the same collector as reviewed retention. Event identities are selected and authorized before any source mutation, then deletion uses exactly those identities. Authority renews before mutation and before commit, so denial rolls back the complete operation. Existing explicit cutoff, hold rules and result shape are preserved. Internal callers and tests must also provide actor context; there is no ambient-owner fallback. The remaining independent import/intake scope work applies to this legacy path as well.
+
+Privacy admission coverage also includes Association site content, membership catalogues and programme catalogues, together with each revision table. Migration 684 adds the shared workspace write guard to these six exported physical domains. They follow the same insert/update/delete and workspace-move exclusion contract as other privacy-covered records; being presentation content does not exempt their writes from an active workspace privacy operation.
+
+
+### Departmental integration authority
+
+Operation grants alone do not authorize protected records. In v2, integration keys need an admitted issuer, department binding and clearance cap; current issuer and any acting assistant authority must still permit the operation. A missing historical binding requires reviewed credential rotation, not an automatic workspace-wide grant. An empty binding means General only. Keep source protection on derived records and treat revoked/expired authority as a refusal; do not retry a provider side effect blindly. Implementation and acceptance progress is tracked in the canonical departmental audit.
+
+
+A bound integration privacy export must be authorized for the entire requested slice, including saved operational and derived-source protection. Verify the final NDJSON manifest: an interrupted stream after credential expiry, revocation or department loss is incomplete. Credential rotation does not authorize replaying a remote side effect.
+
+
+Integration read requests renew stored operation/resource and department authority before returning. Reusing an earlier authenticated request does not preserve revoked access. New grants cannot expand that request's original scope; retry with a fresh authenticated request after a deliberate grant change.
+
+
+`create_intake_credential` accepts an optional `departmentBinding` with `departmentIds`, optional `assistantId`, and `cap` (`public`, `internal`, or `confidential`; default `internal`). Omit department IDs to use the issuer's current context/home, or pass an empty list for General. New v2 keys retain this ceiling and renew the issuer/assistant on each submission; missing historical evidence requires reviewed rotation. Rotation does not automatically grant access to the old key's records.
+
+Submission discovery, detail and attachment reads require current access to both the saved submission audience and live source. Reclassifying a contact does not broaden an earlier submission or its replay.
+
+Consent history and sendability renew the current actor/credential and admit saved consent and suppression evidence before returning events or a verdict. Hidden evidence is a denial, never an omitted withdrawal that turns into permission to send. Purpose selectors still constrain integration reads. Contact declassification does not release saved evidence; provider-event replay also requires its retained scope. Historical unclassified records require explicit recovery, not guessed labels.
+
+Managed delivery admission checks saved consent/suppression scope before preparation and final provider handoff. Native adapters capture the trusted turn's department, Project and assistant visibility ceiling in server-side context. Missing or revoked source authority prevents dispatch; an already-attempted remote operation retains its uncertain-outcome receipt and must be reconciled before retrying.
+
+Durable delivery receipts keep their creation-time recipient and consent/suppression protection. Read and exact replay require saved/current source access; denial never means the delivery ID is unused. Redaction removes source identifiers and payloads while preserving a minimal authorization floor and the no-resend receipt. Missing historical evidence is withheld rather than silently assigned General scope.
+
+
+Provider callbacks require source authority at inbox admission, before a receipt is created. Order callbacks check the order's retained scope and current sources; entitlement callbacks check the contact and any existing entitlement. A source-authority rejection creates no new receipt or business effect. If an existing backend credential expires, an operator retry cannot revive it: resubmit the exact event using a currently authorized credential. Original admitted-actor provenance and event identity remain unchanged.
+
+
+New provider receipts preserve their admitted source scope throughout pending recovery and exact replay. A replacement credential must cover that original scope as well as current sources. Entitlements created from pending receipts inherit the saved floor even if the contact was declassified in the meantime. Receipt history applies actor scope before pagination, and operator retry requires access to the receipt. Legacy unclassified receipts are withheld under v2; absence from a filtered list does not authorize repeating an uncertain remote effect.
+
+
+Association waitlist discovery filters by current actor access to the saved submission and linked orders before pagination. An inaccessible offer is not reported as a waiting person. Promotion and replay require submission and order access; new orders inherit the submission's saved floor even after contact declassification. Restore source authority before retrying the same promotion identity.
+
+
+Notification history requires current actor access to the retained source envelope and active source. Retirement removes the source reference and payload but preserves the original authorization floor and prior delivery state. A retired notification remains a minimized outcome, not a new delivery or workspace-wide record. Notification list filtering occurs before pagination; missing historical scope requires explicit recovery.
+
+
+Promotion configuration responses use nullable `reservedUses`, `redeemedUses`, and `sourceRedeemedUses`. Null means the complete usage evidence is unavailable to the actor; it is not zero and must not be used to estimate remaining capacity. Promotion settings remain available, but changing global/per-contact limits requires complete usage authority. Reservation cap enforcement always uses full canonical usage. Historical imported totals without captured source evidence remain unavailable pending review.
+
+
+New promotion imports with complete per-contact usage attribution capture the admitted contacts' immutable scope. Authorized list and exact replay can return those imported totals; contact declassification cannot release the saved evidence. Partial attribution and historical rows without captured evidence still return null totals. Import actors must cover every supplied contact before any promotion or attribution rows are created. Subject/workspace privacy admission checks imported usage independently of the shared promotion settings.
+
+
+Canonical contact erasure removes the contact identifier from captured promotion-usage evidence after clearing its attribution. The immutable scope and usage total remain. Exact replay returns the protected aggregate without restoring erased contact links; remaining contacts still impose live source restrictions. Access to minimized usage requires the original scope.
+
+### Credential binding preview
+
+Owner/admin member clients can read `GET /api/crm/:workspaceId/operations/integration-credentials/binding-options` with optional `assistantId` and `cap` (`public`, `internal`, or `confidential`; default `internal`). The response identifies legacy or department-v2 mode. In department-v2 mode, `choices` contain admitted selections (`departmentIds` omitted for current context, empty for General, or explicit IDs), their department names and resolved binding. `assistants` contains visible choices. These advisory choices expire after `validForMs` (30000); credential creation repeats current issuer/assistant authority checks. A preview does not create a secret or authorize a later write.
+
+Credential creation accepts a UUID `requestId` for retry safety. Repeating the same identity, issuer and parsed payload returns HTTP409 `conflict` with `reason: credential_already_issued` and `credentialId`; no new key is issued and the plaintext secret is never returned again. Changed input conflicts without revealing the existing ID. Inspect the existing key before explicitly rotating a lost secret under a new request identity.
+
+Integration record reads and member-profile edits retain any trusted caller Project, assistant-visibility and shared-audience limits in addition to key department authority. Filtering occurs before pagination; an unavailable profile cannot be edited through the integration adapter.
+
+Execution limits captured by the trusted host at credential issuance are immutable authorization metadata, not request fields. Authentication retains saved Project, assistant-visibility and mutation limits; record reads and profile edits intersect them with a narrower current caller. A direct consumer cannot discard saved limits by omitting them from its principal. Attended native and authenticated OAuth Brain-MCP issuance retain these limits. OAuth child keys also retain the exact parent lifetime; other programmatic parent kinds remain unavailable.
+
+New integration-key lifecycle audits retain the key's immutable department binding as their source floor. Losing that department hides the audit without preventing an authorized administrator from revoking the key; revocation appends a receipt with the same protection. Historical audits are not assigned invented lineage.
+
+A selected acting assistant also contributes its complete current execution scope at issuance. Authentication and canonical transaction admission resolve that assistant again and intersect current Project, visibility and mutation limits with the saved ceiling. Later restrictions take effect for already-authenticated direct callers; later expansion cannot exceed the key’s saved limits. Missing assistant or issuer authority denies access.
+
+Retained CRM read adapters preserve a narrower caller execution ceiling across invocations and intersect it with renewed credentials. Intake authentication and submission transactions carry the same saved/current assistant execution limits. After Project access loss, matching a hidden contact must fail before contact, submission or follow-up effects; authorized follow-up tasks inherit the source Project.
+
+Direct machine import chunk execution renews the credential’s bound issuer/assistant and complete execution limits before row work and again before commit. A missing bound assistant denies a contact-only import without imported entity or row/chunk effects; restoring valid authority permits resumption. This applies even without an HTTP execution wrapper.
+
+The trusted server-side native lifecycle admission path requires pinned authoring authority independently of request JSON. It renews the executing assistant and current owner/admin issuer for preview, issuance, list and revoke. Delegated issuance binds that assistant, retains frozen execution limits and requires a stable request UUID. The attended tools listed below use this store path; full device and programmatic-parent acceptance remain pending.
+
+Native attended credential tools are `previewCrmCredentialBindings`, `listCrmCredentials`, `createCrmCredential` and `revokeCrmCredential`. They require configure and CRM write capabilities plus current owner/admin membership. Preview supplies the operation/selector catalog and expiring binding choices. Issuance requires `requestId`, `label`, `expiresAt`, `grants` and `departmentBinding`; optional `revokeCredentialId` rotates an existing key. The executing assistant and authority are server-pinned, never request inputs. Preserve the request UUID across uncertain retries; only first success returns `oneTimeSecret`. A conflict with `credential_already_issued` names the existing key without revealing its secret. OAuth Brain-MCP invocation is available only with an authenticated read-write parent and live execution lease. Workflow invocation requires the exact retained server-side execution source and a current execution lease.
+
+Native credential lifecycle operations renew active configure, CRM and CRM-write grants inside the canonical transaction. Previously discovered tools or a retained tool context do not authorize issuance after a grant is revoked. Human credential administration does not depend on assistant grants.
+
+The canonical store supports a trusted OAuth-parent binding for delegated keys: child expiry is capped by the exact authenticated access token, and current admission rejects token rotation/expiry, loss of write scope, or authorization/client revocation. The stored binding contains a one-way verifier fingerprint, never the bearer token or raw verifier. OAuth Brain-MCP authentication supplies this descriptor through trusted context to native tool execution; callers cannot supply it as tool input.
+
+Read-write Brain keys also support the four native credential lifecycle tools under current owner/primary-assistant authority and configure/CRM write grants. The child retains the exact parent key, owner, verifier fingerprint, cap and admitted context. Parent revocation, rotation or changed authority invalidates child admission. Model input cannot choose a parent or acting owner; Workflow delegation uses its own exact execution source.
+
+Read-write Home-app bridge tokens support the native credential lifecycle as the authenticated viewer, subject to current owner/admin membership and primary-assistant configure/CRM write grants. Child expiry cannot exceed the exact bridge token expiry. App grant/cap changes, viewer role loss and server signing-key rotation invalidate child admission. Parent evidence is captured by authentication; callers cannot choose it, and no bridge bearer or signing secret is persisted.
+
+Workflow-native credential lifecycle retains the original run, actor, executing assistant, context and authority/evidence fingerprints. The tool never accepts these as input. Child authentication renews that saved source and denies cancelled runs, changed evidence or lost authority. An unavailable old child can be inspected, revoked or rotated from a currently authorized attended session; reuse issuance request IDs after uncertain outcomes and never assume a missing response means no credential was created. Successful-use metadata is committed only after authority admission; refused authentication does not update it.

@@ -290,3 +290,17 @@ credential actor and bind the workspace's primary assistant. Read credentials
 cannot send. Exact replay returns a content-minimized receipt; an uncertain
 provider outcome must be reconciled under its original delivery id. See the
 [CRM delivery contract](../api/crm-operations.md#native-managed-delivery-tools).
+
+OAuth calls execute as the user who authorized the credential; Home-app calls execute as the authenticated viewer. Neither inherits the workspace owner’s private records or department access. A missing user identity is rejected. The workspace primary assistant and credential caps still constrain execution, while ownership remains billing/credential attribution. Brain keys retain their documented workspace-primary/owner binding.
+
+Retained OAuth and Home-app calls revalidate their exact authentication before continuing canonical execution. OAuth token rotation, expiry, grant revocation or client revocation invalidates the retained call. Home-app token expiry or changed app grants/clearance does likewise. A Home-app token’s signed clearance cap also limits a later expanded app grant; current reductions narrow it immediately. Durable child credentials additionally require the parent binding described below.
+
+Read-write OAuth clients can use `previewCrmCredentialBindings`, `listCrmCredentials`, `createCrmCredential` and `revokeCrmCredential` when the current user is an owner/admin and the primary assistant has configure and CRM write grants. Authentication supplies the exact parent descriptor; no tool input can provide or override it. Child expiry is capped to the authenticated access token expiry, and rotation, expiry or revocation of that token or its client invalidates child use. Preserve the issuance request UUID across uncertain retries; the secret is returned only on first success. Unattended issuance remains unavailable. See the [credential lifecycle contract](../api/crm-operations.md).
+
+A retained Brain-key invocation also checks its original context and admission envelope. Replacement context, configuration-session or admitted department/Project values invalidate that invocation; a previously authenticated call cannot adopt the replacement authority.
+
+Read-write Brain keys also support the four native credential lifecycle tools under current owner/primary-assistant authority and configure/CRM write grants. The child retains the exact parent key, owner, verifier fingerprint, cap and admitted context. Parent revocation, rotation or changed authority invalidates child admission. Model input cannot choose a parent or acting owner; Unattended delegation remains unavailable.
+
+Read-write Home-app bridge tokens support the native credential lifecycle as the authenticated viewer, subject to current owner/admin membership and primary-assistant configure/CRM write grants. Child expiry cannot exceed the exact bridge token expiry. App grant/cap changes, viewer role loss and server signing-key rotation invalidate child admission. Parent evidence is captured by authentication; callers cannot choose it, and no bridge bearer or signing secret is persisted.
+
+Home-app tokens expire at `exp <= now`. Invalid or out-of-range signed expiry timestamps are rejected before delegated credential evidence is constructed.

@@ -211,3 +211,7 @@ Import notes for a bundle author:
 
 An unchanged branch HEAD is a no-op. A sync that fails records its reason
 against the app and does not disturb the previous working bundle.
+
+## Department authority for store access
+
+Store tools are discovered and executed under the authenticated app viewer plus the workspace assistant. App consent and store scope only narrow that authority; they do not grant department membership. A missing viewer identity exposes no store tools. Access is resolved again for each request and immediately before provider execution. A previously listed tool may disappear after revocation; a retained tool refuses execution if current authority cannot be verified or its exact connector instance is unavailable. Refresh discovery to inspect current access; another store is never substituted automatically. Credential storage and billing ownership do not substitute for viewer authorization.

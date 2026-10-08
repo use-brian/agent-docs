@@ -27,6 +27,16 @@ to Brian. Never embed a Brain credential in browser JavaScript.
 All referenced `contactId` values must be live CRM `person` entity ids in the
 credential's workspace.
 
+Order source inheritance is being implemented for ordinary and imported ticket
+orders. The canonical store records the buyer and identified attendees' current
+scope/version evidence and derives the order and generated registrations from
+all those sources. Held, retired, missing or incompatible private source records
+cannot be combined into a new order. Callers supply contact identifiers, never
+invent department labels or source snapshots. Public ticket publication does
+not make operational buyer or attendee information public. Evidence persistence
+alone is not completed department authorization; the rollout still requires
+current-source admission, filtered reads and legacy-record recovery.
+
 ## Endpoints
 
 | Method | Path | Purpose |
@@ -462,3 +472,114 @@ not mean already-open browser pages have refreshed.
 This contract requires the membership catalogue release and migration 557 on the
 server. Documentation publication does not assert that a hosted service has
 already deployed that release.
+
+New ticket-order insertion in v2 workspaces checks the current buyer and identified attendee source permissions, and the inherited operational scope, inside the transaction. Workspace ownership alone does not grant department access. Human and import actors need current source membership; an agent or credential requires a trusted execution department grant. An unbound credential is refused rather than using the workspace owner implicitly. This is an insertion guard only: idempotent replay, existing-record reads and mutations, and integration-credential binding/recovery remain incomplete in the rollout.
+
+Order detail and ordinary/imported idempotent retries now require both the saved protection floor and current source access. Orders with missing legacy evidence or unavailable sources are denied. Order list results, pending counts and financial summaries are filtered before pagination/aggregation using the same actor scope. Cancellation and free confirmation also renew this floor after acquiring locks and before commit. Registration rosters, provider reconciliation and other record families remain under implementation; these order gates are not full Association departmental sign-off.
+
+
+Registration lists and operational rosters now apply saved registration and parent-order protection plus live source authority before pagination and totals. Registration management lookup, status updates and check-in corrections also renew that authority. In department-v2 workspaces, legacy registrations lacking source evidence are withheld until a recovery path supplies it; workspace owner/admin status does not bypass the department checks. Other operational record families and legacy recovery are still being implemented.
+
+
+Direct manual/imported CRM participation now stores inherited contact protection and renews source authority for creation, replay, status changes and check-in correction. Member REST, integration REST and Brian participation listing carry the authenticated actor into the same registration and parent-order filter. Department revocation removes records from both CRM and Association discovery; a workspace role cannot restore access. Legacy records without evidence still require recovery.
+
+
+Manual membership grants and imported source memberships now persist the contact-derived department floor. Membership/entitlement discovery forwards the real human or agent actor and filters saved protection plus live source authority; retries and lifecycle updates recheck that authority. Legacy rows without evidence are withheld in department-v2 workspaces. Provider renewal bindings, rescue/sponsorship creation and legacy recovery remain pending and must not be assumed to bypass these gates.
+
+
+Offline membership rescue cases now retain source-derived department evidence. Their finance-role requirement remains necessary, and current department access is also required for listing, creation/retry, settlement, cancellation and reversal. A generated membership inherits the original rescue floor plus current source protection. Source declassification cannot widen it. Legacy cases lacking evidence require explicit recovery. These finance review commands remain limited to the existing human reviewer contract.
+
+
+### Protected operational list cache lifetime
+
+Association's shared operational page hook uses the existing surface cache with a maximum 30-second projection lifetime measured from request start, not response arrival. Expiry removes rows and pagination even while offline or a refresh is pending. HTTP 401/403/404 removes the cached projection immediately; ordinary transient failures may retain rows only within their original lifetime. An expired response cannot reinstall its data. These browser bounds supplement, and never replace, canonical server authorization. Failed operational commands with an authorization denial evict Association and CRM cached projections for that workspace before offering recovery. This shared-list policy does not certify component-local selected contacts, editor drafts, or independent order-detail caches; those require separate lifecycle coverage.
+
+The offline payment action editor stores only the selected record identity and derives its content from the current authorized rescue page. Expiry or denial unmounts the editor and discards its form content. Empty payment queues describe the current viewer’s access, not an assertion that the workspace has no payments.
+
+Mounted operational lists renew every 15 seconds and on window focus, before the 30-second deadline. A failed renewal does not extend the previous deadline. This avoids periodically discarding an authorized open payment form on healthy connections.
+
+
+### UI verification record: protected payment queue (2026-10-06)
+
+Local owner queue inspected at 1440×900 and 390×844. Desktop score: task clarity 2, findability 2, staff vocabulary 2, role fit 2, honest states 2 (10/10); phone: 10/10 by the same rubric. Phone document width is exactly 390 and the primary action measures 44px. Desktop controls use the compact size required by responsive contract M3. Screenshots: `/tmp/miniapp-association-cache-desktop.png`, `/tmp/miniapp-association-cache-phone.png`, and final revoked desktop `/tmp/miniapp-association-cache-revoked.png`. The empty copy describes the viewer's available records without exposing hidden record counts.
+
+With the page open, expiry of a fictional local department edge removed the visible rescue rows without navigation. A second check with the payment review open removed the selected person's name and payment form and returned to the scoped empty queue. No payment was submitted through the browser. Fixtures restore the prior edge expiry automatically. Member-only denial is component-tested; a live member browser walkthrough remains outstanding. Contact selection, independent order caches and other editor-local copies still require separate verification.
+
+
+### Protected order projection lifecycle
+
+The Association operational projection hook also owns order lists, financial totals, the Home pending-order summary and expanded order detail. All share the same request-start 30-second bound, 15-second renewal, focus renewal and denial eviction through the existing surface cache. Order detail is keyed by workspace/viewer/order and only mounted while its parent order remains on the current authorized page. There is no independent component-state copy of attendee names or order lines. Closing a detail or changing the list cannot let an older request paint under another order. Failed order mutations discard cached order projections before recovery; canonical server authority remains decisive.
+
+
+### UI verification record: order projection revocation (2026-10-06)
+
+Orders inspected at 1440×900 and 390×844 with expanded ticket and attendee details. Desktop and phone: task clarity 2, findability 2, staff vocabulary 2, owner role fit 2, honest states 2 (10/10). Phone document width equals viewport width (390); primary controls have the existing phone 44px floor. Screenshots: `/tmp/miniapp-order-cache-desktop.png`, `/tmp/miniapp-order-cache-phone.png`, `/tmp/miniapp-order-cache-revoked.png`. A live fictional department expiry removed the order, financial summary, ticket lines and attendee name from the open phone view without navigation. The controlled fixture restores its original edge expiry. Live member and weaker-assistant walkthroughs remain outstanding; this record is not a complete Association sign-off.
+
+
+### Contact selection authority
+
+Association contact search results use the bounded operational projection cache. Selected contacts in membership, payment, reservation, sponsorship and privacy forms retain only a contact identifier in local state; their displayed name and hint come from a renewed canonical CRM record read. The selected-contact projection rejects unavailable, archived, non-contact or mismatched records. A denial removes the projection immediately, and transient failure cannot retain it beyond the 30-second request-start deadline. A form cannot submit with an unavailable selected contact. This does not authorize copied guest fields, previously generated sponsorship tokens or privacy preview receipts: each still needs its own source-linked lifecycle.
+
+Order buyer-filter labels also use the canonical selected-contact projection. The membership adjustment editor stores only the membership identifier and derives its current row from the protected page, so its contact name and financial fields cannot outlive that page.
+
+Contact erasure preview and execution controls also disappear when their selected contact is no longer readable; a previously loaded preview cannot keep that action enabled. Broader privacy receipt/source-floor and linked-guest field coverage remains separate work.
+
+
+### UI verification record: selected contact lifetime (2026-10-06)
+
+At 1440×900 and 390×844, the offline payment form displays a contact only after a canonical record read. On the phone, document width is 390px and submit height is 44px. Scores on both widths: task clarity 2, findability 2, vocabulary 1 (existing finance wording remains dense), role fit 2, honest states 2: 9/10. Screenshots: `/tmp/miniapp-contact-cache-desktop.png`, `/tmp/miniapp-contact-cache-phone.png`. With a contact and plan selected, a fictional local department expiry removed the contact chip, source-derived summary and dependent form without navigation; the remaining search returned an empty authorized projection. Evidence: `/tmp/miniapp-contact-cache-revoked.png`. No payment was submitted. Member walkthroughs and linked-guest copies remain unverified.
+
+
+### Sponsorship operational source protection
+
+Allocations persist protection inherited from the sponsor contact and the sponsoring membership's saved floor. Invitations inherit that allocation floor plus the nominee contact; redemption preserves the invitation floor in the resulting membership. Saved source evidence contains canonical contact snapshots, while current parent membership/allocation authority is also required. Current actor authority gates initial creation, idempotent replay, discovery before pagination/counts, cancellation, issue, revocation and redemption. Cascading cancellation requires authority over every affected invitation and membership and rolls back atomically on denial. Legacy rows without evidence fail closed under v2 pending explicit recovery. Token possession does not replace a trusted, currently authorized execution principal; integration binding remains a separate required rollout task.
+
+Sponsorship writes serialize per workspace before acquiring allocation/invitation locks. Source authority locks parent memberships before contact snapshots. Allocation seat totals are nullable: if any contributing invitation is unreadable, the response returns unknown rather than leaking its count or presenting a partial count as capacity. UI uses the existing localized unknown label. Admission still checks actual capacity and requires authority over contributing invitation records before exposing capacity-dependent outcomes.
+
+A newly issued sponsorship token is displayed only after refreshed invitation/allocation projections confirm that the current nominee and pending invitation remain readable. The UI clears that token when any supporting projection disappears or the invitation expires/revokes; refreshing an idempotent issue never recovers a token from storage.
+
+
+### Linked reservation guest lifetime (2026-10-06)
+
+Reservation drafts store linked guest identities without copying lookup names. A shared bounded canonical contact projection resolves every linked guest before display or submission. Missing, archived, mismatched or denied contacts invalidate this projection; offline failures can retain it only until its original 30-second deadline. Linked guest fields and CRM links are hidden while the projection is unavailable, including any operator edits derived from those contacts. Reservation is blocked until all linked contacts are readable. Refresh retries the read; clearing a link also clears its name and email edits so protected data cannot be converted into an unlinked guest by that action. Unlinked guests retain their ordinary editable fields. Server source checks remain authoritative at reservation execution.
+
+
+### UI verification record: sponsorship and linked guests (2026-10-06)
+
+Sponsorship was inspected at 1440×900 and 390×844. Phone document width is 390px and both submit controls measure 44px. Screenshots: `/tmp/miniapp-sponsorship-desktop.png`, `/tmp/miniapp-sponsorship-phone.png`. Scores: task clarity 1 (allocation terminology is dense), findability 2, vocabulary 1, role fit 2, honest states 2: 8/10 on both widths. Issued-token revocation has component coverage; the corresponding browser issuance/revocation and non-manager walkthrough remain unverified.
+
+The reservation guest editor was reached through Events → event → Tickets & fees → Reserve for someone, then a buyer and linked guest were selected. At 1440×900 and 390×844 it shows the canonical guest name and permits editing. Phone width is 390px and reserve height is 44px. Scores: task clarity 2, findability 2, vocabulary 2, role fit 2, honest states 1 (the shared refresh error still refers to a list): 9/10 on both widths. Screenshots: `/tmp/miniapp-linked-guest-desktop.png`, `/tmp/miniapp-linked-guest-phone.png`. After fictional local department expiry, the open form removed guest inputs and the CRM link, and disabled reservation. Clearing the link returned blank name/email fields. Evidence: `/tmp/miniapp-linked-guest-revoked.png`. No reservation was submitted in this browser check. Non-manager browser acceptance remains unverified.
+
+
+### Module and management-role projection lifetime (2026-10-06)
+
+The Association module snapshot, including its management-role flag, is an expiring authority projection. Both navigation prefetch and mounted readers retain it for at most 30 seconds from request start; mounted readers renew every 15 seconds and on focus. A denied module read evicts the snapshot immediately. An offline or delayed renewal cannot extend the previous authority. Successful module changes refresh the complete canonical snapshot rather than copying the former management flag into a new module result. Management-only forms must unmount when the role snapshot is unavailable or read-only, with explicit unavailable/retry or member guidance. Department record protection remains independent of the staff management role and is still enforced by canonical server commands.
+
+
+### UI verification record: management authority lifetime (2026-10-06)
+
+The open offline-payment settlement editor was reviewed at 1440×900 and 390×844 after the module-cache change. Phone width is 390px and the primary control is 44px. Scores on both widths: task clarity 2, findability 2, vocabulary 1 (existing settlement wording remains), role fit 2, honest states 2: 9/10. Screenshots: `/tmp/miniapp-module-editor-desktop.png`, `/tmp/miniapp-module-editor-phone.png`. No payment action was submitted. Component tests verify immediate editor removal on a member role/denial and removal during offline expiry, but the exact live role-change walkthrough is pending explicit approval: automatic approval review rejected temporarily changing the fictional local audit user's workspace role. No role mutation was executed. This is an evidence limitation, not a completed live revocation check.
+
+### Erasure review disclosure lifetime (2026-10-06)
+
+The staff erasure review uses the read-only review endpoint as its display authority. A projection lasts at most 30 seconds from request start, renews every 15 seconds and on focus, and is evicted on denied or stale review responses. Execution success or uncertainty refreshes the same review; recovery never creates another preview or silently repeats erasure. Consumed receipts use the saved review floor and remain recoverable without the deleted contact. Losing management authority hides the review and receipt. Selecting another contact resets the review reference. Retention and physical cleanup need their own authority lifecycle before full privacy sign-off.
+
+
+UI verification record (2026-10-06): erasure review desktop 1440×900 and phone 390×844 scored 9/10 (task clarity 2, findability 1, staff vocabulary 2, role fit 2, honest states 2). Phone document width is 390px and the execute target is 44px high. Technical identifiers, raw domain details and receipt payloads are collapsed; the visible review summarizes actions and counts. A new fictional General contact's open review disappeared after a newly linked membership added inaccessible department protection; the contact remained visible. No erasure or existing-user access change occurred. Role-loss rendering and consumed-receipt lifetime are covered by component tests; the separate live workspace-role test remains pending its earlier approval.
+
+
+### Explicit ticket-order destination
+
+Ticket-order creation accepts an optional `destination`: `{kind: "department", departmentId}` or `{kind: "general"}`. Omission retains canonical context/home admission. Human HTTP and native agent commands carry the same field into canonical admission; selecting General never removes a source department, privacy or sensitivity floor. A selected department must be active and writable under the current actor and frozen execution ceilings. The destination participates in the idempotency fingerprint: replay cannot relocate an existing order, and denied creation writes no order, registration or inventory event. Department selection/preview controls and equivalent choices for other operational families remain separate required rollout work.
+
+
+Order destination preview accepts the canonical buyer/linked-contact IDs and returns only choices admitted with their full current source floor and the caller's current/frozen authority. It includes the implicit home/context choice when available and explicit General/department choices that pass the same admission as creation. Each choice carries its resulting envelope and authorized department names. A failed implicit home is not silently replaced: the caller must select another admitted choice explicitly. Preview is advisory, lasts at most 30 seconds for display, creates no business rows/events, and never substitutes for admission at creation. Native tools and HTTP share the same preview command/store.
+
+
+Ticket reservation management follows the staff-console role contract. Human members can inspect admitted ticket/event history but cannot create reservations; the canonical service requires owner/admin for a human create-order command. Delegated assistant/workflow/OAuth/Home-app calls naming a human renew that person's workspace management role before reservation creation, in addition to their existing capability/source/destination ceilings. Dedicated integration credentials retain their independently granted operation/resource contract. Losing management permission closes the event ticket editor/reservation UI and removes mutation controls.
+
+Direct Association command and read adapters reload saved integration-key execution limits. Project and assistant-visibility restrictions apply to current sources, saved output floors, parent-child reads, counts and destination admission even outside the HTTP authentication wrapper. A source becoming less restricted does not lower a saved order or membership floor.
+
+Operational source-access refusal returns `not_authorized` with non-disclosing `details.recovery` guidance. A missing record, missing historical evidence and inaccessible source do not identify different recovery categories. Preserve the original request identity and do not automatically retry a mutation or issue a fresh payment. Retry reads only after access review. Independent fresh creation requires an operator to verify that it will not duplicate a prior effect; current contact access cannot reconstruct or certify historical protection. Historical rows remain withheld without trustworthy original evidence.
+
+The Association staff console exposes “Can't find a record?” on every section. It links to currently accessible contacts and, for managers, payment reconciliation. After the manager checks the prior outcome, independent fresh-start links open the ordinary event, free-membership or offline-payment flow. They neither submit an operation nor recover historical lineage. Assistants must likewise preserve original request identity and verify an uncertain outcome before invoking the ordinary creation commands.
