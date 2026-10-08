@@ -212,3 +212,10 @@ replace these bindings. This coverage does not certify all event families or
 complete departmental strict-mode activation.
 
 For an authorized failed run, the run-detail page offers **Review department access**. This opens workspace access settings; check the completed steps before starting a new run, since an interrupted operation may already have executed.
+
+## Department-context workflows
+
+A workflow saved with a department context is visible and editable only to people
+(and their assistants) who may read that department. Others, including an owner
+or admin without that department, see it as not found in lists and reads and
+cannot rename, disable or delete it.
