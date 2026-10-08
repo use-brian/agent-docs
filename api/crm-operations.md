@@ -344,6 +344,11 @@ POST /api/crm/:workspaceId/operations/imports/:jobId/cancel
 GET  /api/crm/:workspaceId/operations/imports/:jobId/errors.csv
 ```
 
+Import jobs, their error and result CSVs, and resume/cancel are available only
+to callers who may read the staged file's department and clearance (or, for a
+key-sourced job, the key's bound departments); otherwise the job reads as not
+found.
+
 The server reads the complete staged file, limited to 30 MB and 100,000 data
 rows. Confirmation must provide the exact dry-run hash and immutable mapping.
 Jobs advance in replay-safe 50-row chunks and may map contacts, companies,
