@@ -122,6 +122,8 @@ GET  /api/workflows/:id/runs
 POST /api/workflow-webhooks/:slug
 ```
 
+A definition saved before authoring authority was recorded reports `authorityReviewRequired: true` and refuses to run. To recover it without editing, send `PATCH /api/workflows/:id` with `{ "confirmAuthority": true }`: authority is recaptured from the calling member's current access (a scheduled workflow goes through its normal schedule review). A historical run that lacks the evidence a resume now requires cannot be retried; start a fresh run instead.
+
 ## Approvals
 
 Workflows pause on the same unified approvals queue every other surface uses (chat, app-kind staged writes, distribution drafts). One `pending_approvals` table, one resolve endpoint, four canonical kinds. Resolution is cross-channel: start a run from web, approve from Telegram.
