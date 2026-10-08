@@ -391,7 +391,9 @@ plus `snapshotCursor` and `snapshotLimit` (1-10,000; default 1,000). Its existin
 `snapshotNextCursor` for IDs. Follow each stream to null with the same segment
 and filters. An edited segment invalidates either cursor; begin a new traversal.
 The count is current dynamic membership, not a frozen database snapshot or
-continuing permission to send. The native SDK completes the ID stream before
+continuing permission to send. Rows, counts and IDs include only contacts the caller may read, and a rule
+never evaluates consent, suppression, membership, registration or relationship
+evidence the caller cannot read: such a contact does not match. The native SDK completes the ID stream before
 presenting a snapshot. Contact compliance reads return all authorized purposes,
 consent and suppression evidence, including histories beyond 500 events.
 

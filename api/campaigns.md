@@ -66,6 +66,13 @@ snapshot are one immutable approved Feed revision. Current CRM consent,
 suppression, member authority, and sender authority are rechecked immediately
 before each handoff. Later segment matches are never added.
 
+The audience preview and approval are evaluated as the caller: only contacts
+you may read can be approved, and a contact whose deciding consent or
+suppression you cannot read is excluded as `evidence_unavailable`. Each
+recipient keeps the contact's protection from approval time. Dispatch status
+returns recipient counts only if you may read every recipient; otherwise each
+count is `null` (unknown), never a partial total.
+
 Every recipient receives a separate envelope with a visible native unsubscribe
 link. GET shows a non-mutating preview; POST records withdrawal. RFC 8058
 one-click is advertised only when DKIM covers the required headers. An
