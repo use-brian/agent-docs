@@ -154,6 +154,7 @@ Available only on `read_write` credentials.
 |---|---|
 | `ingestToBrain` | Capture content into the brain. `captureMode: "immediate"` (default) keeps the existing behavior: `decompose: true` runs full extraction and `decompose: false` files one distilled memory. `captureMode: "routed"` submits one message to the connection's configured assistant capture profile. Routed inputs require stable `eventId` and may include `occurredAt`, `sessionId`, `subjectId`, `role`, and bounded scalar `metadata`. A scheduled match is durably queued without an extraction-model call and is extracted later as part of one pooled window. |
 | `saveMemory` / `deleteMemory` | Save one distilled workspace memory; soft-delete a memory by id |
+| `deleteBrainRow` | Soft-delete one entity, task, KB chunk, contact, company or deal by id (history kept for audit). It deletes only a row the calling user and credential may currently change, including department access; any other id is reported as not found and nothing is changed |
 | `saveTask` / `updateTask` / `closeTask` / `reopenTask` | Create, patch, and transition tasks |
 | `saveContact` / `updateContact` | Upsert / patch a contact |
 | `saveCompany` / `updateCompany` | Upsert / patch a company |
@@ -230,6 +231,7 @@ Inside a tool call, a failure is a normal MCP tool result with `isError` and a t
 - Call `tools/list` after `initialize` and select from what is returned. If a write tool is absent, the credential is `read`-scoped; if file tools are absent, the deployment has no file storage; if the page tools are absent, the deployment has no doc surface.
 - An empty read result may be a clearance filter, not an empty brain: the credential only sees rows at or below its tier.
 - An empty read may also be the key's Team/Project envelope. Never infer that a hidden Project is absent or ask the caller for a raw compartment key.
+- A `deleteBrainRow` not-found can likewise be an access boundary rather than a missing row. Re-resolve the id with the listed discovery tool; do not retry the same id or tell the user the record does not exist.
 - Every write is audited exactly like a chat write. Assume no action is invisible to the workspace owner.
 - Prefer `searchBrain` over the deprecated `searchKnowledge`.
 
