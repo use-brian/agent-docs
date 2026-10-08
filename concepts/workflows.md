@@ -219,3 +219,9 @@ A workflow saved with a department context is visible and editable only to peopl
 (and their assistants) who may read that department. Others, including an owner
 or admin without that department, see it as not found in lists and reads and
 cannot rename, disable or delete it.
+
+A workflow triggered by a connector event (for example new mail) only runs for
+events from connectors whose department audience fits the workflow's
+department and that its author can currently use; a private connector only
+triggers its owner's workflows. Other events are skipped without pausing the
+workflow.
