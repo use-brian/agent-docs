@@ -200,6 +200,7 @@ Error responses use the shape `{ "error": "<slug>", "detail": "..." }`.
 | 403 | `actor_not_member` | Internal-audience keys only: the attributed actor (or the key's creator) is not a member of the assistant's workspace. |
 | 404 | `assistant_not_found` | Key valid but the assistant no longer exists. |
 | 429 | `budget_exhausted` | The workspace has no active plan (trial ended or plan lapsed). The owner must pick a plan, or self-host. |
+| 409 | `conversation_busy` | Another request on the same conversation is still running and did not finish within about 4 minutes. This turn did not run. Requests on one conversation are serialized: a second one waits for the first. Retry after the earlier request returns. |
 | 502 | `upstream_failed` | LLM provider error after retries. Treat as transient. |
 | 500 | `internal` | Anything else. Open a bug report. |
 
