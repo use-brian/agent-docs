@@ -153,7 +153,16 @@ human, while assistant email sends from the assistant's own address.
 
 ## Group chats
 
-In Telegram, Slack, and Feishu/Lark groups, the bot only responds when @mentioned by default. Anonymous group members get session-only context. Chat works, but no personal memories are written about them. The WeChat iLink bot has no group support; the self-hosted WeChat desktop personal-account bridge supports groups and defaults to @-mention gating.
+A group connected to a workspace through its channel (Slack, Telegram, Discord, Feishu/Lark, Microsoft Teams, or a BYO-number WhatsApp group) is **one shared workspace conversation**, a room. Everyone in the group shares it:
+
+- The bot replies only when @mentioned (or replied to). Messages that do not mention it are still kept in the room as context, and may be saved to the team brain. A workspace owner or admin can switch saving off per group; the messages then stay context only.
+- When the room starts, the bot posts a one-time notice in the group saying so. A Telegram bot in privacy mode only sees messages that mention it, and its notice says that.
+- Group members who are not in the workspace are guests: they can ask the bot and get replies, labeled by their platform handle, and nothing is ever saved to a guest's memory.
+- No one's personal memory is used in a group, including the person who asked.
+- Usage is billed to the workspace, with the person who asked recorded.
+- The room appears in the Chat app's Workspace list with the platform's badge. It is read-only on the web: reply in the group.
+
+A group that is not connected to a workspace (for example the official @use_brian_bot added without a channel binding) keeps the older behaviour: each person gets their own session, and anonymous members get session-only context. The WeChat iLink bot has no group support; the self-hosted WeChat desktop personal-account bridge supports groups and defaults to @-mention gating.
 
 Bot credentials and inbound sender policy do not prove who can read an outbound
 group conversation. Public workflow/relay output can use the normal destination.
@@ -175,7 +184,7 @@ call.
 - Channels are workspace-owned. Connecting a bot does not attach it to an assistant until you route the channel to one.
 - Assistant email is also workspace-owned, but its **Handled by default** assistant is required at creation. Manage default handling, access mode, sender routing, ingestion, and outbound actions on the email Channel itself.
 - Messaging platforms are bring-your-own credentials: the user owns the bot, Use Brian is the brain. Web is the only zero-setup channel.
-- In any group chat, expect a reply only when the bot is @mentioned, and expect no personal memory to be written for anonymous group members.
+- In any group chat, expect a reply only when the bot is @mentioned. In a group connected to a workspace, expect one shared conversation for everyone in it: un-mentioned messages are kept as context, members outside the workspace are guests, and no personal memory is used or written.
 - The official @use_brian_bot covers only the default assistant; routing a channel to any other assistant, or custom branding, requires a BYO bot.
 
 ## Related
