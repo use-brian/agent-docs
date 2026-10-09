@@ -255,3 +255,20 @@ A failed template upload can be retried on its existing unedited draft. Inspect 
 Spreadsheet templates use explicit typed tokens for customer data and fixed line-item slots. Preserve formulas and branding. Missing required facts return `needs_input` with `material_fact_missing`; the user can answer the displayed question to resume the same generation. Do not infer payment terms from sample cells. Optional blank references need blank-safe template formulas.
 
 Generated artifacts and exported files inherit template/evidence department and sensitivity restrictions within the caller's access ceiling. This does not enable template-derived generation in workspaces whose ready-mode admission adapter supports only prompt-only documents. Invoice PDF release selects one worksheet and retains other sheets only as hidden calculation dependencies.
+
+
+## Resume a draft waiting for a template
+
+A generation job with `needs_input` and `template_ambiguous` has paused before
+creating content. A source workbook file is not a published Office template.
+Read `getOfficeArtifact`: its job exposes the input question, whether template
+recovery is allowed, and a bounded list of currently visible published matching
+`templateChoices`. Call `resumeOfficeGeneration` with the exact `artifactId`,
+`jobId` and selected `templateVersionId` to resume the same empty draft.
+Only the initiating user with current Edit authority may resume; the original
+execution protections remain in force. An identical accepted selection is safe
+to repeat after a lost acknowledgement, but a different or stale selection
+conflicts. If no template is available, ask the user to upload, review and publish
+one in Office > Templates. Free-text steering does not choose a template.
+Workspaces whose admission requires unsupported source provenance refuse this
+recovery; it does not bypass department or sensitivity checks.
