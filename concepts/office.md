@@ -160,8 +160,13 @@ and durable file authority before returning bytes.
 
 Office SQL metadata lists, details, live snapshots, comments, suggestions, template
 routing and job/events reads return `X-Brian-Projection-Valid-For-Ms` with no-store
-responses. Revalidate retained metadata before that lifetime expires, including
-request time in the budget. A `409 office_projection_changed` means the read's
+responses. Treat the metadata header as a request-start allowance: subtract the
+complete request and body-read duration exactly once, and refuse a nonpositive
+remaining budget. The allowance is bounded by 30 seconds, current grant expiry
+and earlier protected dependencies; server query or cleanup latency cannot
+extend those deadlines. Never add elapsed time back on the client. Media
+lifetimes remain a separate byte-response contract. Revalidate retained metadata
+before its remaining budget expires. A `409 office_projection_changed` means the read's
 content or authority changed before publication: discard any old projection and
 make a fresh read. It does not authorize retrying a mutation.
 
