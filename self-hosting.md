@@ -152,6 +152,13 @@ self-host: set `WECHAT_CONNECTOR=true` in `client.conf` and add
 as a loopback service; it needs no public hostname. Without the toggle, the
 WeChat tab in Studio reports pairing as unavailable.
 
+One connector service runs every WeChat bot (one bot per staff member, each
+linked to that person's Brian account); do not run a second connector instance
+or another gateway against the same bots, because iLink allows one poller per
+bot. Upgrading to the staff-identity release applies an additive migration
+(`743_channel_identity_bindings.sql`) that links nobody: each existing bot
+answers again once its user links it from Studio or Settings.
+
 The separate WeChat desktop bridge mirrors a personal account instead of
 creating an iLink bot. Clone `brian-message-store` beside `use-brian`; its
 `agent-wechat/` directory is the pinned standalone runtime source used by the

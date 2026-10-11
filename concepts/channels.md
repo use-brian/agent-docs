@@ -20,7 +20,7 @@ Channels are where the assistant can be reached. They are owned by the workspace
 | Feishu / Lark | BYO enterprise app | @-mention | Short audio | App ID + App Secret |
 | Microsoft Teams | BYO Azure Bot | @-mention | N/A | App ID + secret + tenant |
 | WhatsApp | BYO number (QR pairing) or Meta Cloud API | Opt-in per group (BYON) | Yes | QR scan or Meta credentials |
-| WeChat | BYO bot (QR pairing) | Not supported (DMs only) | STT only | QR scan |
+| WeChat | One BYO bot per person (QR pairing) | Not supported (DMs only) | STT only | QR scan, then link to a Brian account |
 | WeChat desktop (self-host) | Personal-account bridge | @-mention in groups | Yes | Custom-channel token + QR scan |
 | Assistant email | Provisioned inbox | Email threads | N/A | Managed AgentMail or BYO key |
 
@@ -72,11 +72,19 @@ Cloud API traffic is direct messages only. Configure the sender access policy be
 
 ## WeChat (BYO bot, QR pairing)
 
-WeChat rides Tencent's iLink Bot API, the sanctioned personal-WeChat bot surface. Studio -> Channels -> WeChat shows a QR code; scanning it with a WeChat account binds a new bot identity (iLink may additionally ask for a pairing code shown on the phone).
+WeChat rides Tencent's iLink Bot API, the sanctioned personal-WeChat bot surface. Studio -> Channels -> WeChat shows a QR code; scanning it with a WeChat account issues a bot for that account (iLink may additionally ask for a pairing code shown on the phone).
+
+**One bot per person, acting as a verified Brian account.** Each bot answers only the WeChat account that scanned its QR, and only after that person is linked to a Use Brian account in the workspace. Contacts do not share one bot. A team of twelve pairs twelve bots through one connector service.
+
+- **QR transport vs verified identity.** The QR scan proves which WeChat account controls the bot; it does not say which Brian account acts. A turn runs only as a *bound* account, with that account's current membership, departments, clearance and connector grants. Billing stays with the workspace. There is no fallback to the workspace owner, the person who paired the bot, or a guest identity: an unlinked bot or an unknown sender gets a fixed notice and no model or tool call.
+- **Two ways to link.** "Connect my WeChat" (any member) links the scanner to the signed-in account when they confirm. "Prepare for a staff member" (owners/admins) saves an unlinked connection; the staff member signs in, opens the shared link (`/w/<workspace>/studio/channels?channel=<channel>`), creates a code and sends `LINK <code>` to the bot from the WeChat account that paired it. The code is consumed before anything reaches a model or an archive.
+- **One account per bot.** A different account cannot take over a linked bot: the current account disconnects it (Settings -> Account -> Connected accounts) or an owner/admin revokes the binding, and the new account links again. History never moves to the new account.
+- **Revocation is live.** Disconnecting, revoking, re-pairing, or removing the person's workspace access stops an in-flight turn before its next private tool call or reply.
+- **Existing bots must be linked.** Bots paired before this model have no linked account and answer nothing until their user links them.
 
 Hard limits inherent to iLink -- set expectations before recommending this channel:
 
-- The bot is its own WeChat contact. It does not act as the user's personal account; contacts must message the bot.
+- The bot is its own WeChat contact. It does not act as the user's personal WeChat account.
 - Direct messages only. Group chats are not delivered to bots.
 - No chat history over the wire: the bot only receives messages sent to it
   after connecting. A self-hosted deployment can still import prior
@@ -84,7 +92,8 @@ Hard limits inherent to iLink -- set expectations before recommending this chann
   [chat message archive](../self-hosting.md#chat-message-archive), which is
   what `searchChatHistory` reads — but iLink itself delivers nothing
   retroactively.
-- One connection per bot account. Connecting the same bot elsewhere steals the session.
+- One connection per bot account. Connecting the same bot elsewhere steals the session, and a bot connected twice is paused as a conflict until an admin disconnects the duplicate.
+- Scheduled and workflow messages cannot be sent to WeChat; a bot answers only its linked person, live.
 
 Inbound text, images, and files work; voice notes are understood when WeChat attaches its own speech-to-text. Outbound is text (a markdown subset renders in the WeChat bot chat).
 
