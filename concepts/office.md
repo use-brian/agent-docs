@@ -170,6 +170,14 @@ before its remaining budget expires. A `409 office_projection_changed` means the
 content or authority changed before publication: discard any old projection and
 make a fresh read. It does not authorize retrying a mutation.
 
+Browser metadata reads use the default request cache mode to allow CORS
+preflight reuse. Successful responses must declare `Cache-Control: no-store`;
+refuse a missing policy before reading or retaining the body. The canonical API
+returns `private, no-store`, so each actual read still reaches authentication and
+current authorization without storing its response body. The ten-minute preflight
+cache contains only the admitted method/header policy and does not extend
+metadata or grant lifetimes.
+
 Read lifetime annotations in the web client belong to the requesting viewer and
 are discarded on expiry or authority refresh. They are not stored in template
 routing or snapshot JSON. Refetch protected metadata after a viewer change; copying
