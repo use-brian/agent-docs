@@ -9,6 +9,14 @@ canonical: https://usebrian.ai/docs/doc
 
 Doc is a Notion-style page surface where chat assembles renderable views over your workspace primitives. It is the inbound counterpart to the outbound Feed surface: Doc marshals tasks, CRM rows, files, deals, and research findings into pages you can drag, save, and revisit. The whole app lives at `app.usebrian.ai` under a separate deployable.
 
+## Brief Pages
+
+A Brief Page is the governed working direction of a shared Project or a
+Department. Its Direction region changes only through an owner's Apply
+direction; every editor, import, Undo and `editPage` change to it is refused.
+Its Current context stays editable. Use `inspectBrief`, `manageBrief` and
+`maintainBriefContext` (see [mcp/brain-mcp.md](../mcp/brain-mcp.md)).
+
 ## Feature walkthroughs
 
 These are illustrative, step-by-step examples. They are not claims that a run, send, or publication has occurred.

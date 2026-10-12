@@ -173,6 +173,25 @@ Available only on `read_write` credentials.
 
 `ingestToBrain` (default `decompose: true`) is the path for raw notes and documents: it derives entities and edges. `saveMemory` is for a single fact you have already distilled. Do not route task-shaped content through `saveMemory`: use `saveTask` or `ingestToBrain`.
 
+### Project and Department Briefs
+
+A shared Project or a Department can have a governed **Brief**: one Page whose
+Direction (outcome, working rules, accepted decisions) changes only when an
+owner explicitly applies it, plus Current context (findings, open questions,
+references and progress) that participants and agents maintain.
+
+| Tool | Use |
+|---|---|
+| `inspectBrief` | Read the accepted Direction, Current context, pending proposals (always pending, never accepted) and revisions. Pass `projectId` or `departmentId`; `create: true` creates an empty Brief. Empty Direction means not established: do not invent a goal from a name. |
+| `maintainBriefContext` | Add attributable findings, questions or references with the source you inspected (`kind`, `id`, `version`, original `passage`). A repeat is a no-op; task and goal status comes from the record; a source the Brief audience cannot read is not written. Never changes Direction. |
+| `manageBrief` | `propose` a Direction change with source evidence, `save_draft`, `dismiss`; owners `apply` (with the `expectedDirectionRevision` / `expectedSelectionRevision` from `inspectBrief`), `restore`, `select_departments`, `repair`. Governing actions are approve-banded: the human approves in the Approvals inbox and the command rechecks ownership. |
+
+Rules for agents: propose, do not apply, unless the owner explicitly asked you
+to apply that exact change. `editPage` on a Brief Page's Direction is refused
+(`brief_direction_protected`); propose instead. Selecting a Department Brief
+grants no access to Department sources. Errors are typed (`brief_owner_required`,
+`brief_revision_stale`, `brief_not_found`, `brief_unavailable`, ...).
+
 ### Routed message capture
 
 Use `captureMode: "routed"` when an integration is forwarding message-shaped work activity and the workspace wants Brian to decide what to keep and when to extract it. The connection must first be assigned a capture assistant in Studio: Programmatic Access. The connection may inherit that assistant's default capture profile or override it. If there is no selected assistant or effective profile, the call fails closed; it never falls back to another assistant.
