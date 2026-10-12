@@ -1001,6 +1001,50 @@ Reads: `GET /change-requests`, `/change-requests/:id`, `/engagements`
 confirmed fee means no unbilled figure) and `/recurring-successors/preview`,
 with `crm.changes.read`, `crm.engagements.read` and `crm.billing.read`.
 
+## ERP bridge
+
+An external application that previously owned client and engagement records
+becomes a client of the CRM through a provider binding.
+
+| Command | Grant |
+| --- | --- |
+| `stage_erp_import`, `confirm_erp_import`, `prepare_erp_cutover`, `commit_erp_cutover` | `crm.cutovers.configure` |
+| `record_projection_receipt` | `crm.projections.write` |
+
+`stage_erp_import` (`bindingKey`, `referenceDefinitions`, `records.clients`,
+`records.engagements` with `legacyId`, codes, former codes, engagement fields
+and decimal fees) returns `importId`, `recordsHash`, `report` and
+`reportHash`. Nothing is written until `confirm_erp_import` with
+`expectedReportHash`; it fails with `reason: "stale_import"` if the CRM changed
+and `import_conflicts` if the report has conflicts. Legacy ids map one-to-one;
+a same-named record is reported in `possibleDuplicates`, never merged.
+
+Read `GET /projection-events?bindingKey=&cursor=` for versioned, fee-free
+company and deal projections (codes, former codes, legacy ids, client, work
+status, periods, owner, participants). Acknowledge each applied event with
+`record_projection_receipt` (`receipts: [{ eventSeq, subjectId, version }]`):
+only the next version applies; a gap returns `resync_required` with
+`expectedVersion`. Resync with `GET /legacy-mappings?bindingKey=&legacyType=&targetId=`
+(returns `projection` and `version`) and record `resynced: [{ subjectId, version }]`.
+These reads need `crm.projections.read` and the binding's own credential.
+
+To act for a person, the person first enrolls their legacy user id in the CRM
+while signed in. Then send `X-Crm-Viewer: <legacy user id>` and
+`X-Crm-Binding: <binding key>`: the request runs with that member's own
+access, limited to the credential's grants, so reviews and protected values
+behave exactly as for the member. Removing the member or revoking the
+credential stops it.
+
+Cutover: `prepare_erp_cutover` with the legacy `source.counts` and
+`source.exportHash` sets `writerState` to `frozen` (stop legacy writes), stage
+and confirm the final delta, then `commit_erp_cutover` with the final source;
+it fails with `stale_cutover` unless counts and the export hash reconcile.
+After commit, `stage_erp_import` fails with `writer_retired`. Read
+`GET /erp-bindings/:bindingKey` for the writer state and the capability
+catalog, and `GET /erp-imports/:id` and `GET /cutovers/:id` for reports
+(`crm.cutovers.configure`). Retry an uncertain write with the same
+`operationId`.
+
 ## Scoped segment discovery
 
 Member and scoped integration `GET .../operations/segments` share the existing
