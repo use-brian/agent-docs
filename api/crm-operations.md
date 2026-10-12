@@ -931,6 +931,36 @@ questions; do not fill commercial facts yourself.
 Other reads: `GET /accounts`, `GET /commercial-profiles`,
 `GET /operation-definitions` (grant `crm.commercial.read`).
 
+## Invoice preparation
+
+An accepted invoice operation prepares an invoice for one customer account:
+deals, service period, line items as decimal strings (at most six fractional
+digits), transaction values only for fields the operation allows, and deal
+allocations. Fields resolve from accepted terms and the response lists the
+remaining questions. When draft facts are complete, an editable Office workbook
+is created from the admitted template with bracketed markers instead of the
+invoice number and issue date; it cannot be released as a customer invoice.
+
+| Command | Grant |
+| --- | --- |
+| `prepare_commercial_document`, `revise_commercial_preparation`, `mark_preparation_ready` | `crm.commercial.write` |
+| `issue_invoice`, `retry_invoice_issue`, `void_invoice` | `crm.commercial.issue` |
+
+`revise_commercial_preparation` sends the complete content with
+`expectedVersion`; it returns a ready preparation to draft.
+`issue_invoice` needs the ready, reviewed `expectedVersion` and an explicit
+`issueDate`. It rechecks accepted terms and access (`reason: "stale_sources"`
+when they changed), allocates the number at issue, freezes the payload and
+returns `issue_pending`; rendering and release run after commit. A failure
+leaves `issue_failed` with the same number; `retry_invoice_issue` resumes it.
+States: `draft`, `ready`, `issue_pending`, `issue_failed`, `issued`, `voided`.
+Issued does not mean sent or paid.
+
+Amounts are computed exactly: each line rounded half away from zero to the
+currency's minor units, summed, then tax rounded once. Reads:
+`GET /preparations/:id`, `GET /invoices`, `GET /invoices/:id` (integrations
+need `crm.commercial.read` for every seller).
+
 ## Scoped segment discovery
 
 Member and scoped integration `GET .../operations/segments` share the existing

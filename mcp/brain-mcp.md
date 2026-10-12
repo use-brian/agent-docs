@@ -197,7 +197,8 @@ When the deployment has CRM operations enabled, both scopes can receive:
 `listCrmReferenceDefinitions`, `previewCrmReference`, `findCrmReference` and
 `getCrmReferenceHistory`, and the commercial context readers
 `listCrmCustomerAccounts`, `listCrmCommercialProfiles`,
-`resolveCrmCommercialFields` and `listCrmOperationDefinitions`.
+`resolveCrmCommercialFields` and `listCrmOperationDefinitions`, and the
+invoice readers `getCrmPreparation` and `listCrmInvoices`.
 
 These catalog/program collection tools return a named array plus `nextCursor`.
 Pass it as `cursor` with the same filters until it is null. `limit` is 1-100
@@ -208,11 +209,13 @@ creation-time bounds. Do not treat the first page as the complete catalog.
 `updateCrmSubmission`, `recordCrmConsent`, `recordCrmSuppression`,
 `saveCrmSegment`, `archiveCrmSegment`, `grantCrmEntitlement`,
 `updateCrmEntitlement`, `recordCrmParticipation`, `updateCrmParticipation`,
-`setDealPipelineStage`, `assignCrmReference` and `saveCrmCustomerAccount`;
+`setDealPipelineStage`, `assignCrmReference`, `saveCrmCustomerAccount`,
+`prepareCrmInvoice`, `reviseCrmPreparation` and `markCrmPreparationReady`;
 with the `configure` capability also `saveCrmReferenceDefinition`,
 `replaceCrmReference`, `retireCrmReference`, `importCrmReferences`,
-`saveCrmSellerProfile`, `acceptCrmCommercialProfile` and
-`proposeCrmOperationVersion`. A proposed operation version is not in force
+`saveCrmSellerProfile`, `acceptCrmCommercialProfile`,
+`proposeCrmOperationVersion`, `issueCrmInvoice`, `retryCrmInvoiceIssue` and
+`voidCrmInvoice`. A proposed operation version is not in force
 until a workspace owner or admin accepts it in CRM. Reference writes carry an
 `operation_id`: reuse the same id to retry an uncertain result. A reference
 preview never reserves a number. Call catalog readers first and pass stable ids/keys;
