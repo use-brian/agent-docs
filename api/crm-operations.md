@@ -961,6 +961,46 @@ currency's minor units, summed, then tax rounded once. Reads:
 `GET /preparations/:id`, `GET /invoices`, `GET /invoices/:id` (integrations
 need `crm.commercial.read` for every seller).
 
+## Governed engagement and billing
+
+Client and engagement changes go through change requests. Draft with
+`save_change_request` (`target: { kind: "company" | "deal", id? }` and a
+bounded `changes` object: `name`, `domain`, `companyId`, `engagement` fields,
+`assignReferences`), then `submit_change_request`. Depending on workspace
+policy the change applies at once or waits for a human reviewer; review is not
+available to integration keys, assistants or workflows. A decision against a
+changed record returns `reason: "stale_review"` and applies nothing.
+
+| Command | Grant |
+| --- | --- |
+| `save_change_request`, `submit_change_request`, `withdraw_change_request` | `crm.changes.write` |
+| `update_engagement_tracking`, `commit_recurring_successors` | `crm.engagements.write` |
+| `set_commercial_values`, `create_billing_request`, `cancel_billing_request` | `crm.billing.write` |
+| `record_external_invoice`, `correct_external_invoice_reference` | `crm.billing.write` and the seller's `crm.commercial.write` |
+| `save_governance_policy`, `save_engagement_catalog` | `crm.catalog.configure` |
+
+`update_engagement_tracking` changes only work status, deadline, owner and
+participants (`expectedVersion` is the engagement tracking version, 0 when
+none). Work status is delivery progress, not the sales stage. Quoted,
+confirmed and outsource amounts are protected: `set_commercial_values` versions
+them with evidence; `null` means absent, never zero.
+`commit_recurring_successors` creates at most one successor per source and
+period key; repeated calls report `existing`.
+
+Billing requests pin the reviewed amount. A request in `ready_to_bill` closes
+once, for exactly that amount and currency, when an allocation names its
+`billingRequestId` (native issue or `record_external_invoice`); otherwise the
+call fails with `billing_request_not_ready` or `billing_amount_mismatch`.
+`record_external_invoice` is idempotent on `provider` and `remoteId`. External
+invoices cannot be voided; `correct_external_invoice_reference` fixes the
+number and reopens named requests without deleting the record.
+
+Reads: `GET /change-requests`, `/change-requests/:id`, `/engagements`
+(`includeCommercialValues=true` adds only values you may read),
+`/billing-requests`, `/billing-balance` (per deal and per currency; no
+confirmed fee means no unbilled figure) and `/recurring-successors/preview`,
+with `crm.changes.read`, `crm.engagements.read` and `crm.billing.read`.
+
 ## Scoped segment discovery
 
 Member and scoped integration `GET .../operations/segments` share the existing

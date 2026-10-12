@@ -198,7 +198,10 @@ When the deployment has CRM operations enabled, both scopes can receive:
 `getCrmReferenceHistory`, and the commercial context readers
 `listCrmCustomerAccounts`, `listCrmCommercialProfiles`,
 `resolveCrmCommercialFields` and `listCrmOperationDefinitions`, and the
-invoice readers `getCrmPreparation` and `listCrmInvoices`.
+invoice readers `getCrmPreparation` and `listCrmInvoices`, and the governed
+record readers `listCrmChangeRequests`, `getCrmChangeRequest`,
+`listCrmEngagements`, `listCrmBillingRequests`, `getCrmBillingBalance` and
+`previewCrmRecurringSuccessors`.
 
 These catalog/program collection tools return a named array plus `nextCursor`.
 Pass it as `cursor` with the same filters until it is null. `limit` is 1-100
@@ -210,7 +213,12 @@ creation-time bounds. Do not treat the first page as the complete catalog.
 `saveCrmSegment`, `archiveCrmSegment`, `grantCrmEntitlement`,
 `updateCrmEntitlement`, `recordCrmParticipation`, `updateCrmParticipation`,
 `setDealPipelineStage`, `assignCrmReference`, `saveCrmCustomerAccount`,
-`prepareCrmInvoice`, `reviseCrmPreparation` and `markCrmPreparationReady`;
+`prepareCrmInvoice`, `reviseCrmPreparation`, `markCrmPreparationReady`,
+`saveCrmChangeRequest`, `submitCrmChangeRequest`, `withdrawCrmChangeRequest`,
+`updateCrmEngagementTracking`, `saveCrmBillingRequest`,
+`cancelCrmBillingRequest`, and (each needing the user's confirmation)
+`setCrmCommercialValues`, `commitCrmRecurringSuccessors`,
+`recordCrmExternalInvoice` and `correctCrmExternalInvoiceReference`;
 with the `configure` capability also `saveCrmReferenceDefinition`,
 `replaceCrmReference`, `retireCrmReference`, `importCrmReferences`,
 `saveCrmSellerProfile`, `acceptCrmCommercialProfile`,
