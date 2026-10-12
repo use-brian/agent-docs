@@ -894,6 +894,43 @@ reserves nothing), `GET /references?q=&match=exact|prefix` or `?targetId=`
 `GET /references/:id/history`. A reference is visible only when its target
 record is visible to the credential's department principal.
 
+## Commercial context
+
+Customer accounts link one canonical company to one seller or business unit,
+with a billing contact and address. A company can have several accounts. An
+account can be classified more strictly than its company and is then invisible
+to callers who cannot read it; a hidden account looks exactly like no account.
+
+Accepted commercial facts are versioned profiles owned by a seller, an account
+or an agreement (an account plus optional deal ids and effective dates). Field
+values are typed: `string`, `text`, `date`, `decimal` (decimal string),
+`currency` (ISO 4217), `percent` (fraction 0 to 1), `boolean`, `reference`.
+`value: null` records that a fact does not apply.
+
+| Command | Grant |
+| --- | --- |
+| `save_seller_profile` | `crm.commercial.configure` |
+| `save_customer_account` | `crm.commercial.write` |
+| `accept_commercial_profile` | `crm.commercial.configure` |
+| `save_operation_definition` (proposes a version) | `crm.commercial.configure` |
+| `accept_operation_version` | not available to integrations; a human owner or admin accepts |
+
+Selectors: `sellerKeys` and `operationKeys`. Accepting a profile needs
+`expectedCurrentVersion` (0 for the first); a stale value returns `409` with
+`reason: "stale_version"`.
+
+`GET /commercial-profiles/resolve?operationKey=&accountId=&dealId=&businessDate=`
+returns every bound field with its value, source (`transaction`, `agreement`,
+`account` or `seller`, with record id and version) and a list of questions:
+`missing` (required for draft or before issue), `conflict` (two applicable
+agreements disagree) and `review_required` (a transaction value contradicts a
+protected agreement term). A transaction value for a field that does not allow
+one is refused with `reason: "override_not_permitted"`. Ask your user those
+questions; do not fill commercial facts yourself.
+
+Other reads: `GET /accounts`, `GET /commercial-profiles`,
+`GET /operation-definitions` (grant `crm.commercial.read`).
+
 ## Scoped segment discovery
 
 Member and scoped integration `GET .../operations/segments` share the existing

@@ -195,7 +195,9 @@ When the deployment has CRM operations enabled, both scopes can receive:
 `listCrmEntitlements`, `listCrmEvents`, `listCrmParticipation`,
 `listCrmPipelines`, and the business reference readers
 `listCrmReferenceDefinitions`, `previewCrmReference`, `findCrmReference` and
-`getCrmReferenceHistory`.
+`getCrmReferenceHistory`, and the commercial context readers
+`listCrmCustomerAccounts`, `listCrmCommercialProfiles`,
+`resolveCrmCommercialFields` and `listCrmOperationDefinitions`.
 
 These catalog/program collection tools return a named array plus `nextCursor`.
 Pass it as `cursor` with the same filters until it is null. `limit` is 1-100
@@ -206,9 +208,12 @@ creation-time bounds. Do not treat the first page as the complete catalog.
 `updateCrmSubmission`, `recordCrmConsent`, `recordCrmSuppression`,
 `saveCrmSegment`, `archiveCrmSegment`, `grantCrmEntitlement`,
 `updateCrmEntitlement`, `recordCrmParticipation`, `updateCrmParticipation`,
-`setDealPipelineStage`, and `assignCrmReference`; with the `configure`
-capability also `saveCrmReferenceDefinition`, `replaceCrmReference`,
-`retireCrmReference` and `importCrmReferences`. Reference writes carry an
+`setDealPipelineStage`, `assignCrmReference` and `saveCrmCustomerAccount`;
+with the `configure` capability also `saveCrmReferenceDefinition`,
+`replaceCrmReference`, `retireCrmReference`, `importCrmReferences`,
+`saveCrmSellerProfile`, `acceptCrmCommercialProfile` and
+`proposeCrmOperationVersion`. A proposed operation version is not in force
+until a workspace owner or admin accepts it in CRM. Reference writes carry an
 `operation_id`: reuse the same id to retry an uncertain result. A reference
 preview never reserves a number. Call catalog readers first and pass stable ids/keys;
 unknown catalog values fail closed with valid choices. Treat a sendability
