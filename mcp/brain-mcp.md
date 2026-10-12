@@ -192,8 +192,10 @@ When the deployment has CRM operations enabled, both scopes can receive:
 `listCrmIntakeDefinitions`, `listCrmSubmissions`, `getCrmSubmission`,
 `listCrmConsentPurposes`, `getCrmConsent`, `checkCrmSendability`,
 `listCrmSegments`, `previewCrmSegment`, `listCrmEntitlementPlans`,
-`listCrmEntitlements`, `listCrmEvents`, `listCrmParticipation`, and
-`listCrmPipelines`.
+`listCrmEntitlements`, `listCrmEvents`, `listCrmParticipation`,
+`listCrmPipelines`, and the business reference readers
+`listCrmReferenceDefinitions`, `previewCrmReference`, `findCrmReference` and
+`getCrmReferenceHistory`.
 
 These catalog/program collection tools return a named array plus `nextCursor`.
 Pass it as `cursor` with the same filters until it is null. `limit` is 1-100
@@ -203,8 +205,12 @@ creation-time bounds. Do not treat the first page as the complete catalog.
 `read_write` may additionally receive `recordCrmSubmission`,
 `updateCrmSubmission`, `recordCrmConsent`, `recordCrmSuppression`,
 `saveCrmSegment`, `archiveCrmSegment`, `grantCrmEntitlement`,
-`updateCrmEntitlement`, `recordCrmParticipation`, `updateCrmParticipation`, and
-`setDealPipelineStage`. Call catalog readers first and pass stable ids/keys;
+`updateCrmEntitlement`, `recordCrmParticipation`, `updateCrmParticipation`,
+`setDealPipelineStage`, and `assignCrmReference`; with the `configure`
+capability also `saveCrmReferenceDefinition`, `replaceCrmReference`,
+`retireCrmReference` and `importCrmReferences`. Reference writes carry an
+`operation_id`: reuse the same id to retry an uncertain result. A reference
+preview never reserves a number. Call catalog readers first and pass stable ids/keys;
 unknown catalog values fail closed with valid choices. Treat a sendability
 verdict as permission only when it is exactly `allowed`.
 

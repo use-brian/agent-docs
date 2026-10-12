@@ -849,6 +849,51 @@ command. No Association activation is needed for generic CRM configuration.
 Each resource command is atomic. The manifest CLI applies resources independently,
 with fresh discovery, partial recovery and final residual-diff verification.
 
+## Business references
+
+Printable customer, engagement and document codes are attached to stable
+company and deal ids through workspace reference definitions. A code never
+replaces the id and never grants access.
+
+Definitions declare a stable `definitionKey` and `namespaceKey`, an assignment
+mode (`native` allocation by Brian, `manual` finance-entered, or `external`
+with provider evidence), and a closed format of `literal`, `parent`, `date`
+(`yyyy`, `yy`, `mm`, `dd`), `category` and one padded `counter` segment.
+Counters partition by `business_year`, `parent_target` and/or
+`service_category`. Dates come only from the explicit `businessDate` you send:
+a calendar date is used as given, an instant is converted in the definition
+timezone.
+
+Commands, sent to `POST /api/crm/integration/operations/commands` (CRM keys) or
+the member command endpoint, each with a stable `operationId`:
+
+| Command | Grant |
+| --- | --- |
+| `save_reference_definition` | `crm.references.configure` |
+| `assign_business_reference` | `crm.references.write` |
+| `replace_business_reference`, `retire_business_reference` | `crm.references.configure` |
+| `import_business_references` | `crm.references.configure` |
+
+Selectors narrow each grant with `referenceDefinitionKeys`. A
+`crm.records.write` grant does not imply any reference authority. Target
+commands need a department-bound credential.
+
+Replay rules: the same `operationId`, request and actor returns the committed
+result with `duplicate: true`; a different request or actor on that id is
+`idempotency_conflict`. Assigning a target that already has a current value in
+the definition returns that value and moves no counter. Values stay reserved
+forever once assigned, including replaced and retired ones; collisions return
+`409` with `reason: "reference_collision"`. Imports are all-or-nothing and
+return `reason: "import_conflicts"` with the conflicting rows; counters only
+rise.
+
+Reads under `/api/crm/integration/operations` (grant `crm.references.read`):
+`GET /reference-definitions`, `GET /references/preview` (a masked example; it
+reserves nothing), `GET /references?q=&match=exact|prefix` or `?targetId=`
+(former codes resolve to the same record), and
+`GET /references/:id/history`. A reference is visible only when its target
+record is visible to the credential's department principal.
+
 ## Scoped segment discovery
 
 Member and scoped integration `GET .../operations/segments` share the existing
