@@ -27,9 +27,18 @@ Five operational primitives, three cognitive ones. The operational primitives ar
 
 Every readable brain row composes the existing workspace, visibility, and
 sensitivity checks with two independent axes: Team requirements are lateral
-audience boundaries; Project requirements identify a body of work and are not
+audience boundaries; Project associations identify a body of work and are not
 an ACL. General rows carry neither requirement. A scoped turn can still use
 General rows plus the exact Team/Project rows its effective grant satisfies.
+
+A **shared Project** (a Project created while the workspace has shared
+Projects on, or converted by the workspace owner) also guards the material
+filed in it: only its participants (people and individually added
+assistants) can read or edit that material, and the workspace owner can read
+it without joining but not edit it. A shared Project never releases a Team or
+private source to its participants: material derived from a Team source keeps
+the Team requirement too. In a turn bound to one Project, other Projects'
+material is not added to the context automatically.
 
 The same predicate applies to search, direct id reads, graph walks, counts,
 provenance, and rollups. An excluded id behaves like a missing id. Derived

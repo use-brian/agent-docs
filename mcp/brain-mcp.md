@@ -71,8 +71,13 @@ The doc-page tools follow the same rule inside teamspaces: a page that lives in 
 An `sk_brain_*` key may be issued with one Team and/or one Project binding in
 Studio: Programmatic Access. The binding is immutable for that key and is
 intersected with the workspace primary assistant's grants on every request.
-General rows remain available; other Team/Project rows do not. Project
-participation is not an ACL.
+General rows remain available; other Team/Project rows do not. Ordinary
+Project participation is not an ACL. A **shared Project** is: its material is
+readable through a key only when the key's issuer and the workspace primary
+assistant are both participants of that Project (or the issuer is the
+workspace owner, which reads but never writes it), and a Team-bound key reads
+no shared Project material. An empty read can be a shared Project's audience;
+never infer that the material is absent.
 
 There is no MCP argument or request header that selects or widens this context.
 To switch or widen scope, a workspace admin must issue a new key. If the bound
