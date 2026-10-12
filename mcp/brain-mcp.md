@@ -184,7 +184,7 @@ references and progress) that participants and agents maintain.
 |---|---|
 | `inspectBrief` | Read the accepted Direction, Current context, pending proposals (always pending, never accepted) and revisions. Pass `projectId` or `departmentId`; `create: true` creates an empty Brief. Empty Direction means not established: do not invent a goal from a name. |
 | `maintainBriefContext` | Add attributable findings, questions or references with the source you inspected (`kind`, `id`, `version`, original `passage`). A repeat is a no-op; task and goal status comes from the record; a source the Brief audience cannot read is not written. Never changes Direction. |
-| `manageBrief` | `propose` a Direction change with source evidence, `save_draft`, `dismiss`; owners `apply` (with the `expectedDirectionRevision` / `expectedSelectionRevision` from `inspectBrief`), `restore`, `select_departments`, `repair`. Governing actions are approve-banded: the human approves in the Approvals inbox and the command rechecks ownership. |
+| `manageBrief` | `propose` a Direction change with source evidence, `save_draft`, `dismiss`; owners `apply` (with the `expectedDirectionRevision` / `expectedSelectionRevision` from `inspectBrief`), `restore`, `select_departments`, `repair`; anyone who can write proposes an existing Page as direction with `adopt_page` (pending until applied). Governing actions are approve-banded: the human approves in the Approvals inbox and the command rechecks ownership. |
 
 Rules for agents: propose, do not apply, unless the owner explicitly asked you
 to apply that exact change. `editPage` on a Brief Page's Direction is refused
