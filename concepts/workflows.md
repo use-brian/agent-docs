@@ -302,3 +302,14 @@ events from connectors whose department audience fits the workflow's
 department and that its author can currently use; a private connector only
 triggers its owner's workflows. Other events are skipped without pausing the
 workflow.
+
+## Configured routine Task intake (implementation pending)
+
+The D49-D54 implementation contract adds optional native workflow task-intake
+configuration with a selected executor/home, source-backed case admission and
+exact human application of material revisions. Draft proposals are inactive.
+Missing execution inputs keep confirmed assigned work waiting; disable governs
+new intake while existing Tasks retain their native controls and allowance.
+This is an implementation draft, not a live endpoint/tool contract. Use existing
+workflow authoring until the acceptance evidence and runtime surface are
+verified; no new command names are promised here.
