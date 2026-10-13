@@ -186,3 +186,21 @@ status filters or resolved IDs when recovering; do not broaden the selection.
 Task visibility depends on current department access, sensitivity and any private partition. Workspace membership alone does not grant access. Projects organize tasks; no Project is not the same as General department scope.
 
 Use `getTask` after creation to inspect the saved `sensitivity`, `compartments` and `project_ids`. An empty `compartments` array means General department scope, still subject to sensitivity and private visibility. A null protection field means the store did not report it; do not infer a classification. Creation retains inherited source protection. Use the canonical context/classification workflow for changes rather than treating a Project edit as an access change.
+
+## Executor, follow-up and home
+
+A task records three separate facts. Set them explicitly; none is inferred from the others.
+
+| Field | Meaning |
+|---|---|
+| `assignee_id` | A **person** executes the task (a `workspace_members` id from `listWorkspaceMembers`). |
+| `executor_assistant_id` | A configured **assistant** executes the task. The executor is one slot: setting this clears `assignee_id` and the reverse. Passing both non-null in one call fails with `task_executor_conflict`. |
+| `follow_up_member_id` | An optional **human contact** who receives the task's questions and review. It never makes that person the executor and never stops an assistant executor. |
+| `home` | `{ "kind": "department" \| "project", "id": "<uuid>" }`: the Department or Project the work belongs to. `null` clears it. A Project home must match the task's Project. |
+
+When assistant work has no explicit contact, human attention resolves on every read to the **current owners** of its home (Department owners, or Project owners). Without a home or an eligible owner the task reports missing routing; nothing guesses an owner or a primary assistant. Only assistant-executed tasks get an automatic Goal draft, for that assistant.
+
+`updateTask` with `if_unassigned: true` is a guarded claim: it succeeds on an unassigned task, is an idempotent success when the same executor already holds it, and fails with `task_already_claimed` when someone else does. Use it to take work from an owner queue without racing another owner.
+
+Validation errors are typed: `task_executor_invalid` (an assistant you cannot see, an app assistant, or one not admitted to the home), `task_follow_up_invalid` (a member who cannot see the task or is not admitted to its home), `task_home_invalid` / `task_home_mismatch`. Treat them as final for that input; choose a different principal rather than retrying.
+

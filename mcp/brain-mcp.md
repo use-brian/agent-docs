@@ -160,7 +160,7 @@ Available only on `read_write` credentials.
 | `ingestToBrain` | Capture content into the brain. `captureMode: "immediate"` (default) keeps the existing behavior: `decompose: true` runs full extraction and `decompose: false` files one distilled memory. `captureMode: "routed"` submits one message to the connection's configured assistant capture profile. Routed inputs require stable `eventId` and may include `occurredAt`, `sessionId`, `subjectId`, `role`, and bounded scalar `metadata`. A scheduled match is durably queued without an extraction-model call and is extracted later as part of one pooled window. |
 | `saveMemory` / `deleteMemory` | Save one distilled workspace memory; soft-delete a memory by id |
 | `deleteBrainRow` | Soft-delete one entity, task, KB chunk, contact, company or deal by id (history kept for audit). It deletes only a row the calling user and credential may currently change, including department access; any other id is reported as not found and nothing is changed |
-| `saveTask` / `updateTask` / `closeTask` / `reopenTask` | Create, patch, and transition tasks |
+| `saveTask` / `updateTask` / `closeTask` / `reopenTask` | Create, patch, and transition tasks. `executor_assistant_id`, `follow_up_member_id` and `home` set who executes, who follows up and the task's Department or Project home; `updateTask` `if_unassigned: true` claims only an unassigned task. See [Tasks](../concepts/tasks.md#executor-follow-up-and-home) |
 | `saveContact` / `updateContact` | Upsert / patch a contact |
 | `saveCompany` / `updateCompany` | Upsert / patch a company |
 | `saveDeal` / `updateDeal` / `advanceDealStage` | Create / patch a deal; move a deal through `lead` -> `qualified` -> `proposal` -> `negotiation` -> `won` / `lost` |
