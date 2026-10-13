@@ -204,3 +204,8 @@ When assistant work has no explicit contact, human attention resolves on every r
 
 Validation errors are typed: `task_executor_invalid` (an assistant you cannot see, an app assistant, or one not admitted to the home), `task_follow_up_invalid` (a member who cannot see the task or is not admitted to its home), `task_home_invalid` / `task_home_mismatch`. Treat them as final for that input; choose a different principal rather than retrying.
 
+## Assigned execution and external progress
+
+When a person assigns a task to an assistant, Brian plans it against the sources it can read and that assistant's actual tools, and starts it only when the next step is ready; otherwise the task records the smallest missing thing (a missing capability, account, input or source). Work keeps its progress across restarts and shares one allowance with any sub-work. People admitted to the task's Project can pause it, steer it with an instruction, or continue it; only a person's steer or continue renews the allowance. Read it with `getTaskExecution`.
+
+An external coding session can report progress on a task with `bindExternalTaskExecution` and `reportTaskProgress` (see [Brain MCP](../mcp/brain-mcp.md#reporting-progress-from-a-coding-session)). Reports are shown as reported work with their freshness; they never change who executes the task or complete it.

@@ -141,6 +141,7 @@ Available on both `read` and `read_write` credentials.
 | `getEntity` | entity `id` or display name; optional `walk_depth` / `walk_edge_types` | Entity rollup: existing relationship edges, recent episodes, memory, open tasks. Use it to resolve an entity's UUID and read existing edges before a linking write |
 | `getMemory` / `getTask` / `getContact` / `getCompany` / `getDeal` | record `id` | Full record |
 | `listTasks` | assignee / status / due range / tag / parent filters | Compact task projection |
+| `getTaskExecution` | `task_id` or `execution_id` | The live execution of an assistant-executed task: phase, readiness and the smallest missing thing, next step, branches, remaining allowance and lifetime use, control revision, and external sessions reporting on it with their freshness (`live`, `stale`, `disconnected`) |
 | `listContacts` / `listCompanies` / `listDeals` | CRM filters | Compact CRM projection |
 | `listCrmFields` | optional CRM entity kind and record id | Live custom-field keys, types, options, and reference targets; a visible record id also returns its current values |
 | `fileRead` | file `id` or path | Text content + metadata of one workspace file. **Text only** — on an image, PDF, or other binary it returns an error rather than a lossy decode, so do not use it to inspect a stored image. Nothing returns raw bytes: bytes leave the brain by being delivered (attached to an email, sent to a chat channel), never by entering a tool result |
@@ -161,6 +162,9 @@ Available only on `read_write` credentials.
 | `saveMemory` / `deleteMemory` | Save one distilled workspace memory; soft-delete a memory by id |
 | `deleteBrainRow` | Soft-delete one entity, task, KB chunk, contact, company or deal by id (history kept for audit). It deletes only a row the calling user and credential may currently change, including department access; any other id is reported as not found and nothing is changed |
 | `saveTask` / `updateTask` / `closeTask` / `reopenTask` | Create, patch, and transition tasks. `executor_assistant_id`, `follow_up_member_id` and `home` set who executes, who follows up and the task's Department or Project home; `updateTask` `if_unassigned: true` claims only an unassigned task. See [Tasks](../concepts/tasks.md#executor-follow-up-and-home) |
+| `controlTaskExecution` | `pause` an assistant-executed task (`execution_id`, `action`, `expected_revision` from `getTaskExecution`). `steer` and `continue` renew the shared allowance and require a person: from a credential they are refused with `human_intent_required` and change nothing |
+| `bindExternalTaskExecution` | Bind your coding session to a task: `task_id`, a stable `external_execution_id`, `harness` (for example `codex` or `claude-code`). Idempotent. It does not make you the task's executor and gives Brian no control over your session |
+| `reportTaskProgress` | Append progress for a bound session: unique `event_id`, increasing `sequence`, `milestone`, `state` (`running`, `waiting`, `blocked`, `claimed_done`), optional `summary`, `artifacts` (`kind` + `ref`, for example a branch or PR URL), `blocker`, `checks`. See "Reporting progress from a coding session" |
 | `saveContact` / `updateContact` | Upsert / patch a contact |
 | `saveCompany` / `updateCompany` | Upsert / patch a company |
 | `saveDeal` / `updateDeal` / `advanceDealStage` | Create / patch a deal; move a deal through `lead` -> `qualified` -> `proposal` -> `negotiation` -> `won` / `lost` |
@@ -170,6 +174,16 @@ Available only on `read_write` credentials.
 | `saveFileBytes` | Persist a file from raw bytes supplied as base64, preserving the exact bytes. Size-capped; larger files use the HTTP upload route |
 | `saveBrandDraft` | Propose a change to the workspace's brand record. Writes the DRAFT only. It does not take effect until a workspace owner or admin approves it in Studio, which creates a new approved version. Each field group you pass replaces that group whole, so call `getBrand` first and send the complete group back when adding to a list. Bind assets by workspace file id (upload with `saveFileBytes` first), never by path |
 | `createPage` / `editPage` / `deletePage` / `createPageFromTemplate` | Author doc pages: create, edit, delete, or seed from a template. `editPage` accepts Markdown and applies it to the live collaborative document when doc-sync is configured, so an edit is immediately shared with open page editors; deployments without doc-sync use the legacy version-checked page store. Present only on deployments with the doc surface wired |
+
+## Reporting progress from a coding session
+
+When you work on a Use Brian task from an external coding harness, report progress so the team sees it next to the task:
+
+1. Call `bindExternalTaskExecution` once per session with a stable `external_execution_id`.
+2. Call `reportTaskProgress` at meaningful milestones (plan made, tests written, PR opened, blocked, done). Give each event a unique `event_id` and an increasing `sequence`; a repeated `event_id` is ignored and an older `sequence` is kept as history without changing the current state.
+3. Put real references in `artifacts` and the smallest unblocker in `blocker`.
+
+What reporting does not do: it does not make your session the task's executor, start or duplicate Brian's own work on the task, renew any allowance, change the Project's Brief, or complete the task. `checks` are stored as claims, and `claimed_done` is a claim, not completion. Brian cannot launch, stop or steer your session: the link only carries what you report. Your identity is the authenticated credential; names inside the payload are text.
 
 `ingestToBrain` (default `decompose: true`) is the path for raw notes and documents: it derives entities and edges. `saveMemory` is for a single fact you have already distilled. Do not route task-shaped content through `saveMemory`: use `saveTask` or `ingestToBrain`.
 
