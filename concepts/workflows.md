@@ -303,13 +303,33 @@ department and that its author can currently use; a private connector only
 triggers its owner's workflows. Other events are skipped without pausing the
 workflow.
 
-## Configured routine Task intake (implementation pending)
+## Configured routine Task intake
 
-The D49-D54 implementation contract adds optional native workflow task-intake
-configuration with a selected executor/home, source-backed case admission and
-exact human application of material revisions. Draft proposals are inactive.
-Missing execution inputs keep confirmed assigned work waiting; disable governs
-new intake while existing Tasks retain their native controls and allowance.
-This is an implementation draft, not a live endpoint/tool contract. Use existing
-workflow authoring until the acceptance evidence and runtime surface are
-verified; no new command names are promised here.
+Optional native `definition.taskIntake` configures a versioned outcome/input/completion blueprint, explicit Department or Project home, native `defaultExecutor`, permitted action names and required accounts. Legacy workflows stay off. Task, Knowledge and committed CRM events have admitted source contracts; unsupported source-authoring contracts refuse activation.
+
+Workflow, origin Chat and native approvals show an inactive refinement with exact before/after, support and uncertainties. A new proposal reserves an id without creating a workflow/subscription. An authorized human applies the exact current revision. Configure governs structured authoring; operational approval history, delegated reviews, credentials and model confirmation flags cannot provide that human proof.
+
+| Command | Contract |
+|---|---|
+| `getRoutineIntake` | `workflow_id` inspects current configuration/revision; `proposal_id` inspects a source-admitted proposal; neither lists pending proposals. |
+| `proposeRoutineIntake` | Inactive draft: `configuration`, `expected_revision`, `idempotency_key`, `rationale`, optional `uncertainties`. Revision uses `workflow_id`; new draft uses explicit `name` and `authoring_assistant_id`. Support comes from admitted turn evidence. |
+| `applyRoutineIntake` / `rejectRoutineIntake` | Exact `proposal_id`, `expected_revision`, `idempotency_key`. Agent surfaces stage these for actual human review. |
+| `setRoutineIntakeEnabled` | Exact `workflow_id`, `enabled`, `expected_revision`, `idempotency_key`, with human review. Disable affects new intake only. |
+
+Authenticated Workflow REST uses the same services:
+
+```text
+GET   /api/workflows/:id/intake
+PATCH /api/workflows/:id/intake
+POST  /api/workflows/intake-proposals
+GET   /api/workflows/intake-proposals?workspaceId=&workflowId=&sessionId=
+GET   /api/workflows/intake-proposals/:proposalId
+POST  /api/workflows/intake-proposals/:proposalId/apply
+POST  /api/workflows/intake-proposals/:proposalId/reject
+```
+
+REST uses camelCase `expectedRevision` and `idempotencyKey`; toggle also needs `enabled`. Proposal POST takes `configuration`, `rationale` and either `workflowId` or explicit `workspaceId`, `name`, `authoringAssistantId`. Actor/session proof and source envelopes are server-owned. A 404 includes source/visibility denial; a 409 requires refreshing and reviewing the exact revision. Never invent authority/evidence to retry.
+
+One verified case creates one canonical assigned Task and receipt atomically. Replays/concurrent events resolve that receipt. Missing execution details keep confirmed assistant-owned work waiting for an admitted question; affected execution cannot start before readiness. Human-owned work remains tracking. Source/tool/account revocation and explicit pause still govern continuation.
+
+Disable blocks queued/uncommitted and future intake. Existing Tasks retain their accepted mandate and original shared Task-tree allowance. Re-enable does not replay intake, retarget Tasks, clear pauses or renew budgets. No routine-period allowance is added. Contextual suggestions use bounded Tasks already read in the interaction, with no timer/archive scan; all projections retain source-filtered support.

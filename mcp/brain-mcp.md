@@ -377,3 +377,7 @@ Read-write Brain keys also support the four native credential lifecycle tools un
 Read-write Home-app bridge tokens support the native credential lifecycle as the authenticated viewer, subject to current owner/admin membership and primary-assistant configure/CRM write grants. Child expiry cannot exceed the exact bridge token expiry. App grant/cap changes, viewer role loss and server signing-key rotation invalidate child admission. Parent evidence is captured by authentication; callers cannot choose it, and no bridge bearer or signing secret is persisted.
 
 Home-app tokens expire at `exp <= now`. Invalid or out-of-range signed expiry timestamps are rejected before delegated credential evidence is constructed.
+
+## Routine configuration review
+
+`getRoutineIntake` reads source-filtered configuration and proposals. Configure-gated `proposeRoutineIntake` saves inactive drafts. `applyRoutineIntake`, `rejectRoutineIntake` and `setRoutineIntakeEnabled` stage exact revisions for actual human review on agent surfaces; credentials and delegated/learned approvals cannot activate routines. See [the Workflow command contract](../concepts/workflows.md#configured-routine-task-intake).
