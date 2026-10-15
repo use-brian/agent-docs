@@ -894,6 +894,25 @@ reserves nothing), `GET /references?q=&match=exact|prefix` or `?targetId=`
 `GET /references/:id/history`. A reference is visible only when its target
 record is visible to the credential's department principal.
 
+## Client codes and invoice numbers
+
+For a new native invoice configuration, propose `INV-ACME-2026-001`: literal
+`INV-`, a `parent` segment naming the saved company-code definition, the
+explicit issue year, and a width-3 counter starting at 1. Set `targetKinds` to
+`['invoice']`, `assignmentEvent` to `issue`, and partition only by
+`business_year` for one annual sequence shared across clients in the namespace.
+This is an editable proposal for an authorized operator; existing numbering
+is never changed automatically.
+
+Use the saved company reference, not a UUID substring or a fresh abbreviation
+generated for every invoice. At the user's request Brian can suggest a short
+company abbreviation, check the configured namespace and save the accepted
+value under a manual company definition through the canonical reference
+command. Reuse an existing code; collisions require another accepted value.
+Issue snapshots that reference. Missing or inaccessible codes block before
+allocating the invoice counter; later name/code changes do not alter issued
+numbers. Issue retries keep the same number.
+
 ## Commercial context
 
 Customer accounts link one canonical company to one seller or business unit,
