@@ -163,7 +163,7 @@ Available only on `read_write` credentials.
 
 | Tool | What it does |
 |---|---|
-| `ingestToBrain` | Capture content into the brain. `captureMode: "immediate"` (default) keeps the existing behavior: `decompose: true` runs full extraction and `decompose: false` files one distilled memory. `captureMode: "routed"` submits one message to the connection's configured assistant capture profile. Routed inputs require stable `eventId` and may include `occurredAt`, `sessionId`, `subjectId`, `role`, and bounded scalar `metadata`. A scheduled match is durably queued without an extraction-model call and is extracted later as part of one pooled window. |
+| `ingestToBrain` | Capture content into the brain. `captureMode: "immediate"` (default) keeps the existing behavior: `decompose: true` runs full extraction and `decompose: false` files one distilled memory. `captureMode: "routed"` submits one message to the connection's configured assistant capture profile. Routed inputs require stable `eventId` and may include `occurredAt`, `sessionId`, `subjectId`, `role`, and bounded scalar `metadata`. A scheduled match is durably queued without an extraction-model call. Extraction profiles later process one pooled window; archive-only profiles preserve individual originals without extraction. |
 | `saveMemory` / `deleteMemory` | Save one distilled workspace memory; soft-delete a memory by id |
 | `deleteBrainRow` | Soft-delete one entity, task, KB chunk, contact, company or deal by id (history kept for audit). It deletes only a row the calling user and credential may currently change, including department access; any other id is reported as not found and nothing is changed |
 | `saveTask` / `updateTask` / `closeTask` / `reopenTask` | Create, patch, and transition tasks. `executor_assistant_id`, `follow_up_member_id` and `home` set who executes, who follows up and the task's Department or Project home; `updateTask` `if_unassigned: true` claims only an unassigned task. See [Tasks](../concepts/tasks.md#executor-follow-up-and-home) |
@@ -219,11 +219,11 @@ grants no access to Department sources. Errors are typed (`brief_owner_required`
 
 ### Routed message capture
 
-Use `captureMode: "routed"` when an integration is forwarding message-shaped work activity and the workspace wants Brian to decide what to keep and when to extract it. The connection must first be assigned a capture assistant in Studio: Programmatic Access. The connection may inherit that assistant's default capture profile or override it. If there is no selected assistant or effective profile, the call fails closed; it never falls back to another assistant.
+Use `captureMode: "routed"` for configured message capture. The profile chooses extraction or archive-only purpose; archive-only engineering capture never enriches operational context. The connection must first be assigned a capture assistant in Studio: Programmatic Access. The connection may inherit that assistant's default capture profile or override it. If there is no selected assistant or effective profile, the call fails closed; it never falls back to another assistant.
 
 Profiles are workspace-owned and reusable. Each profile has one partition policy (`connection`, `user`, `session`, or `subject`) and an ordered first-match-wins rule list. Rules may match every event, keywords, actor, role, or scalar metadata and route to `drop`, `scheduled`, or `realtime`. Connection rules and assistant defaults are selected, never merged.
 
-Each routed rule also chooses how its audience is bound. `inherit` uses the selected assistant's explicit or administrator-reviewed default. `explicit` uses the rule's exact Team and Project selection; an empty explicit selection intentionally means Workspace General. In a strict workspace, a legacy or unavailable binding is preserved as a held queued receipt and is not extracted. A later configuration edit does not silently release that held payload.
+Each routed rule also chooses how its audience is bound. `inherit` uses the selected assistant's explicit or administrator-reviewed default. `explicit` uses the rule's exact Team and Project selection; an empty explicit selection intentionally means Workspace General for extraction. Engineering archive capture requires an explicit nonempty audience. In a strict workspace, a legacy or unavailable binding is preserved as a held queued receipt and is not extracted. A later configuration edit does not silently release that held payload.
 
 For every routed call:
 
@@ -233,7 +233,7 @@ For every routed call:
 - Treat `subjectId` and metadata as opaque routing/provenance labels. They do not select a workspace, assistant, or security principal.
 - Do not set `decompose: false`; flat-memory mode is only available with immediate capture.
 
-A queued result means the event was durably appended. It does not mean extraction ran or that the item is currently eligible to run. The profile's cron window or the 32k-token size bound flushes an eligible batch keyed by workspace, assistant, rule, partition, and firing time. Brian orders that window and makes one extraction call for the whole batch. MCP does not passively observe another product's transcript: the connected client must call `ingestToBrain` for each message it chooses to submit.
+A queued result means the event was durably appended. It does not mean extraction ran or that the item is currently eligible to run. For extraction profiles, the cron window or the 32k-token size bound flushes an eligible batch keyed by workspace, assistant, rule, partition, and firing time. Brian orders that extraction window and makes one extraction call for the whole batch. Archive-only profiles use their dedicated per-event publisher instead; see the engineering capture contract below. MCP does not passively observe another product's transcript: the connected client must call `ingestToBrain` for each message it chooses to submit.
 
 ### CRM operations tools
 
@@ -377,6 +377,40 @@ Read-write Brain keys also support the four native credential lifecycle tools un
 Read-write Home-app bridge tokens support the native credential lifecycle as the authenticated viewer, subject to current owner/admin membership and primary-assistant configure/CRM write grants. Child expiry cannot exceed the exact bridge token expiry. App grant/cap changes, viewer role loss and server signing-key rotation invalidate child admission. Parent evidence is captured by authentication; callers cannot choose it, and no bridge bearer or signing secret is persisted.
 
 Home-app tokens expire at `exp <= now`. Invalid or out-of-range signed expiry timestamps are rejected before delegated credential evidence is constructed.
+
+## Opted-in engineering capture (archive-only)
+
+First discover `getCaptureConfiguration` and `engineeringHistory` on the target endpoint. Runtime deployment and collector package release/installation are separate from source implementation and fixture verification. No client should infer availability from this documentation alone.
+
+Configure the existing capture profile in Studio: Programmatic Access with `processingMode: archive_only`, an explicit Department and optional Project audience, and the submitted-prompt/final-reply role filter. Select a capture assistant on the credential; its profile override wins over the assistant default. Missing/disabled/unavailable configuration fails without falling back to extraction or General. Existing profiles default to `extract` and new keys do not opt in automatically.
+
+`getCaptureConfiguration` returns only this authenticated connection's `connectionId`, effective `processingPurpose`, `ready`, profile/revision, permitted event kinds, audience labels/references, limits, `contractVersion: 1`, `receiptContractVersion: 1` and `localEmitterObserved: false`. It contains no secret or workspace-wide profile registry. Read-only credentials cannot capture.
+
+A deterministic collector calls `ingestToBrain` using `captureMode: routed`, a stable `eventId`, exact nonempty `content`, source `sessionId`, `role: user | assistant`, optional source time and allowlisted observed metadata. The server chooses purpose and authority. One selected event becomes one original native File and one identity/lexical projection. Archive-only processing calls no extraction/embedding model and creates no operational memories, tasks, Goals, Briefs, progress or learning proposals. Provider authorship/result claims are unverified source evidence, never approval, assigned work or completion proof.
+
+Interpret MCP `structuredContent`, not prose, using the version-1 archive receipt. `processingPurpose` must be `archive_only`. A queued/duplicate-pending receipt has pending delivery/index state and is not searchable success. An archived receipt has `receiptStatus: completed`, `deliveryStatus: archived`, `indexStatus: ready`, `archiveId` and `fileId`. Reconcile retries with the same event identity; changed content under an existing identity fails `capture_event_conflict`. A held receipt requires configuration review. Excluded/deleted tombstones prevent replay resurrection. Schema/state mismatches are failures, not acknowledgements.
+
+The `engineeringHistory` tool and authenticated `/api/workspaces/:workspaceId/engineering-history` HTTP service share the same native File/source authority:
+
+| Action | Arguments / result |
+|---|---|
+| `list`, `search` | Optional `query` object: lexical `query`, `provider`, `sessionId`, `profileId`, `keyId`, `since`, `until`, opaque `cursor`, `limit` (1-100; default 50). Returns admitted ordered `events`, `nextCursor` and server-index health. Filters never grant access. |
+| `read` | Server `eventId` (archive UUID, distinct from source event ID). Returns exact original text, provenance, annotations, event `revision` and `fileVersion`. |
+| `export` | Same admitted query, bounded JSONL `jsonl`, `count`, truthful `status`, `nextCursor` and optional `failureCode`. `partial` is continuation or a partial failure, not complete delivery. |
+| `annotate` | `eventId`, `text` (1-4000), `expectedRevision`, `expectedFileVersion`, UUID `idempotencyKey`. Appends attributed annotation without rewriting the original. |
+| `exclude`, `delete` | Same version/idempotency arguments, without text. Native mutation/erasure authority applies. Exclusion retracts history; deletion erases the canonical File and projection. |
+
+Read-only keys discover only read actions on this tool. HTTP uses actual web-user authentication; admitted nonadmin collaborators can read history independently of the admin configuration gate. List/search/excerpts/counts/cursors/read/export honor current workspace, Department, shared Project, credential/source and private restrictions. Owner oversight does not release restricted originals. Cursors are bound to viewer, workspace and query. Annotation/deletion retries must reuse the same command identity and expected versions; changed commands conflict. Errors are nonrevealing (`history_not_available`, `history_write_denied`, `history_cursor_invalid`, `history_version_conflict`, `history_command_conflict`, `history_storage_unavailable`).
+
+HTTP routes are `GET /`, static `GET /export`, `GET /:eventId`, `POST /:eventId/annotations`, `POST /:eventId/exclude`, `DELETE /:eventId`. JSONL HTTP responses expose `X-Brian-Export-Status`, optional `X-Brian-Next-Cursor` and `X-Brian-Export-Error`. Each selected event is bounded at 256 KiB. Exact export pages have at most 100 events. Search uses a bounded lexical projection; exact reads/export resolve native File bytes. Missing or revoked rows are withheld before projection. Ordinary Files discovery/general retrieval excludes archive purpose.
+
+The OSS `@use-brian/engineering-capture` source package provides `brian-capture setup|hook|worker|flush|status`. Setup emits inspectable plans and preserves unrelated hooks/trust; it installs nothing. Hook adapters select only documented `UserPromptSubmit.prompt` / `Stop.last_assistant_message` fields for Codex and Claude Code, return neutral output, queue owner-only state outside repositories and wake a leased MCP worker. System/tool/reasoning/subagent/transcript/attachment content is excluded. Missing final output, interruptions and unsupported schema are coverage gaps. Codex turn identity is used when supplied; without a documented immutable provider identity, distinct submissions receive distinct durable local IDs. Text alone never deduplicates them. Secrets are resolved only from an environment-variable reference.
+
+Local defaults are 1000 pending events, 64 MiB pending bytes, 256 KiB selected text, 12 failed delivery attempts, backoff up to 5 minutes, a 30-second lease and a 10-second tool-call timeout. Offline/transient/uncertain failures retain WIP and stable identity; permanent authentication/configuration/source denial suspends. Explicit `flush --resume --accept-configuration` follows inspected configuration changes and does not substitute credentials/destination. Local status reports historical observed receipts and emitter diagnostics separately from server index availability; no capture is not proof of no engineering work.
+
+Package publication, actual opted-in hook installation/trust, production migrations/deployment and installed Codex desktop/CLI/Claude Code interruption/offline/privacy acceptance remain live operations. Offline goal setting, benchmark construction/runs and coding control are outside this feature.
+
+Queued originals remain pending until canonical publication. Removing a profile/rule with undelivered originals returns `capture_pending_archive_review_required`. A current member can explicitly discard only their own pending server archives through the Studio recovery control or authenticated `DELETE /api/workspaces/:workspaceId/programmatic-capture-profiles/pending-archives` with `{ "idempotencyKey": "<UUID>" }`. A repeated command affects the same selection; it returns only a content-free acknowledgement. Local collector WIP is managed separately.
 
 ## Routine configuration review
 
