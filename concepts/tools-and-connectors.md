@@ -424,3 +424,17 @@ Association order, registration and membership reads and commands preserve both 
 New Association operational records retain their source protection and use canonical destination admission. A General source is not an explicit choice to publish operational data in General: an active department context is added, or the writer's home department applies when neither source nor context supplies one. Existing records keep their saved protection on retries. Missing destination authority refuses creation atomically. Unbound legacy provider credentials remain unavailable under v2 until a supported binding is established.
 
 Discounted membership checkout reservation, replay and provider binding require the contact's current access and the checkout's saved protection. Provider settlement preserves that protection in the membership, including after the contact becomes less restricted. Receipt replay renews membership access. Legacy checkouts without trustworthy source evidence are unavailable under v2 pending recovery; a provider reference or receipt ID alone does not authorize access.
+
+
+## Connection intent and health
+
+A configured connector can still need attention. "Reconnect needed" means
+authentication or provider permissions need attention; check the provider grant
+and reconnect through the existing setup. "Not syncing" is a different state and does not by itself
+mean the credential needs replacing. Studio shows these states in the connector
+list and detail panels.
+
+Saving a document and delivering it to a channel are separate operations. A
+source-permission refusal means the save did not complete. An uncertain save
+outcome must be inspected before retrying. Confidential files retain their
+protection and require a supported delivery surface.
