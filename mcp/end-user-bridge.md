@@ -141,3 +141,11 @@ source retention or broadened discovery. Department admission, current source
 rights, complete evidence/retention consumers, management and runtime qualification
 are still being implemented. Existing installations must not treat legacy headers
 or this documentation as proof of that acceptance barrier.
+
+The shared channel adapter now intersects enabled connectors with the actual
+sender's current native Department/Project scope and its existing audience
+ceiling. Legacy assistant-only channel settings and room scope cannot grant
+staff authority to an unlinked/non-member sender. Explicit Department edges are
+checked even under a legacy workspace read flag; owner/admin universe reads do
+not replace them. External-app/public-bot resource releases remain separate.
+This channel checkpoint does not certify common dispatch or source retention.
