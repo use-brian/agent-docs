@@ -179,3 +179,13 @@ JSON embedded in tool display text cannot create trusted evidence. This local
 checkpoint includes a coordinator and independent persisted HTTP/MCP fixture;
 protected runtime trust, retained descendant readers, all consumers and management
 remain unqualified. Production activation and provider adoption remain separate.
+
+Brian now maps each trusted source reference to a stable local UUID and keeps
+immutable field observations separately. A narrower later read cannot replace
+earlier field evidence. Current source decisions can be pinned to one short local
+SQL operation; transaction, actor/assistant/recipient, fields, versions and local
+authority changes are checked again. Missing external evidence is held or
+unverifiable, including during outage/withdrawal; it never becomes an allowed
+historical copy. The initial SQL adapter covers attended native human fixtures.
+Other principal/lane adapters, complete retained consumers and runtime qualification
+remain required before protected source activation.
