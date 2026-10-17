@@ -218,3 +218,9 @@ linked member arriving through an authenticated channel is `verified_channel`;
 native sign-in is `native_session`. Membership, a display channel name or API-key
 email attribution does not establish native-session authentication. Missing
 provenance refuses protected source admission instead of guessing.
+
+Protected source ancestry cannot be removed because a conversation combines
+several visibility partitions. Persistence must retain current source/field
+ancestors under its target audience or refuse the incompatible write. Remote
+source revalidation at every retained-content boundary remains required for
+activation; a successful tool read alone is not a retention permission.
