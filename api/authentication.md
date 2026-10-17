@@ -72,3 +72,12 @@ documented in [Identity & memory](identity.md).
 - [Send messages](messages.md)
 - [Identity & memory](identity.md)
 - [Connector identity](connector-identity.md)
+
+## Application-data contract status
+
+A shared application-data contract is under implementation and has not passed its
+local authority/consumer acceptance barrier. App-data credential issuance, general
+non-member resource grants and delegated source trust are not available through
+this documented API yet. Existing chat keys, Brain keys, Home bridges and OAuth
+audiences retain their documented rights. Do not treat a supplied user ID or email
+as verified app-user identity or put any service credential in a browser.
