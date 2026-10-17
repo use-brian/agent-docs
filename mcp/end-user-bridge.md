@@ -224,3 +224,9 @@ several visibility partitions. Persistence must retain current source/field
 ancestors under its target audience or refuse the incompatible write. Remote
 source revalidation at every retained-content boundary remains required for
 activation; a successful tool read alone is not a retention permission.
+
+Source context permission does not authorize a persistent derivative. A governed
+write needs separate current `derive` and `retain` decisions for every exact
+source field/version and recipient. Both receipts share the operation and local
+transaction binding; their earlier expiry controls. Unsupported retention modes
+remain unavailable until their complete lane is qualified.
