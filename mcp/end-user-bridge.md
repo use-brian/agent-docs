@@ -242,3 +242,9 @@ file-segment parents and saved workflow evidence to find external observations.
 Ordinary native copies or edits do not establish an independent source release.
 Every retained consumer still needs current native admission, field projection
 and source receipt use before the full profile can be qualified.
+
+Shared runtime composition applies protected source admission even when a channel
+or background caller omits an explicit source factory. Unsupported verified
+identity/capability setups refuse instead of issuing unsigned legacy calls.
+Introducing protected profile history invalidates previously admitted legacy
+connector tools; pending or revoked trust cannot revive that old dispatch.
