@@ -438,3 +438,18 @@ Saving a document and delivering it to a channel are separate operations. A
 source-permission refusal means the save did not complete. An uncertain save
 outcome must be inspected before retrying. Confidential files retain their
 protection and require a supported delivery surface.
+
+
+### Independent source obligations in native descendants (qualification pending)
+
+A native derivative does not become an independent permission grant. Common
+caller and audience evidence checks recover its immutable external source
+observations, including native predecessor versions. Reuse needs a fresh source
+`context` receipt; delivery needs a separate current `deliver` receipt for the
+recipient. Retention and context receipts cannot authorize delivery. Missing,
+changed, oversized or unverifiable ancestry withholds the result. Hosts prepare
+source proof before canonical writes and pin it in the same transaction. The
+admitted metadata reader can see that transaction's new lineage without exposing
+raw observation tables. This is a local guard checkpoint; complete application,
+background, payload-reader and destination adapters remain unqualified. Protected
+issuance and runtime activation remain disabled.
