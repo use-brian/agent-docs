@@ -97,3 +97,9 @@ consumer acceptance barrier qualifies the installation. These are local source
 changes, not deployed availability. A browser receives a public-client OAuth token
 for its user; a service key remains server-side. Schema/operation catalogs enumerate
 the admitted typed inputs and do not confer an authorization lease.
+
+Local native company/task creation now uses the canonical writers and exact
+application transaction proof, with the actual user/service as author and current
+command/field authority. Self-grant schema preparation, write-only receipts and
+rollback have real fixture evidence. This remains an unqualified local foundation;
+it does not announce deployed app-data issuance or retained-source availability.
