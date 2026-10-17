@@ -236,3 +236,9 @@ their exact fields. Brian batches fresh source decisions under an operation and
 checks each recipient's native floor before authorization and at use. A prepared
 proof belongs to one execution and transaction; copying its JSON does not grant
 access. This coordinator alone does not qualify every retained-content consumer.
+
+The retained-authority coordinator follows canonical native derivation links,
+file-segment parents and saved workflow evidence to find external observations.
+Ordinary native copies or edits do not establish an independent source release.
+Every retained consumer still needs current native admission, field projection
+and source receipt use before the full profile can be qualified.
