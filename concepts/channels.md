@@ -188,6 +188,24 @@ generation, streamed edits, persistence and the adapter send. Revocation stops
 later output; an unverified group receives zero restricted tokens and no outbound
 call.
 
+### Pending: group clearance and shared upload receipts
+
+Status: implemented in [OSS PR #433](https://github.com/use-brian/use-brian/pull/433),
+awaiting merge and deployment. Do not assume existing hosts already have this fix.
+
+The approved group audience, shared across active bot installations, limits what
+each bot can read and reply with. A Confidential bot can help an Internal group,
+but its entire turn uses only data permitted by the group's limits and its own
+Department/Project grants. Personal memory stays excluded. Stored history,
+quotes, summaries and tools use the same limits; older restricted context does
+not become readable after a policy downgrade. Telegram topic ownership remains
+in force for passive participation.
+
+New Telegram document uploads use one shared operation across bots and webhook
+retries: one file write and one receipt attempt. Albums use their shared provider
+album id and one aggregate receipt. A failed or interrupted claim is not replayed
+automatically after an uncertain write or send; resending creates a new operation.
+
 ## Notes for agents
 
 - Channels are workspace-owned. Connecting a bot does not attach it to an assistant until you route the channel to one.
