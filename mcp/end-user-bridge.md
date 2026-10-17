@@ -149,3 +149,11 @@ staff authority to an unlinked/non-member sender. Explicit Department edges are
 checked even under a legacy workspace read flag; owner/admin universe reads do
 not replace them. External-app/public-bot resource releases remain separate.
 This channel checkpoint does not certify common dispatch or source retention.
+
+The common injector now adds a current native actor/assistant floor and keeps
+actor-specific discovery caches separate. Retained gateway/direct tools refuse
+observed native access loss, connector disconnection, changed exposure metadata
+or custom transport credential replacement, and withhold a result after contraction.
+An enabled shared assistant or credential owner does not supply the initiating
+person's Department membership. This native checkpoint remains separate from
+protected source ACL/field/retention and complete consumer qualification.
