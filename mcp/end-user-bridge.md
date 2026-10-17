@@ -230,3 +230,9 @@ write needs separate current `derive` and `retain` decisions for every exact
 source field/version and recipient. Both receipts share the operation and local
 transaction binding; their earlier expiry controls. Unsupported retention modes
 remain unavailable until their complete lane is qualified.
+
+Retained access checks use current canonical source observations and preserve
+their exact fields. Brian batches fresh source decisions under an operation and
+checks each recipient's native floor before authorization and at use. A prepared
+proof belongs to one execution and transaction; copying its JSON does not grant
+access. This coordinator alone does not qualify every retained-content consumer.
