@@ -453,3 +453,14 @@ admitted metadata reader can see that transaction's new lineage without exposing
 raw observation tables. This is a local guard checkpoint; complete application,
 background, payload-reader and destination adapters remain unqualified. Protected
 issuance and runtime activation remain disabled.
+
+
+Within one canonical SQL operation, the host prepares each required source action
+before the transaction and pins its receipt before write locks. Selecting an
+already pinned action later in that exact transaction rechecks its saved request
+digest, actor, receipt expiry, native authority and transaction-visible ancestry;
+it does not insert receipts or call the source. A changed ancestor set permanently
+invalidates that prepared token, including after a savepoint rollback. A new
+retrieval, prompt, replay or delivery boundary still requires fresh source proof.
+The local independent-source fixture verifies this composition. All-consumer and
+runtime activation qualification remain pending.
