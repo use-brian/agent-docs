@@ -157,3 +157,10 @@ or custom transport credential replacement, and withhold a result after contract
 An enabled shared assistant or credential owner does not supply the initiating
 person's Department membership. This native checkpoint remains separate from
 protected source ACL/field/retention and complete consumer qualification.
+
+Remote search now advertises stable `connector:<instance UUID>` identities beside
+human labels. Unique legacy labels and existing direct aliases remain accepted;
+ambiguous labels require selecting the stable identity returned by search. Dispatch
+keeps the selected instance's transport and credentials even when two connectors
+share a URL. Hook metadata separates the actual actor, human server label and
+stable source ID. This checkpoint does not activate protected source trust.
