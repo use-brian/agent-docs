@@ -431,3 +431,14 @@ Append (`append_delivery_observation`) takes `{operationId,commitmentId,expected
 Review (`review_delivery_recognition`) takes `{operationId,commitmentId,expectedVersion,decision:"recognise"|"correct"|"dismiss",reason,outcome?}`; outcome is allowed only for correction. Member HTTP acts as the current human. Brian requires an exact persisted attended human approval bound to those arguments, Chat and assistant. Machine credentials/workflows cannot substitute that approval. Review changes only interpretation, never original content or governed terms. Ask for update fills a Chat draft and chooses no recipient; clicking it never sends.
 
 Exact replay returns the original receipt with `duplicate:true` after current source admission. REST uses 400 `invalid_input`, 403 `not_authorized`/`scope_operation_denied`, 404 `not_found` for hidden/missing sources, and 409 `conflict`/`idempotency_conflict` for stale versions or reused identities. MCP returns `isError:true` with a typed error. Retry uncertain writes using the same exact operation; stop and reload on conflict/source loss. No recurring scan, automatic retry, ownership selection or messaging authority is added. Local fixtures do not certify deployed availability or broad model quality; discover actual tools before use.
+
+## Application profile status
+
+A separate app-data profile is under local gated implementation. It reuses the
+maintained stateless MCP transport and publishes only the registered application
+catalog, query and command operations admitted by the current binding. Read-only
+bindings omit command tools. Brain keys and Brain OAuth tokens do not authenticate
+to this profile; app-data tokens do not authenticate to the existing Brain profile.
+A Home application binding uses the existing bridge budget and rechecks the viewer
+and consent on every request. Full consumer/source acceptance and deployment remain
+pending; discover the actual installed tools before relying on this profile.

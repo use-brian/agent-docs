@@ -87,3 +87,13 @@ canonical generic validation/revisions and a deployed native CRM/task adapter.
 These foundations do not publish app-data routes or grant data access. General
 app identity, source-aware retention and the full consumer acceptance matrix remain
 unqualified; continue using the currently documented credential audiences.
+
+The local gated implementation now includes app-bound PKCE on the existing OAuth
+lifecycle, native Google/email/OIDC continuation, scrypt app keys, independent
+delegated user tokens, exact CORS, and non-bypass record/field projections. Native
+grant/key management prepares actor-bound persisted reviews and supports current
+revocation. Broadened issuance remains denied until the complete native/source and
+consumer acceptance barrier qualifies the installation. These are local source
+changes, not deployed availability. A browser receives a public-client OAuth token
+for its user; a service key remains server-side. Schema/operation catalogs enumerate
+the admitted typed inputs and do not confer an authorization lease.

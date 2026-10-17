@@ -215,3 +215,16 @@ against the app and does not disturb the previous working bundle.
 ## Department authority for store access
 
 Store tools are discovered and executed under the authenticated app viewer plus the workspace assistant. App consent and store scope only narrow that authority; they do not grant department membership. A missing viewer identity exposes no store tools. Access is resolved again for each request and immediately before provider execution. A previously listed tool may disappear after revocation; a retained tool refuses execution if current authority cannot be verified or its exact connector instance is unavailable. Refresh discovery to inspect current access; another store is never substituted automatically. Credential storage and billing ownership do not substitute for viewer authorization.
+
+## Gated application scope extension
+
+Local implementation work adds an explicit application manifest scope with module,
+resource, action and read/write-field requirements. Application-only bundles use
+`data: none` and cannot combine that declaration with implicit legacy store or agent
+powers. Widening any declared application requirement invalidates prior consent.
+The existing opaque iframe/host bridge and MCP budget are retained. A signed opaque
+application binding additionally requires current viewer membership, consent, app
+state and live grants. Old bridge tokens do not gain application operations. Native
+binding capture remains unavailable before the full acceptance barrier; do not
+assume this extension is deployed or substitute a workspace session/service key in
+an iframe.
