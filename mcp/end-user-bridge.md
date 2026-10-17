@@ -116,3 +116,28 @@ The stored pairing is identity bookkeeping, never authority. It is not read back
 - [Connector identity](../api/connector-identity.md): the header rail in general, across all channels
 - [Identity & memory](../api/identity.md): anonymous vs identified tiers
 - [Brain MCP Server](brain-mcp.md): the other direction — an agent reading a user's own brain
+
+## Protected delegated connector profile (local implementation checkpoint)
+
+The Node-only `@use-brian/brian-app/connector` entry provides strict Ed25519
+`ub.actor.v1` assertion verification and source-owned authorization callbacks.
+This profile requires a separately authenticated transport, pinned installation
+issuer/source audience/workspace/instance/public keys, actual initiator and
+executing-assistant mapping, exact method/encoded request target/raw-byte digest,
+and atomic replay consumption. Tokens last 60 seconds with at most five seconds
+clock skew. The bounded single-process replay consumer refuses exhaustion;
+clustered sources supply shared atomic storage. Token-provided key URLs are refused.
+
+A valid assertion alone grants no source access. The source invokes its current
+canonical ACL after transport and signature checks. The readable assistant ID
+header accompanies the existing identity opt-in; config and dynamic hooks cannot
+replace reserved identity/assertion headers. Deployment keys are independent
+Ed25519 keys stored encrypted by Brian; only public JWKS is exposed at
+`/.well-known/usebrian-connector-jwks.json`. Rotation retains retiring public keys
+for the last assertion window, while emergency revoke withdraws them immediately.
+
+This SDK/key-storage/wire checkpoint does not activate protected delegated trust,
+source retention or broadened discovery. Department admission, current source
+rights, complete evidence/retention consumers, management and runtime qualification
+are still being implemented. Existing installations must not treat legacy headers
+or this documentation as proof of that acceptance barrier.
