@@ -164,3 +164,18 @@ ambiguous labels require selecting the stable identity returned by search. Dispa
 keeps the selected instance's transport and credentials even when two connectors
 share a URL. Hook metadata separates the actual actor, human server label and
 stable source ID. This checkpoint does not activate protected source trust.
+
+The Node connector SDK now validates `ub.source.v1` evidence, capabilities and
+Brian-specific `POST /usebrian/source/{capabilities,authorize,reconcile}` contracts.
+Use the source's own current authorization functions for both ordinary reads and
+sidecar decisions. A valid actor assertion without a source mapping grants no
+records. Evidence names exact resource/content/policy versions, returned fields,
+subjects, actions, retention and export rights. Missing authorization pairs deny;
+short receipts bind an exact operation and never act as standalone bearer grants.
+
+MCP evidence travels in reserved `_meta["ub.source.v1"]` over the authenticated
+source connection. HTTP adapters keep content and the validated envelope separate.
+JSON embedded in tool display text cannot create trusted evidence. This local
+checkpoint includes a coordinator and independent persisted HTTP/MCP fixture;
+protected runtime trust, retained descendant readers, all consumers and management
+remain unqualified. Production activation and provider adoption remain separate.
