@@ -191,7 +191,7 @@ call.
 ### Pending: group clearance and shared upload receipts
 
 Status: implemented in [OSS PR #433](https://github.com/use-brian/use-brian/pull/433),
-awaiting merge and deployment. Do not assume existing hosts already have this fix.
+merged to develop; awaiting deployment. Do not assume existing hosts already have this fix.
 
 The approved group audience, shared across active bot installations, limits what
 each bot can read and reply with. A Confidential bot can help an Internal group,
@@ -205,6 +205,23 @@ New Telegram document uploads use one shared operation across bots and webhook
 retries: one file write and one receipt attempt. Albums use their shared provider
 album id and one aggregate receipt. A failed or interrupted claim is not replayed
 automatically after an uncertain write or send; resending creates a new operation.
+
+### Pending: room text and memory capture repairs
+
+These follow-up repairs are implemented in [OSS PR #435](https://github.com/use-brian/use-brian/pull/435) and [hosted PR #453](https://github.com/use-brian/brian-platform/pull/453), awaiting review and deployment:
+
+- Passive and addressed copies share one provider message row. Repeated webhook
+  deliveries can start each addressed bot's turn only once; a passive copy does
+  not consume its turn. Uncertain attempts are not automatically replayed.
+- Group memory saves use shared workspace ownership at the room's limits.
+  Explicit personal saves require a private chat. Actual private reads remain
+  blocked; the delivery privacy guard is unchanged.
+- Provider rooms use their consented capture pipeline for shared learning,
+  instead of legacy compaction that reads personal memory. Room capture batches
+  have a valid session parent, shared ownership and an attributed assistant.
+- The original shared room and Telegram topic ownership remain. Existing
+  history is preserved; these changes do not clean up old duplicate rows or
+  rename the room's original assistant heading.
 
 ## Notes for agents
 
