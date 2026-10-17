@@ -135,7 +135,7 @@ Two rules matter when you integrate:
   "sessionId": "thread-789",
   "messageId": "9f1e7c2a-...",
   "reply": "Proposals reach a vote 7 days after submission. Quorum is 30% of staked supply...",
-  "model": "gemini-3-flash-preview"
+  "model": "gemini-3.6-flash-pro"
 }
 ```
 
@@ -144,7 +144,7 @@ Two rules matter when you integrate:
 | `sessionId` | string | Echo of the session id (or the default if you did not pass one). |
 | `messageId` | string | Stable id of the stored assistant turn. |
 | `reply` | string | The final assistant reply. It excludes text from intermediate tool-calling turns and any draft retracted by grounding checks; a validated assistant question is returned as ordinary reply text. |
-| `model` | string | Which model produced the reply (e.g. `gemini-3-flash-standard` for Standard, `gemini-3-flash-preview` for Pro, `gemini-3.8-flash` for Max, `gemini-3-pro-research` for Research). Since the model registry, deployments may also serve metered pay-per-use models (e.g. `qwen3.7-plus`, `deepseek-v4-pro` via DashScope); those ids appear here verbatim, and the billing tier is recorded separately from the model id, so do not infer pricing from the model string. |
+| `model` | string | Which model produced the reply (e.g. `gemini-3.6-flash-standard` for Standard, `gemini-3.6-flash-pro` for Pro, `gemini-3.8-flash` for Max, `gemini-4-argon-research` for Research). Since the model registry, deployments may also serve metered pay-per-use models (e.g. `qwen3.7-plus`, `deepseek-v4-pro` via DashScope); those ids appear here verbatim, and the billing tier is recorded separately from the model id, so do not infer pricing from the model string. |
 
 ## Streaming with SSE
 
@@ -161,7 +161,7 @@ event: text_delta
 data: {"text":"a vote after..."}
 
 event: turn_complete
-data: {"sessionId":"thread-789","messageId":"9f1e7c2a-...","model":"gemini-3-flash-preview"}
+data: {"sessionId":"thread-789","messageId":"9f1e7c2a-...","model":"gemini-3.6-flash-pro"}
 
 event: done
 data: {}
@@ -289,7 +289,7 @@ Example reply with a tag:
   "sessionId": "thread-789",
   "messageId": "9f1e7c2a-...",
   "reply": "CIP-1694 governance relies on three groups: Delegate Representatives (DReps), Stake Pool Operators (SPOs), and the Constitutional Committee. You participate by delegating your ADA's voting power to a DRep, who votes on your behalf regarding treasury withdrawals, parameter changes, and more. For an action to pass, it must meet specific consensus thresholds from these governing bodies.\n\n<followup>[\"What is a DRep?\", \"How do I delegate my voting power?\", \"What are governance thresholds?\"]</followup>",
-  "model": "gemini-3-flash-preview"
+  "model": "gemini-3.6-flash-pro"
 }
 ```
 
