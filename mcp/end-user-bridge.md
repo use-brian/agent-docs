@@ -202,3 +202,13 @@ This remains a local read-profile checkpoint. Protected commands, application or
 service releases, durable delegation, other retention modes and all retained/
 background/delivery consumers still require their complete adapters and readiness
 proof. Product qualification stays closed until those obligations pass.
+
+Connector deletion now removes live credentials and revokes protected trust while
+keeping immutable source observations held for lineage. A personal connector
+owner can remove their exposed connector without workspace trust-admin rights.
+The original connector identity stays immutable, so deleted/revoked profiles
+cannot fall back to legacy dispatch. Source envelopes accept mapped team/Project
+UUID labels only; unknown namespaces refuse. Shared Project quarantine also
+invalidates a pinned local operation. Connector assignment retains its existing
+Department-only contract. Complete retained consumers and other principal/command
+profiles remain unqualified.
