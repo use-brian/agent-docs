@@ -81,3 +81,9 @@ non-member resource grants and delegated source trust are not available through
 this documented API yet. Existing chat keys, Brain keys, Home bridges and OAuth
 audiences retain their documented rights. Do not treat a supplied user ID or email
 as verified app-user identity or put any service credential in a browser.
+
+Local implementation work now includes strict application wire/value contracts,
+canonical generic validation/revisions and a deployed native CRM/task adapter.
+These foundations do not publish app-data routes or grant data access. General
+app identity, source-aware retention and the full consumer acceptance matrix remain
+unqualified; continue using the currently documented credential audiences.
