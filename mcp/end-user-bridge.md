@@ -212,3 +212,9 @@ UUID labels only; unknown namespaces refuse. Shared Project quarantine also
 invalidates a pinned local operation. Connector assignment retains its existing
 Department-only contract. Complete retained consumers and other principal/command
 profiles remain unqualified.
+
+Protected human assertions preserve verified host authentication provenance. A
+linked member arriving through an authenticated channel is `verified_channel`;
+native sign-in is `native_session`. Membership, a display channel name or API-key
+email attribution does not establish native-session authentication. Missing
+provenance refuses protected source admission instead of guessing.
