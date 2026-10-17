@@ -189,3 +189,16 @@ unverifiable, including during outage/withdrawal; it never becomes an allowed
 historical copy. The initial SQL adapter covers attended native human fixtures.
 Other principal/lane adapters, complete retained consumers and runtime qualification
 remain required before protected source activation.
+
+The attended native read adapter now reaches the common custom-MCP injector and
+web-chat boot seam. It checks the exact current execution/accumulator, sends fresh
+signed discovery rather than reusing permission-bearing catalogs, and keeps each
+source's current field dictionary. Successful reads bind every immutable field
+observation before display conversion. Pending/revoked profiles, missing keys or
+source mappings refuse with a setup/access recovery notice; they never choose a
+legacy owner dispatch. Profiles require HTTPS for remote sources.
+
+This remains a local read-profile checkpoint. Protected commands, application or
+service releases, durable delegation, other retention modes and all retained/
+background/delivery consumers still require their complete adapters and readiness
+proof. Product qualification stays closed until those obligations pass.
