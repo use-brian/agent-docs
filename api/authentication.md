@@ -112,3 +112,11 @@ aliases and another app's original grant do not transfer authority. Missing fiel
 observations are withheld. Query/aggregate evidence, global native field policy,
 all legacy consumers and broader retention profiles remain unfinished; no deployed
 availability or qualified application-data issuance is announced by this checkpoint.
+
+
+The gated native field-policy work also includes schema-bound policy algebra and a
+current native-member metadata mask reader. Module-scoped roles are resolved from
+the actual current member, with lifetime/revocation and record/execution floors.
+These masks do not authorize source access, writes or application credential use.
+App/issuer/configuration, query and legacy consumer acceptance still block global
+activation; no additional production authentication audience is available.
