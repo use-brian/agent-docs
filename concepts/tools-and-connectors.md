@@ -464,3 +464,19 @@ invalidates that prepared token, including after a savepoint rollback. A new
 retrieval, prompt, replay or delivery boundary still requires fresh source proof.
 The local independent-source fixture verifies this composition. All-consumer and
 runtime activation qualification remain pending.
+
+
+### Model-input revalidation (local checkpoint; qualification pending)
+
+The shared turn kernel requires fresh caller admission before the query loop's
+explicit model inputs, including session construction, ordinary requests,
+compaction and isolated terminal synthesis. An attended private native turn with
+protected source ancestry needs fresh source context proof, pinned and validated
+with admitted native metadata in a short non-bypass SQL transaction. A runner
+cannot omit the mandatory check, and an invalid invocation cannot revive by
+removing evidence or restoring access. Unsupported identities/audiences and
+missing source wiring refuse before model access. The local fixture uses a
+scripted model and an independently persisted source ACL; no paid model is used.
+Provider-internal retries/failover, other model callers and complete retention,
+background, delivery, native-field and legacy migration remain pending. This
+guard does not activate protected issuance or qualify the runtime.
