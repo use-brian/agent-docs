@@ -196,3 +196,12 @@ module field roles intersect with the explicit release. Joining the workspace
 invalidates an existing invocation; a fresh request resolves the combined limits.
 The app's profile label cannot bypass actual membership or confer membership on
 a non-member.
+
+The local selector-observation path now binds empty app queries and counts to
+immutable original ID/self/relationship scope and predicate-field obligations.
+A later app or native reader uses its own current authority. Relationship domains
+also retain an independently readable canonical anchor, including an empty result;
+revoking that anchor withholds the observation before model or memory use. Query
+aliases do not change canonical resource ownership. This is still under acceptance:
+finite admitted-point refinement, invocation configuration freezing and complete
+consumer qualification remain required, and application-data activation stays off.
