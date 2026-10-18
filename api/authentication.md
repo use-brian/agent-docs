@@ -172,3 +172,12 @@ memories rather than treating its owner connection as a field grant.
 Department-v2 and application-selector domain proofs, historical/system readers,
 all remaining consumers and full qualification are still required. These local
 checks do not enable issuance, protected retention profiles or deployed APIs.
+
+
+The gated native query-domain contract also includes Department-v2 General and
+Department tiers, required Department context, binding labels, shared Project
+read membership or oversight, and the independent Project-ID ceiling. A later
+reader needs its own current authority covering all original combinations.
+Finite current result IDs do not prove that containment, and an owner has no
+automatic Department access. This additive extension remains under local
+acceptance; it does not enable application-data issuance or retention.
