@@ -205,3 +205,11 @@ revoking that anchor withholds the observation before model or memory use. Query
 aliases do not change canonical resource ownership. This is still under acceptance:
 finite admitted-point refinement, invocation configuration freezing and complete
 consumer qualification remain required, and application-data activation stays off.
+
+Local finite-query observations now separate admitted pure-ID points from absent
+IDs. Later readers need their own query authority for the exact original points;
+an unused wider grant ceiling is not a point permission. Absent IDs keep their
+original domain obligations, and candidate/version changes during the read hold
+the request. Ordinary native generic queries also retain scope evidence without
+requiring a native module owner. Compound selector refinement and full consumer
+qualification remain pending; these local changes do not enable application data.
