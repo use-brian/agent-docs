@@ -514,3 +514,16 @@ Local kernel tests with independent source ACLs allow an authorized compound res
 and refuse mixed private/source inputs when neither actor can read all contributors.
 Field observation storage and complete query/aggregate, background, retention and
 delivery qualification remain pending; no protected issuance is activated.
+
+
+### Source checks while a model response is running (qualification pending)
+
+The shared loop now rechecks current native field and source context before its
+output events leave the invocation. A field-role or issuer downgrade during a
+response stops later content; restoring access does not revive that invocation.
+Nested results returning to model context keep their context check. At actual
+SSE, adapter and JSON sinks, protected source delivery additionally needs a fresh
+`deliver` decision for the actual recipient; a `context` decision cannot substitute.
+The final sink checks again. Unsupported identity/retention lanes still refuse.
+These local boundaries do not qualify recordings, background work, other retained
+consumers or protected issuance.
