@@ -103,3 +103,12 @@ application transaction proof, with the actual user/service as author and curren
 command/field authority. Self-grant schema preparation, write-only receipts and
 rollback have real fixture evidence. This remains an unqualified local foundation;
 it does not announce deployed app-data issuance or retained-source availability.
+
+
+The local gated implementation now captures canonical generic/native read fields
+and original relationship targets as metadata, then checks the current reader's
+own app/member rights before model input or exact-version derivation. Catalog
+aliases and another app's original grant do not transfer authority. Missing field
+observations are withheld. Query/aggregate evidence, global native field policy,
+all legacy consumers and broader retention profiles remain unfinished; no deployed
+availability or qualified application-data issuance is announced by this checkpoint.
