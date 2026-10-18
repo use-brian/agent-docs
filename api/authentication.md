@@ -139,3 +139,36 @@ A generic projection's `fields` lists returned value keys. Optional `absentField
 lists declared, currently readable cells whose absence was observed under the same
 field evidence. Withheld cells appear in neither list. Absence is source-bound;
 these names are metadata, never credentials or proof of permission.
+
+
+The gated canonical query now checks predicate fields before filtering and sort
+or aggregate fields across every matching contributor before cursor/limit.
+Result evidence retains predicate-only nonmatches, contributors beyond the page,
+returned values and readable absences. Actual query-only member, external-user
+and service grants use the query action without borrowing read permission.
+Managed system cells come from canonical columns after field admission; hidden
+creation timestamps are not exposed by page cursors. Every retained observation
+is rechecked under the current reader, with exact record versions checked before
+return. Registered catalog and record metadata functions must remain private to
+their canonical owner, including direct runtime-login grants.
+
+Empty-domain/selector proof is still being implemented and currently refuses
+when the original query domain cannot be established. This temporary hold is not
+the final empty-query contract. The local query checkpoint does not certify the
+remaining query, writer, legacy, background or retention consumers and does not
+enable application-data issuance or announce deployed API availability.
+
+
+Registered legacy native types now retain immutable query-domain evidence for
+empty results and counts. Later readers must cover the original tier, compartment
+and Project ceilings under their own current access. Readable General catalog
+metadata does not cover a wider original domain. Empty aggregate field-role loss
+withholds both model context and a retained memory for the affected reader; an
+independently entitled reader remains usable. Native memory viewer searches,
+indexes and counts apply that field ancestry in the non-owner transaction before
+returning payloads. An unsupported system/share projection excludes field-backed
+memories rather than treating its owner connection as a field grant.
+
+Department-v2 and application-selector domain proofs, historical/system readers,
+all remaining consumers and full qualification are still required. These local
+checks do not enable issuance, protected retention profiles or deployed APIs.
