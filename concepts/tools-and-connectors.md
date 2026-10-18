@@ -480,3 +480,16 @@ scripted model and an independently persisted source ACL; no paid model is used.
 Provider-internal retries/failover, other model callers and complete retention,
 background, delivery, native-field and legacy migration remain pending. This
 guard does not activate protected issuance or qualify the runtime.
+
+
+The supported HTTP model transports now carry the same private invocation check
+to each dispatch, including Gemini 429/schema retry, compatible endpoint retry,
+standard wrapper retry and provider/endpoint failover. A source withdrawal after
+a primary response prevents a second model request. Anthropic checks its guarded
+SDK fetch and disables opaque SDK retries. A refusal keeps its authority
+classification through SDK causes and cannot revive the invocation after rights
+are restored. This callback is host code, never a public request field. Local
+proof uses an independently persisted source ACL and loopback model HTTP only.
+Codex RPC continuation, standalone model callers, preprocessing retention and
+complete persistence/background/delivery/field/legacy handling remain pending;
+protected issuance and runtime activation remain disabled.
