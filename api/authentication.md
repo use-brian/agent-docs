@@ -125,3 +125,17 @@ The local gated metadata boundary also resolves nested source/scope helpers from
 canonical schemas. Caller-created temporary rows cannot replace source floors or
 mint field evidence. This does not activate application credentials or complete
 the remaining field/query/legacy acceptance.
+
+
+The gated canonical generic-record getter now applies current module field rules
+for native members, member applications, external users and named services. App
+and parent-grant issuers retain their own current field floor; an explicit release
+profile is required for a non-member. Catalog aliases and calling modules do not
+change canonical ownership. A role loss invalidates previously captured field
+context and a result still awaiting admission. This does not qualify all queries,
+writers, indexes, background or delivery consumers, and issuance remains disabled.
+
+A generic projection's `fields` lists returned value keys. Optional `absentFields`
+lists declared, currently readable cells whose absence was observed under the same
+field evidence. Withheld cells appear in neither list. Absence is source-bound;
+these names are metadata, never credentials or proof of permission.
