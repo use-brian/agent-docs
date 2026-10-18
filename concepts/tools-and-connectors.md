@@ -504,3 +504,13 @@ sessions on the shared RPC peer remain available. No callback/token metadata
 is model or public-API input. Local independent-source/kernel history/schema withdrawal passes;
 standalone model callers and complete persistence/background/delivery/field/legacy
 qualification remain pending. Protected issuance and activation stay disabled.
+
+
+A compound result retains every canonical contributor, including observations not
+shown as rows. Automatic prompt assembly keeps bound and legacy reader evidence
+together; channel history admits every contributor before returning the row. A
+single-source consumer cannot mistake several observations for missing evidence.
+Local kernel tests with independent source ACLs allow an authorized compound result
+and refuse mixed private/source inputs when neither actor can read all contributors.
+Field observation storage and complete query/aggregate, background, retention and
+delivery qualification remain pending; no protected issuance is activated.
