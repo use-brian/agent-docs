@@ -493,3 +493,14 @@ proof uses an independently persisted source ACL and loopback model HTTP only.
 Codex RPC continuation, standalone model callers, preprocessing retention and
 complete persistence/background/delivery/field/legacy handling remain pending;
 protected issuance and runtime activation remain disabled.
+
+
+Codex inference now checks the bound invocation at each queued JSONL write:
+thread instructions, every history batch, turn start and schema retry. Parked
+tool results use a private response token bound to the exact session, checked
+again immediately before writing. Revocation withholds queued protected bytes
+and permanently closes that session; control-only cleanup and independent
+sessions on the shared RPC peer remain available. No callback/token metadata
+is model or public-API input. Local independent-source/kernel history/schema withdrawal passes;
+standalone model callers and complete persistence/background/delivery/field/legacy
+qualification remain pending. Protected issuance and activation stay disabled.
