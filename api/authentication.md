@@ -213,3 +213,18 @@ original domain obligations, and candidate/version changes during the read hold
 the request. Ordinary native generic queries also retain scope evidence without
 requiring a native module owner. Compound selector refinement and full consumer
 qualification remain pending; these local changes do not enable application data.
+
+
+### Invocation construction and field/configuration changes (local R1)
+
+Canonical native and application invocations pin current field/configuration
+policy metadata before the first read or model session. A role gain, role loss,
+timed assignment transition, schema/owner/contract or configuration revision change
+invalidates that invocation, including its session lease. Restoring policy does
+not revive a rejected invocation. Start a fresh request for current permissions;
+never automatically retry an effect whose result may be uncertain. Business-value
+writes still use separate source/version checks. Independent authorized readers
+retain their own current access to canonical observations. Deployed external module
+configuration requires a private metadata revision port; unverifiable required
+revisions hold access. This bounded local checkpoint does not qualify application
+data issuance, every consumer, production activation or the remaining R2-R6 work.
