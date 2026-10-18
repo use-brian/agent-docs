@@ -120,3 +120,8 @@ the actual current member, with lifetime/revocation and record/execution floors.
 These masks do not authorize source access, writes or application credential use.
 App/issuer/configuration, query and legacy consumer acceptance still block global
 activation; no additional production authentication audience is available.
+
+The local gated metadata boundary also resolves nested source/scope helpers from
+canonical schemas. Caller-created temporary rows cannot replace source floors or
+mint field evidence. This does not activate application credentials or complete
+the remaining field/query/legacy acceptance.
