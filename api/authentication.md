@@ -228,3 +228,12 @@ retain their own current access to canonical observations. Deployed external mod
 configuration requires a private metadata revision port; unverifiable required
 revisions hold access. This bounded local checkpoint does not qualify application
 data issuance, every consumer, production activation or the remaining R2-R6 work.
+
+
+The complete local R1 SQL matrix now passes 316 cases across 14 files, including
+37 invocation-epoch cases, with zero feature skips. Policy epochs distinguish
+actual configuration from ordinary memory/source bookkeeping; a business edit
+uses source/version admission, not a workspace-wide invocation reset. A current
+result read before that edit is refused by the canonical result version check.
+Retained historical observations keep their existing separate admission contract.
+Local proof does not enable application-data issuance or satisfy R2-R6/rollout.
