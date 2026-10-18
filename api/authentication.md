@@ -181,3 +181,18 @@ reader needs its own current authority covering all original combinations.
 Finite current result IDs do not prove that containment, and an owner has no
 automatic Department access. This additive extension remains under local
 acceptance; it does not enable application-data issuance or retention.
+
+
+The gated query-only catalog path can enumerate admitted schema metadata even
+when no business row exists. It intersects current and issuance-bound fields
+through parent issuers and credential layers, including module roles and explicit
+external/service releases. Catalog discovery grants no record or retained-result
+rights. Original app query selectors and independent reader revalidation remain
+under implementation; application-data activation is still unavailable.
+
+An external app profile also retains the recipient's native limits when that
+account is a workspace member. Its current clearance, Departments, Projects and
+module field roles intersect with the explicit release. Joining the workspace
+invalidates an existing invocation; a fresh request resolves the combined limits.
+The app's profile label cannot bypass actual membership or confer membership on
+a non-member.
