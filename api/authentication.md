@@ -245,3 +245,12 @@ uses its own current point, field and relationship-anchor rights; another reader
 revocation does not grant or remove those independent rights. Absent or excluded
 IDs retain their original domain obligations. This remains unpublished source
 work behind the existing qualification barrier, not available app-data issuance.
+
+
+The local legacy generic getter/query implementation now shares canonical field
+capture and the admitted candidate query engine with application operations.
+Predicates run only after whole-candidate field admission, and empty/nonreturned
+predicate evidence reaches the actual Brian query tool. Native and application
+readers keep their existing independent ceilings. Canonical writer, governance,
+all-consumer and final R2 acceptance work remains in progress; this does not change
+credential availability or certify deployed behavior.
