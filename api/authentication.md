@@ -448,3 +448,13 @@ Current genuine-member, issuer and executing-assistant bounds remain enforced;
 owner/client registration does not promote an external principal into a member.
 Qualification and issuance remain disabled while native/persistent consumer
 closure and final acceptance are incomplete.
+
+
+Canonical entity create, patch and supersession reject undeclared root keys,
+forged creation metadata, malformed business scalars/arrays/dates/source enums
+and non-JSON or nonfinite attribute values as invalid_value before writes.
+Validation preserves the original trusted derivation object; it never creates
+source authority. Explicit null Department/Project destinations retain canonical
+destination-admission errors rather than being treated as omitted selections.
+These checks compose with current row/field/source/revision admission and do not
+turn on application issuance or qualification.
