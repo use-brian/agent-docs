@@ -318,3 +318,26 @@ assistant, monotonic policy revision, schema and affected-record versions. A pol
 change and restore requires fresh preview; applied recovery rechecks current
 rights against its saved post-apply revision. Legacy reviews without this evidence
 require fresh preview. Runtime JSON cannot register readers, handlers or owners.
+
+
+Native-session schema management uses:
+- POST `/api/applications/workspaces/:workspaceId/schemas/:schemaId/preview` with
+  `{ expectedVersion, properties, assistantId? }`.
+- POST `.../schema-reviews/:reviewId/apply` with `{ assistantId? }`.
+- POST `.../schema-mcp` for native `applicationSchemaPreview` and
+  `applicationSchemaApply`; optional assistantId query selection.
+
+The existing native-session/origin guards and canonical native member/assistant
+context factory apply. JSON supplies no actor or roles. Application OAuth/service/
+Home credentials acquire no management audience. Preview counts require complete
+current governance and independent field references, including person/files/
+relation/managed-author targets. Counts are withheld after an awaited contraction.
+Both data and management services reject direct/inherited owner connections.
+
+Preview returns an actor/assistant/policy-bound review; apply returns
+`{ entityTypeId, schemaVersion, applied }`. The review ID is the once-applied identity.
+Schema apply changes its pinned epoch: MCP may report `grant_revoked` with
+`effect: committed` and `retrySafe: false`. Reconcile the same review in a fresh
+invocation; never automatically retry a write. SDK schema helpers consume explicit
+deployment management ports without receiving native-session credentials in the
+browser application transport. Qualification and real app issuance remain disabled.
