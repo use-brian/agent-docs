@@ -265,3 +265,11 @@ row-delete and named-command actions. A field write grant cannot confer deletion
 Reference captures use canonical file-owner metadata for independent native/app
 readers. These are local implementation checkpoints; qualification and credential
 issuance remain unavailable pending all-consumer acceptance.
+
+
+Canonical task updates now have a local caller-owned transaction contract and
+optional expected source version. Registered native commands can commit task
+supersession, canonical links, receipt, audit and event atomically and reauthorize
+replay after current audience changes. This is a reusable writer checkpoint;
+complete native application operation catalogs, governance, downstream adoption
+and final acceptance remain pending. Application-data issuance stays disabled.
