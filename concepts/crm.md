@@ -265,3 +265,18 @@ New CRM activity rows capture their source's sensitivity, department/project req
 CRM event workflow starts require the recorded actor to read the saved and current source audience before the run input is stored. Replaying an idempotency key does not bypass current access. Run and step reads retain the event floor, including through copied prior outcomes. Execution refuses a source that becomes inaccessible and withholds an in-flight result if access changes. Review Department access and start a new run after resolving an access failure; do not automatically retry an operation that may have run. Legacy, aggregate and inventory-event classification is not yet certified for strict mode.
 
 The event-delivery listing also requires a current member envelope. An integration credential's `crm.audit.read` grant currently receives HTTP 403 `not_authorized` with Department access guidance because persisted machine ceilings are not implemented yet. It cannot borrow the credential creator's role. Current owner/admin members can inspect minimized, terminal retirement receipts; these cannot restart delivery. The operations-audit list is a separate surface whose audience protection remains pending.
+
+
+Canonical company/contact/deal business writes validate keys and values before
+reading the source. Unknown or immutable patch keys, empty names, malformed tags/
+references, invalid dates and non-finite amounts return `invalid_value`; nullable
+clears and omitted fields keep their existing meaning. Typed creation shares those
+business declarations and rejects unknown input keys.
+
+Native in-place CRM edits now lock and reread the current admitted source in one
+transaction, preserving concurrent unrelated attributes and existing IDs/links.
+Canonical writer composition accepts an optional expected source version and
+refuses stale edits with `record_version_conflict`, without partial fields or graph
+effects. This internal writer contract does not add a guessed public REST input or
+qualify application-native mutation/issuance. Historical revision projection and
+remaining application-native field enforcement are still under implementation.
