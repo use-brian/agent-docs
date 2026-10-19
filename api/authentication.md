@@ -273,3 +273,11 @@ supersession, canonical links, receipt, audit and event atomically and reauthori
 replay after current audience changes. This is a reusable writer checkpoint;
 complete native application operation catalogs, governance, downstream adoption
 and final acceptance remain pending. Application-data issuance stays disabled.
+
+
+Legacy generic records now return nullable managed timestamps/authors: a metadata
+property carries a value only when a corresponding declared system cell is currently
+readable; otherwise its value is null. The application record projection wire is
+unchanged. Custom tables and rendered pages preserve private query/field evidence,
+including empty queries, for subsequent current-access checks. This local reader
+checkpoint does not qualify runtime or certify the later model/cache consumers.
