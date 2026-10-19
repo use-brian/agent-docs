@@ -307,3 +307,14 @@ Preflight returns only client-mode metadata. CORS reflects the exact opaque orig
 without wildcard or cookie credentials. `/api/applications/:appId/schemas/:type`
 returns the current projected catalog resource. Schema mutation still requires
 native governance. Qualification, binding capture and real issuance remain gated.
+
+
+Protected generic schema preview and mutation require native governance and the
+complete current catalog/record read/write and scope floors before inspecting
+business values. Owner/admin status alone grants no field authority. Direct legacy
+schema edits/deletion use the same canonical guard; the exact owner declaration
+retires with an authorized parent schema deletion. Schema reviews bind the actor,
+assistant, monotonic policy revision, schema and affected-record versions. A policy
+change and restore requires fresh preview; applied recovery rechecks current
+rights against its saved post-apply revision. Legacy reviews without this evidence
+require fresh preview. Runtime JSON cannot register readers, handlers or owners.
