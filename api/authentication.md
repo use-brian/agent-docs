@@ -421,3 +421,16 @@ Existing browser amount inputs, ordering and totals preserve exact strings.
 The additive shared applicationDecimalText/Add/Compare helpers use BigInt scaled
 arithmetic and do not imply currency rounding. Other native aggregate/read/history
 closure still belongs to R2; this checkpoint does not enable runtime qualification.
+
+
+Typed native CRM partial edits merge their original semantic keys into canonical
+JSONB in PostgreSQL. Untouched values stay intact even when a hidden stored JSON
+number has more precision than JavaScript can represent. Current row/source/field
+checks still govern the operation and every actual changed field. The pure merge
+codec reads no database source and grants no permission. Raw full-attribute
+replacement remains a full-field operation. Native deal decoders retain original
+SQL decimal text when JSON numeric parsing would otherwise round an amount,
+without changing untouched stored values into strings as a side effect of a patch.
+Explicit nullable clears affect only the named key; canonical IDs/links and one
+version increment remain intact. Full native consumer/history/operation governance
+closure is still pending, and qualification/issuance remain disabled.
