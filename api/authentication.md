@@ -281,3 +281,11 @@ readable; otherwise its value is null. The application record projection wire is
 unchanged. Custom tables and rendered pages preserve private query/field evidence,
 including empty queries, for subsequent current-access checks. This local reader
 checkpoint does not qualify runtime or certify the later model/cache consumers.
+
+
+Legacy generic schema discovery now advertises only field declarations currently
+readable or writable through the canonical catalog. Native generic history returns
+only currently readable fields and retains private evidence on its result wrapper.
+Missing required private policy configuration, invalid revisions or public reader
+ACLs hold direct legacy reads and writes as well as application invocations. These
+floors do not grant row access, register handlers or enable runtime qualification.
