@@ -471,3 +471,20 @@ lock and current-policy existing-receipt read for idempotency. No owner data
 read or relaxed RLS is used by the composed application path. Outbox failure
 rolls back business rows and audits. Remaining native/HTTP/query/history closure
 is still required, and qualification and real issuance remain disabled.
+
+
+Canonical native CRM business values are constrained on the actual entity row,
+below typed and raw writers: known text/tag/reference-ID shapes, deal stage and
+bounded nonnegative amount/date values, current custom-field types/options and
+required values. Unknown custom keys refuse; archived values can be retained
+unchanged but not edited or removed. Existing curated person-profile text slots
+organisation_name/position (200) and mailing_address (600) remain a finite native
+vocabulary and obey those bounds. Configured definitions add restrictions.
+Raw SQL reports 22023; application dispatch maps constraint refusal to invalid_value.
+Unsafe JavaScript integer amount inputs refuse before serialization at raw native
+create/patch/supersession; exact decimal strings and original SQL numeric text
+retain precision. A type-specific patch check admits and locks its current source,
+so a hidden source keeps its normal miss rather than revealing its kind.
+These constraints do not grant row/field access or certify complete native relation,
+read/query/history, creation-input and governance closure. Issuance/qualification
+remain disabled pending the remaining R2 and downstream work.
