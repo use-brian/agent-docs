@@ -49,6 +49,10 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 - [concepts/feed.md](concepts/feed.md): brand voice, planning, collaborative drafts, review, publishing, platforms, and email campaigns
 - [concepts/custom-home-apps.md](concepts/custom-home-apps.md): build a static web app that renders inside a workspace and reads the brain through a scoped bridge; manifest, bundle, sandbox, consent
 
+### Application kits
+
+- [apps/sdk.md](apps/sdk.md): application/source SDK profiles, scaffolds and unqualified runtime limits
+
 ### Public API (REST)
 
 - [api/overview.md](api/overview.md): when to use it, request flow, setup
