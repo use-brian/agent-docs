@@ -610,3 +610,21 @@ role/source-policy epoch or SDK wire export is changed by this metadata revision
 Runtime JSON cannot select a codec or register its implementation. Complete native
 query/history/legacy adoption and semantic/configuration/governance closure still
 belong to R2; qualification and real issuance remain disabled.
+
+
+The deployed native module now declares `query` for canonical company, person and
+deal resources, using the existing `{type, query}` operation input and bounded
+application query schema. Actual current native/application SQL authority admits
+predicate, sort and aggregate fields for every candidate before evaluation. Output
+fields are captured only for selected rows. Native decimal comparisons, keyset
+cursor values and aggregate results remain decimal text; page limits default to 50
+and cannot exceed 100. Candidate evidence is bounded at 4096 and fails closed beyond
+that bound. Cursors bind workspace, type, schema and declared query shape.
+
+Query results carry immutable candidate/domain/field evidence, including empty
+results and excluded candidates. Original selector formulas and candidate versions
+are metadata, not former-reader permits or stored business values. Independent
+current readers can validate the same evidence; field/role/source/schema/candidate
+changes hold stale observations. Runtime JSON cannot register codecs, readers or
+SQL. This canonical query entry does not certify legacy CRM report/history adoption,
+task/file query support, other unfinished R2 operations, qualification or issuance.
