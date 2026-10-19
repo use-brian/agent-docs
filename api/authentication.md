@@ -503,3 +503,17 @@ These are restriction-only checks and do not grant rows, create memberships, or
 enable native application mutation ports. Full native query/history/configuration
 and remaining legacy adapter closure are still in scope for R2; qualification and
 issuance remain disabled.
+
+
+Legacy CRM HTTP creation, standard/custom patch, archive, and fallback pipeline
+mutations compose canonical rows/participants/activities on one nonowner database
+transaction. A later validation or activity failure rolls the complete mutation
+back; graph/notification effects follow commit. Original unknown keys, wrong types
+and excessive values refuse rather than being stripped or truncated. Mapped-row
+HTTP import is one atomic batch of at most 100 records: any failed row rolls every
+member back; successful results contain only committed IDs. Production staged CSV
+jobs retain their separately transactional row/checkpoint contract. Legacy view
+create/patch inputs carry declared customFields through the canonical writer.
+Native application mutations, full native field/query/history/configuration
+closure and remaining composed revision/legacy command work still belong to R2.
+Qualification and real issuance remain disabled.
