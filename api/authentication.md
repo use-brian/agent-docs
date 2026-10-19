@@ -517,3 +517,18 @@ create/patch inputs carry declared customFields through the canonical writer.
 Native application mutations, full native field/query/history/configuration
 closure and remaining composed revision/legacy command work still belong to R2.
 Qualification and real issuance remain disabled.
+
+
+The native registry adds create_contact and create_deal using canonical typed CRM
+writers and the shared canonical entity insert port. Contacts remain person
+entities; deals remain deal entities. Fixed command input schemas enumerate their
+supported fields. Current create/command field and issuer/member/parent ceilings
+apply on the same nonowner transaction. No membership or credential-owner identity
+is substituted. Results and replay receipts hold refs only, so write-only creation
+can replay without a readable record; current write revocation stops replay.
+Concurrent identical command requests acquire their existing idempotency lock
+before workspace/module/source locks and recheck authority after waiting. They
+recover one receipt/event and one canonical record. Original invalid frames and
+audit failures leave no partial effects. Raw native SELECT remains closed to apps.
+Unsupported native relations/custom commands, patch/history/query and configuration
+ports remain required R2 work; qualification/issuance stay disabled.
