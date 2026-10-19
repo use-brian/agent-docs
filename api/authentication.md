@@ -488,3 +488,18 @@ so a hidden source keeps its normal miss rather than revealing its kind.
 These constraints do not grant row/field access or certify complete native relation,
 read/query/history, creation-input and governance closure. Issuance/qualification
 remain disabled pending the remaining R2 and downstream work.
+
+
+Canonical CRM create and typed update inputs accept optional customFields values
+from the current declared vocabulary. Initial required values are validated and
+inserted together; custom references retain their current privacy/scope floor.
+Combined standard/custom edits and company upserts preserve the canonical ID and
+commit one source-version increment. CSV imports and the seven legacy CRM mutation
+tools use the same writers. Tool custom_fields inputs are JSON objects, and an
+unknown original input key refuses the entire call before store mutation.
+Protected native insertion and kind promotion additionally validate the actual
+post-write point field mask, which may be stricter than its prospective catalog.
+These are restriction-only checks and do not grant rows, create memberships, or
+enable native application mutation ports. Full native query/history/configuration
+and remaining legacy adapter closure are still in scope for R2; qualification and
+issuance remain disabled.
