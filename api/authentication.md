@@ -575,3 +575,27 @@ write/role/configuration withdrawal stops replay or rolls back an uncommitted
 insert. Restoring configuration cannot revive an old invocation. Protected task
 semantics, richer native commands, raw reference/history/query closure and full
 governance still require R2 completion; qualification and issuance remain false.
+
+
+Canonical native row constraints now reject invalid company/contact/member-owner/
+custom/configuration relationship assignments below typed and raw writers.
+Targets must have the right current kind/lifecycle/workspace, and pipeline/stage
+IDs must form a consistent current pair. New relationships preserve target
+sensitivity, Department/Project and private-owner requirements in the source.
+Scope changes revalidate retained archived custom references as well. Unrelated
+typed partial edits can preserve untouched historical relationships. Invalid UUID
+shapes retain invalid_value; unavailable/invalid targets use the same generic
+access_unavailable refusal without disclosing their identity or state.
+
+Native reference-write identity uses the existing current native row envelope
+and private point field policy. Derived payloads retain their stricter Project/
+ancestry conditions; a valid legacy write does not release a derived payload.
+Application reference admission retains its existing exact released-target path.
+Original ID/workspace/authorship/creation time cannot be rewritten on native
+rows, and new alias assignments must retain canonical normalization.
+read_native_application_record explicitly rejects owner/bypass connections even
+with a member GUC; a member identifier cannot substitute for the nonowner role.
+This supplements the earlier owner-read proof, which had tested an unset actor.
+No raw RLS privilege is widened. Native task/semantic/query/history, complete
+legacy read adoption and configuration/governance remain R2 work; qualification
+and real issuance remain disabled.
