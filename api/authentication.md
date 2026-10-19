@@ -237,3 +237,11 @@ uses source/version admission, not a workspace-wide invocation reset. A current
 result read before that edit is refused by the canonical result version check.
 Retained historical observations keep their existing separate admission contract.
 Local proof does not enable application-data issuance or satisfy R2-R6/rollout.
+
+
+Local R2 query work additionally preserves finite ID/self/registered-relationship
+intersections as canonical query points. An independently authorized later reader
+uses its own current point, field and relationship-anchor rights; another reader's
+revocation does not grant or remove those independent rights. Absent or excluded
+IDs retain their original domain obligations. This remains unpublished source
+work behind the existing qualification barrier, not available app-data issuance.
