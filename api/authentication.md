@@ -341,3 +341,37 @@ Schema apply changes its pinned epoch: MCP may report `grant_revoked` with
 invocation; never automatically retry a write. SDK schema helpers consume explicit
 deployment management ports without receiving native-session credentials in the
 browser application transport. Qualification and real app issuance remain disabled.
+
+
+Native module role/owner governance is a native-session management profile:
+- GET `/api/applications/workspaces/:workspaceId/governance/catalog` with
+  `moduleKey`, optional `afterId` and optional `assistantId` query values.
+- POST `.../governance/preview` with `{ moduleKey, expectedRevision, operation,
+  assistantId? }`.
+- POST `.../governance/reviews/:reviewId/apply` with `{ assistantId? }`.
+- POST `.../governance/mcp?moduleKey=...` with optional assistant selection.
+
+Catalog returns a current revision, deployed role keys and at most 100 assignment
+metadata rows with IDs/versions and `nextCursor`. Operations are strict:
+`assign_role({userId,roleKey,startsAt,expiresAt})`,
+`revoke_role({assignmentId,expectedVersion})`, and
+`bind_owner({entityTypeId})`. Each operation object includes its `kind` discriminator.
+The binding can attach an unowned generic schema to a deployed protected module;
+it cannot remove/reassign an existing protected owner or upload code/readers.
+
+Owner/admin membership alone gives no missing field role. Complete current native
+schema/row/field/reference governance applies, and delegation needs the actor's
+own live module role without exceeding its expiry. Preview is actor/assistant/
+revision bound. Apply commits its mutation/review/content-free event once. Changed
+or restored authority requires fresh review; replay still needs current authority.
+An explicit self-revocation can return its committed status while further reads
+and replay use the reduced authority. No business payload or old allowance is
+cached in the outcome. Required private configuration ports remain mandatory.
+
+Native MCP exposes `applicationGovernanceCatalog`, `applicationGovernancePreview`
+and `applicationGovernanceApply`, with the selected module's actual role enum.
+A committed apply changes its invocation epoch; reconcile the same review in a
+fresh invocation after `grant_revoked` with `effect: committed`. App OAuth/service/
+Home credentials acquire no native management audience. Qualification and app
+key/grant issuance remain disabled; native module bindings and compiled external
+configuration update handlers are still under implementation.
