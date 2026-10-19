@@ -375,3 +375,22 @@ fresh invocation after `grant_revoked` with `effect: committed`. App OAuth/servi
 Home credentials acquire no native management audience. Qualification and app
 key/grant issuance remain disabled; native module bindings and compiled external
 configuration update handlers are still under implementation.
+
+
+Protected generic record deletion retains every current native member/issuer and
+module field-release floor for the actual deleted fields, in addition to the exact
+application delete and named-command actions. A member using an external profile
+keeps the member floor; a child cannot borrow its issuer's rights for a parent.
+A field mask alone still grants no row-delete action. Ordinary unowned exact row-
+delete capability retains its existing contract.
+
+Deletion receipts contain refs only. A deployed protected module may retain its
+current per-record policy after deletion and use the private canonical tombstone
+metadata port for scope/version; no field values are retained there. Native recovery
+checks current write rights to the recorded deleted keys. App recovery repeats the
+current principal, issuer, parent and release checks. Missing retained policy or
+unknown legacy deleted-key metadata holds protected recovery with access_unavailable.
+Role restoration permits a fresh authorized recovery of the same receipt without
+repeating deletion, audit or event. A tombstone never restores old field payloads
+or authorizes reading them through historical observations. Qualification and app
+issuance remain disabled.
