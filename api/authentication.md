@@ -458,3 +458,16 @@ source authority. Explicit null Department/Project destinations retain canonical
 destination-admission errors rather than being treated as omitted selections.
 These checks compose with current row/field/source/revision admission and do not
 turn on application issuance or qualification.
+
+
+Canonical archive/restore, catalog pipeline-stage changes, participant removal,
+registered CRM stages and import enrichment carry exact original business-field
+sets into the canonical entity writer. Partial SQL merges preserve untouched
+hidden and precise values; clears and equal attempted fields still require
+current write admission. Archive/pipeline field names match the public semantic
+vocabulary. Registered nonowner stage commands resolve outbox IDs under the
+existing read policy after the insert, using a workspace/event-key transaction
+lock and current-policy existing-receipt read for idempotency. No owner data
+read or relaxed RLS is used by the composed application path. Outbox failure
+rolls back business rows and audits. Remaining native/HTTP/query/history closure
+is still required, and qualification and real issuance remain disabled.
