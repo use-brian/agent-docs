@@ -434,3 +434,17 @@ without changing untouched stored values into strings as a side effect of a patc
 Explicit nullable clears affect only the named key; canonical IDs/links and one
 version increment remain intact. Full native consumer/history/operation governance
 closure is still pending, and qualification/issuance remain disabled.
+
+
+Finite/self/registered-relationship selector intersections apply to actual member
+OAuth, members using external profiles, nonmember external OAuth and named service
+credentials. Each current parent and the credential's immutable issuance maximum
+remain restrictions. Fields may union only on the same candidate within one
+layer; a broader live app grant cannot fill a field absent from its captured
+credential/OAuth ceiling. The server derives issuance snapshots, and later writes
+to those snapshots are refused. A still-valid credential may retain an unrelated
+resource while a revoked parent makes the requested resource unavailable.
+Current genuine-member, issuer and executing-assistant bounds remain enforced;
+owner/client registration does not promote an external principal into a member.
+Qualification and issuance remain disabled while native/persistent consumer
+closure and final acceptance are incomplete.
