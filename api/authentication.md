@@ -289,3 +289,21 @@ only currently readable fields and retains private evidence on its result wrappe
 Missing required private policy configuration, invalid revisions or public reader
 ACLs hold direct legacy reads and writes as well as application invocations. These
 floors do not grant row access, register handlers or enable runtime qualification.
+
+
+Native record patches check every supplied field, including equal-value assignments.
+A title-only patch preserves untouched fields without requesting write permission
+for them. Native generic command replay rechecks its original write fields under
+current native roles, row/scope and review state. Refused replay repeats no effects;
+receipts contain references only. Deployed semantic commands can compose canonical
+multi-record writers under one transaction with state/CAS and result checks.
+
+Sandboxed Home frames may send Origin `null` only to active Home application
+clients with the installed Home authentication adapter. Each actual request needs
+the existing exact signed Home binding and current viewer/manifest authority. This
+does not accept application OAuth/service keys or native session credentials for
+opaque origins, and authentication/budget consumption occur once per request.
+Preflight returns only client-mode metadata. CORS reflects the exact opaque origin
+without wildcard or cookie credentials. `/api/applications/:appId/schemas/:type`
+returns the current projected catalog resource. Schema mutation still requires
+native governance. Qualification, binding capture and real issuance remain gated.
