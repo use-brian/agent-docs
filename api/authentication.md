@@ -555,3 +555,23 @@ The owner pool cannot use the canonical read port. Pipeline/stage references hol
 while their canonical configuration target port is incomplete. Complete native
 query/history, legacy DTO/query adoption, protected writes and governance remain
 required R2 work; runtime qualification and actual issuance stay disabled.
+
+
+Protected canonical company/contact/deal creation admits current create and
+command rights against the private catalog before insertion and checks the actual
+canonical point afterward. Existing issuer, parent, native member and assistant
+ceilings remain in the shared authority formula. A stricter point can roll the
+whole command back. A genuine member behind an external profile still needs its
+native field role; owner status does not supply a missing issuer role.
+The existing seven-argument application_native_create_allows remains the actual
+point check; the private eight-argument form carries prospective metadata only
+inside canonical server admission. No public raw table rights are added.
+Narrow CRM create commands omit their legacy implicit empty tags in the canonical
+insert, retaining the existing [] read default without an undeclared tags write.
+Member/external-user/service creators retain actual actor and assistant IDs and
+exact decimal strings, commit one canonical version and ref-only receipt/event
+under concurrent replay, and require no read grant or new membership. Current
+write/role/configuration withdrawal stops replay or rolls back an uncommitted
+insert. Restoring configuration cannot revive an old invocation. Protected task
+semantics, richer native commands, raw reference/history/query closure and full
+governance still require R2 completion; qualification and issuance remain false.
