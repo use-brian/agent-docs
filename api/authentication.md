@@ -254,3 +254,14 @@ predicate evidence reaches the actual Brian query tool. Native and application
 readers keep their existing independent ceilings. Canonical writer, governance,
 all-consumer and final R2 acceptance work remains in progress; this does not change
 credential availability or certify deployed behavior.
+
+
+The local canonical generic writer now restricts actual inserted/changed native
+cells at the database boundary, including old SQL writers. Legacy partial patches
+preserve omitted hidden values; create/update responses are projected before the
+transaction commits. Native field roles and each application/issuer/parent ceiling
+remain mandatory. Whole-record application deletion requires its distinct exact
+row-delete and named-command actions. A field write grant cannot confer deletion.
+Reference captures use canonical file-owner metadata for independent native/app
+readers. These are local implementation checkpoints; qualification and credential
+issuance remain unavailable pending all-consumer acceptance.
