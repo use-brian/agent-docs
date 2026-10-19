@@ -599,3 +599,14 @@ This supplements the earlier owner-read proof, which had tested an unset actor.
 No raw RLS privilege is widened. Native task/semantic/query/history, complete
 legacy read adoption and configuration/governance remain R2 work; qualification
 and real issuance remain disabled.
+
+
+Native deal amount field evidence includes builtin codec revision 2 for lossless
+decimal-text values. Former-revision observations remain immutable and hold after
+the codec change even if the canonical row version, scope and grant are unchanged.
+Fresh independent readers share the new current field identity; unchanged name
+observations retain their prior identity and remain valid. No business version,
+role/source-policy epoch or SDK wire export is changed by this metadata revision.
+Runtime JSON cannot select a codec or register its implementation. Complete native
+query/history/legacy adoption and semantic/configuration/governance closure still
+belong to R2; qualification and real issuance remain disabled.
