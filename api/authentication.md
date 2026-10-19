@@ -407,3 +407,17 @@ unchanged fields a semantic writer preserves; it never permits a hidden change.
 Allowed partial edits preserve hidden untouched fields and canonical IDs/links.
 Missing current protected metadata fails closed. This is field-write admission,
 not full native operation/history qualification; issuance remains disabled.
+
+
+Canonical native deal amounts accept nonnegative decimal strings with at most 18
+fractional digits under the bounded application decimal grammar. Use strings for
+exact values; unsafe integer numbers, exponent strings and invalid/negative values
+refuse. Safe finite legacy numeric inputs remain supported. Strings survive typed
+create/patch/get/list, REST/views/chat and CSV import without conversion to Number.
+Application deal catalogs declare amount as decimal (scale 18), and projections
+return decimal text even for JSON numeric storage. Native field observations use
+the same text codec; source versions and policy epochs are unchanged by projection.
+Existing browser amount inputs, ordering and totals preserve exact strings.
+The additive shared applicationDecimalText/Add/Compare helpers use BigInt scaled
+arithmetic and do not imply currency rounding. Other native aggregate/read/history
+closure still belongs to R2; this checkpoint does not enable runtime qualification.
