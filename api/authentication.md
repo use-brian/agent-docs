@@ -532,3 +532,26 @@ recover one receipt/event and one canonical record. Original invalid frames and
 audit failures leave no partial effects. Raw native SELECT remains closed to apps.
 Unsupported native relations/custom commands, patch/history/query and configuration
 ports remain required R2 work; qualification/issuance stay disabled.
+
+
+Native get accepts optional exact fields. A requested unknown or currently
+unreadable field refuses; explicit [] is an authorized identity-only selection.
+The company/person/deal catalog declares canonical tags/aliases as JSON text
+arrays, externalRef as a JSON object, scalar/decimal/timestamp fields with their
+existing shapes, current reference IDs, and the three finite curated-person text
+slots. The additive json descriptor is inert schema data with bounded array
+count/item declarations; it cannot register handlers, SQL, readers or policy.
+Current custom definitions retain their typed crm descriptors. Prospective self
+creators can discover contact/deal schema before the first business record exists.
+Application catalog discovery uses structural source/scope and schema metadata,
+without reading business projections. Hidden fields do not become synthetic nulls.
+
+read_native_application_record and readCanonicalNativeRecord capture the exact
+selected values under the real nonowner SQL actor. They attach current immutable
+application_field evidence and retain independent target authority for company,
+contact and member-owner IDs. Target grant revocation withholds the first reader's
+old capture while an independently authorized second reader can still use it.
+The owner pool cannot use the canonical read port. Pipeline/stage references hold
+while their canonical configuration target port is incomplete. Complete native
+query/history, legacy DTO/query adoption, protected writes and governance remain
+required R2 work; runtime qualification and actual issuance stay disabled.
