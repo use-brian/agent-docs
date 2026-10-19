@@ -394,3 +394,16 @@ Role restoration permits a fresh authorized recovery of the same receipt without
 repeating deletion, audit or event. A tombstone never restores old field payloads
 or authorizes reading them through historical observations. Qualification and app
 issuance remain disabled.
+
+
+Native entity-backed CRM updates keep the current deployed module field-write
+mask alongside ordinary member/assistant/row bounds. Typed native company,
+contact, deal, stage and custom-field writers authorize their original supplied
+keys before reading and merging stored values. Equal hidden-value assignments
+remain unavailable. The canonical SQL guard repeats current admission for actual
+business changes; raw attribute replacement requires its complete supplied field
+set, including equal values. Exact-record partial intent only restricts which
+unchanged fields a semantic writer preserves; it never permits a hidden change.
+Allowed partial edits preserve hidden untouched fields and canonical IDs/links.
+Missing current protected metadata fails closed. This is field-write admission,
+not full native operation/history qualification; issuance remains disabled.
