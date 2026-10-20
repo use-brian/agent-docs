@@ -51,3 +51,10 @@ Native management denial (401/403/404) clears the human panel's protected view
 before parsing even a malformed error body. It never retries the write. Re-enter
 through current native authority and reconcile admitted metadata. The People/access
 recovery destination uses `/organization?section=access`.
+
+The bounded overview includes the selected module's governance catalog. Use the
+optional `moduleKey` query parameter to select a deployed module; unavailable
+module governance is explicit and is never an empty authorized role catalog.
+The catalog has the same actor/workspace lifetime as the overview. After an
+uncertain mutation, keep further writes disabled until a fresh authorized
+overview succeeds. A failed reconciliation is not evidence to retry a write.
