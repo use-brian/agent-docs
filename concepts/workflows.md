@@ -344,3 +344,7 @@ outcomes require checking the destination and receipt; resending the full output
 can duplicate messages. `retrySafe: true` records a no-effect outcome, and a new
 attempt still requires correcting the cause and passing current authority. A
 completed assistant step alone does not prove delivery.
+
+Messaging approval notices use fixed text and link to the authenticated review
+page. They omit workflow names, tool names and arguments. Read the authorized
+approval record before deciding; the notice alone is not the operation review.
