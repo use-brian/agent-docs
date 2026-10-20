@@ -219,3 +219,15 @@ automatically after an uncertain write or send; resending creates a new operatio
 - [Assistants](./assistants.md)
 - [Workspaces & sharing](./workspaces.md)
 - [Tools & connectors](./tools-and-connectors.md)
+
+## Desktop bridge acknowledgement recovery
+
+A running WeChat desktop bridge retries an unavailable outbox acknowledgement
+before polling for more work. It keeps the completed send result and does not
+resend text or files just to recreate that acknowledgement. A failed send also
+keeps its original failed result while acknowledgement is retried.
+
+This protection lasts for that worker process. Restart or multiple-worker
+reconciliation is still pending. An expired outbox lease or a missing
+acknowledgement does not prove that nothing was delivered; check the destination
+before initiating another send.
