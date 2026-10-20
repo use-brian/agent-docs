@@ -747,3 +747,17 @@ the transaction, and independently authorized readers retain their own access.
 This checkpoint does not certify other native writers, ancestry-backed patch
 admission, legacy standalone dispatch, authorized history readers or governance.
 Qualification and actual credential issuance remain false.
+
+
+Canonical native/generic point reads, generic query-domain observations and field
+evidence capture retain a genuine application's exact private host lease. The
+lease is checked before SQL dispatch and after its awaited completion, including
+SQL rejection. A completed or in-flight former invocation cannot borrow another
+app's current credentials when a physical non-owner connection is reused. Its
+result refuses access_unavailable before value validation or evidence return.
+The currently authorized app still reads its own released targets. This liveness
+check grants no authority: current SQL row/field/issuer/member and source checks
+remain required. Native callers without an application host retain their actual
+non-owner transaction path. No wire shape or SDK source changes, and qualification
+and issuance remain false. Complete native operation, legacy reader, governance
+and final acceptance closure remain in progress.
