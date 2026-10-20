@@ -726,3 +726,24 @@ that evidence through the final payload and split larger mixed reference sets in
 bounded calls. Malformed private restrictions hold; narrowed data scope never grants
 unreadable catalog metadata. Qualification and actual issuance remain false; other
 legacy lists, full DTOs, reports/history, operations and governance remain uncertified.
+
+
+The registered native patch_company command takes {id,patch}, with the expected
+canonical source version in the command envelope. patch_companies takes {patches}
+with 1-100 unique targets, each {id,patch,expectedVersion}; a scalar envelope
+version is invalid for a batch. Patches use the canonical company update schema.
+Current patch and command:<key> releases must cover every written field through
+all authority layers, including native member and issuer ceilings. Exact write-only
+releases return canonical references without requiring or returning protected DTOs.
+The legacy full-DTO updater admits its complete selected result before effects and
+refuses access_unavailable when unavailable. Business/history rows, the reference-only
+receipt, audit and committed event commit once or all roll back. Replays reauthorize
+current targets without reapplying an old version comparison. Version conflicts
+return record_version_conflict and malformed values return invalid_value. Optional
+domain/custom clears preserve canonical deletion semantics; untouched hidden fields
+stay inside the database. Same-value semantic patches advance the source version
+because updatedAt is observable. Current role contraction after a write rolls back
+the transaction, and independently authorized readers retain their own access.
+This checkpoint does not certify other native writers, ancestry-backed patch
+admission, legacy standalone dispatch, authorized history readers or governance.
+Qualification and actual credential issuance remain false.
