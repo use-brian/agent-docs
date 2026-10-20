@@ -52,6 +52,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 ### Application kits
 
 - [apps/sdk.md](apps/sdk.md): application/source SDK profiles, scaffolds and unqualified runtime limits
+- [apps/management.md](apps/management.md): native management commands, saved reviews, safe reconciliation and unqualified limits
 
 ### Public API (REST)
 
