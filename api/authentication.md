@@ -668,3 +668,15 @@ uses those captured values; selected output records retain their original admitt
 candidate versions and current source reauthorization. Valid values, decimal text,
 canonical fallback, observation identities and source versions are unchanged.
 This read checkpoint does not qualify remaining legacy consumers or enable issuance.
+
+
+Application access metadata cannot be reused as native-member authority. A legacy
+native getter refuses access_unavailable for a remembered actual, shallow-copied
+or serialized application context outside its genuine host. An older context also
+cannot borrow another application's broader execution. Genuine host access retains
+its current field, actor and scope ceilings, including shallow narrowing copies.
+The deny-only applicationBound hint cannot authorize a read; the host separately
+verifies private execution provenance, its authenticated transaction and live lease.
+Serialized or forged hints cannot mint that proof. Existing native contexts keep
+their actual-member path. No source identity, policy epoch or wire grant is added.
+Remaining R2 consumer/write/governance adoption and runtime qualification stay open.
