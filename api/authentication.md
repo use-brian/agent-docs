@@ -653,3 +653,18 @@ through the existing canonical row predicate over verified scope metadata. No ow
 payload read, runtime reader registration or alternative live store is introduced.
 Legacy list/search/deal DTO/report/history, public-query adoption and remaining R2
 operations are still uncertified; qualification and actual issuance stay disabled.
+
+
+Native CRM reads evaluate only their selected field codecs. Unselected historical
+malformed values cannot change a name-only read, query count, result order or error.
+Explicit empty selection evaluates no business values; omitted selection keeps the
+current readable-field default. Selected native values are validated against the
+current declared field shape. Malformed scalar/container values in admitted captures return invalid_value for
+review rather than a null/default replacement. Rejected references retain the
+canonical access_unavailable contract without certifying absence or revealing targets. Native queries validate every
+admitted candidate's consumed filter/sort/aggregate values before expression
+evaluation, including candidates excluded from the final output. Query evaluation
+uses those captured values; selected output records retain their original admitted
+candidate versions and current source reauthorization. Valid values, decimal text,
+canonical fallback, observation identities and source versions are unchanged.
+This read checkpoint does not qualify remaining legacy consumers or enable issuance.
