@@ -231,3 +231,11 @@ version remains subject to its original scope and current history/field rights. 
 These contracts remain behind runtime qualification. They do not authorize real
 application credential issuance or activation, and do not certify downstream
 persistent or background consumers.
+
+## Goal completion after cancellation
+
+A stale structural completion check cannot overwrite a discarded Goal, finish a
+Goal already claimed by its acting worker, or close the host under a changed
+acceptance or authority binding. Read the current Goal state after such a change.
+This ownership check does not grant source access or make an uncertain external
+effect safe to repeat.
