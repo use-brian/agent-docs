@@ -180,6 +180,8 @@ author and the billed account do not prove recipient access.
 
 Deterministic steps, approved tool invocations and delivery now recheck live member authority. If access changes during an operation, its result is withheld and the operation may already have executed: inspect its outcome before starting another run. Delivery also checks current recipient authority; these checks do not make external side effects transactionally atomic.
 
+Workflow tool discovery renews the same invocation authority before it starts and after its awaited result, before any step is created. A policy change can therefore fail a manual or scheduled advance with `authority_changed` even when discovery returned tools. Treat this as changed access requiring a fresh reviewed request, rather than an ordinary tool-registry lookup retry. Unchanged authorized runs continue normally.
+
 An old approval card cannot restart a failed or completed run, even if access is restored. Approval notifications also renew current authority before sending.
 
 ## CRM wake-ups for goals
