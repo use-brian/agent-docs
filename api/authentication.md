@@ -785,3 +785,12 @@ whole current protected field footprint. Current relationship target ancestry is
 checked alongside the original target. These checks do not grant root row, field
 or command access. Native application source profiles retain their existing holds;
 qualification, issuance and remaining R2 operation/governance closure stay pending.
+
+
+Raw canonical CRM edits retain the same current input-source authority as typed
+application edits, including destinations without a protected field-owner binding.
+SQL statement and commit checks enforce current input roles; contraction between
+UPDATE and COMMIT rolls back the value, revision and history together. Equal
+business assignments still require admission. Source holding and maintenance keep
+their metadata path, and physical erasure keeps its existing authority. Root row,
+field, command and application ceilings remain independently required.
