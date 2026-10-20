@@ -773,3 +773,15 @@ frames and generic evaluation use the same internal lease guard; SQL permissions
 and immutable source evidence remain authoritative. No wire or SDK shape changes,
 and qualification/issuance remain false. Other R2 native operations, legacy-path
 and governance closure remain in progress.
+
+
+Canonical native company reads and edits retain their original source obligations.
+Current input-field permissions are checked before returning values or applying an
+edit, including direct field capture and retained source observations. Revoking an
+input role refuses the derived record even if its own name field is public; an
+independently authorized current reader/writer stays admitted. Selected field
+inputs consume their selected footprint; an explicit raw CRM input requires its
+whole current protected field footprint. Current relationship target ancestry is
+checked alongside the original target. These checks do not grant root row, field
+or command access. Native application source profiles retain their existing holds;
+qualification, issuance and remaining R2 operation/governance closure stay pending.
