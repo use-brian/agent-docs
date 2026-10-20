@@ -335,3 +335,12 @@ REST uses camelCase `expectedRevision` and `idempotencyKey`; toggle also needs `
 One verified case creates one canonical assigned Task and receipt atomically. Replays/concurrent events resolve that receipt. Missing execution details keep confirmed assistant-owned work waiting for an admitted question; affected execution cannot start before readiness. Human-owned work remains tracking. Source/tool/account revocation and explicit pause still govern continuation.
 
 Disable blocks queued/uncommitted and future intake. Existing Tasks retain their accepted mandate and original shared Task-tree allowance. Re-enable does not replay intake, retarget Tasks, clear pauses or renew budgets. No routine-period allowance is added. Contextual suggestions use bounded Tasks already read in the interaction, with no timer/archive scan; all projections retain source-filtered support.
+
+A workflow's Slack delivery outcome may include a `receipt` with `channelId`,
+`attemptedMessages`, `messageIds`, `effect` (`none`, `partial`, `complete` or
+`unknown`) and `retrySafe`. Inspect `output.__delivery` before reporting
+delivery or sending again. Partial, unconfirmed and acknowledged-but-unrecorded
+outcomes require checking the destination and receipt; resending the full output
+can duplicate messages. `retrySafe: true` records a no-effect outcome, and a new
+attempt still requires correcting the cause and passing current authority. A
+completed assistant step alone does not prove delivery.
