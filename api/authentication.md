@@ -628,3 +628,28 @@ current readers can validate the same evidence; field/role/source/schema/candida
 changes hold stale observations. Runtime JSON cannot register codecs, readers or
 SQL. This canonical query entry does not certify legacy CRM report/history adoption,
 task/file query support, other unfinished R2 operations, qualification or issuance.
+
+
+Legacy company/contact getters now select their complete declared DTO fields through
+the canonical native field reader. A partially readable DTO refuses access instead
+of replacing hidden fields with null, defaults or empty containers. Inaccessible
+identity retains the existing nullable lookup contract; null is unavailable and
+does not certify absence. Returned DTOs preserve canonical IDs, dates, arrays,
+reference rights and field evidence. Existing domain/email canonical-ID fallback
+uses builtin codec revision 2; old observations hold without rewriting the business
+source or original evidence. Point and query metadata share that fixed dictionary. Internal native query
+catalog schema identity also includes the compiled codecs, so an old cursor holds
+after codec changes even when field shapes and business versions are unchanged.
+
+When invoked inside a genuine application operation, these getters retain its exact
+nonowner transaction and current credential/issuer/member/field ceiling. Actor
+substitution and callbacks retained after transaction release refuse, including when the same
+physical client and execution are reused. In-flight reads recheck their original
+private lease around asynchronous value/admission boundaries; a later broader
+application transaction cannot authorize the stale narrow read. The host pins the exact genuine
+execution and a private permanently expiring transaction lease. A narrower
+caller clearance, shared audience or actual v2 Department grant remains effective
+through the existing canonical row predicate over verified scope metadata. No owner
+payload read, runtime reader registration or alternative live store is introduced.
+Legacy list/search/deal DTO/report/history, public-query adoption and remaining R2
+operations are still uncertified; qualification and actual issuance stay disabled.
