@@ -239,3 +239,9 @@ Goal already claimed by its acting worker, or close the host under a changed
 acceptance or authority binding. Read the current Goal state after such a change.
 This ownership check does not grant source access or make an uncertain external
 effect safe to repeat.
+
+The Goal terminal-delivery path stops when the canonical task write is refused.
+It reports `goal_host_write_unavailable`, and the acting
+worker does not schedule an automatic replacement tick. Review current access and
+recorded state before an explicit retry. This does not yet close every durable
+Goal/effect recovery window.
