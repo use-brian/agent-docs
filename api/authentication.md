@@ -680,3 +680,18 @@ verifies private execution provenance, its authenticated transaction and live le
 Serialized or forged hints cannot mint that proof. Existing native contexts keep
 their actual-member path. No source identity, policy epoch or wire grant is added.
 Remaining R2 consumer/write/governance adoption and runtime qualification stay open.
+
+
+The legacy CRM store deal getter now selects its complete DTO through canonical
+native field/source admission and retains the genuine application's private host
+execution and transaction lease. Unreadable DTO fields refuse; unavailable identity
+remains nullable without certified absence. IDs, links, dates, aliases and admitted
+null-stage defaults keep their existing shape. Application native record projections
+still expose amount as lossless decimal text. A private selected amount-format hint
+lets the legacy DTO retain safe numeric storage as a number and string storage as
+a string. Numeric storage that cannot round-trip exactly stays decimal text. The
+hint is not returned as an application REST/MCP record field and grants no rights.
+Admitted historical null tags/external references keep legacy empty-container
+defaults only after full field admission. Source rows, immutable observations,
+codec revisions and policy epochs are unchanged. Legacy lists/full R2 DTOs/search/
+reports/history, operations and governance remain uncertified; qualification stays false.
