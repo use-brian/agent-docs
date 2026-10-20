@@ -46,3 +46,8 @@ Unknown source mapping/retention/key capabilities are unavailable. Source trust
 installation and key rotation require the deployment-owned path. Legacy repair,
 qualified positive issuance, real provider QA and production activation remain
 explicitly owed. Registration and a successful safe review do not certify them.
+
+Native management denial (401/403/404) clears the human panel's protected view
+before parsing even a malformed error body. It never retries the write. Re-enter
+through current native authority and reconcile admitted metadata. The People/access
+recovery destination uses `/organization?section=access`.
