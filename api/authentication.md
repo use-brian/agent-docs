@@ -709,3 +709,20 @@ cursors refuse after the compiled query format changes. Point values, source
 versions, field codecs and metadata epochs remain unchanged. Remaining legacy
 query/write/history and governance adoption is uncertified; qualification and
 actual issuance remain false.
+
+
+Legacy mixed CRM label lookups use canonical native query admission on the actual
+application host transaction/private lease or native member non-owner transaction.
+Fixed requested-ID, Department, Project, private-user and assistant restrictions
+intersect current authority before values; private compiled restrictions cannot
+grant rights or substitute actors. Company/contact labels consume name. Deal labels
+retain their canonical-ID fallback and consume no name. Unreadable consumed fields
+refuse; invalid batches return invalid_value. Each call accepts at most 100 distinct
+mixed references. The returned Map retains selected-field and requested-ID query
+evidence, including empty admitted domains. An omitted identity outside the admitted domain
+remains unavailable rather than certified globally absent. Independent readers retain their own current
+access after another reader contracts. Contact/deal tables and deal boards carry
+that evidence through the final payload and split larger mixed reference sets into
+bounded calls. Malformed private restrictions hold; narrowed data scope never grants
+unreadable catalog metadata. Qualification and actual issuance remain false; other
+legacy lists, full DTOs, reports/history, operations and governance remain uncertified.
