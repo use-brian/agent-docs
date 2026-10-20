@@ -228,3 +228,22 @@ state and live grants. Old bridge tokens do not gain application operations. Nat
 binding capture remains unavailable before the full acceptance barrier; do not
 assume this extension is deployed or substitute a workspace session/service key in
 an iframe.
+
+
+### R2 parallel native operation completion
+
+Local native command contracts now include complete typed CRM/task creation,
+contact/deal/task patch, bounded mixed CRM patches, custom fields, archive,
+stage and relationships. Existing-record mutations require a current canonical
+version; creation rejects an existing-record version. Task application refs keep
+a stable logical ID across existing physical supersession.
+Receipts contain refs and reauthorize recovery under current access. These
+contracts remain unavailable through unqualified product entry points. Runtime
+qualification and issuance stay disabled until downstream acceptance is complete.
+
+
+Canonical CRM report/summary decimal results preserve exact text when converting
+to a JSON number would lose precision. Safe legacy numeric results retain their
+existing shape; clients must accept `number | string` and keep exact decimal text
+through transport and arithmetic. Hidden fields cannot contribute to filters,
+ordering, counts or aggregates merely because the response omits those fields.

@@ -693,6 +693,15 @@ immutability and source/mapping hashes validate the prefetched bytes. Reads
 performed inside the transaction (custom fields, attribution and identities)
 reuse that connection, avoiding nested pool acquisition under a small pool.
 
+Cancellation has one bounded server-side exception for a pre-business
+module/workspace admission wait: an actual statement timeout may trigger one
+fresh attempt only after confirmed rollback, zero queued effects and release
+of the old client. It retains the original actor/job/key/source ceiling and
+renews current authority. A changed issuer, failed rollback, user-request cancel,
+other/business timeout or commit error does not authorize retry. Existing
+statement deadlines remain unchanged; clients must not infer that uncertain
+business effects are safe to repeat.
+
 Each row uses a savepoint. Canonical entity creation/updates, custom fields,
 stable identity bindings, operations commands, audit/outbox and its completed
 receipt share the caller-owned client. A row rejection rolls these effects back
@@ -1799,3 +1808,37 @@ Append (`append_delivery_observation`) takes `{operationId,commitmentId,expected
 Review (`review_delivery_recognition`) takes `{operationId,commitmentId,expectedVersion,decision:"recognise"|"correct"|"dismiss",reason,outcome?}`; outcome is allowed only for correction. Member HTTP acts as the current human. Brian requires an exact persisted attended human approval bound to those arguments, Chat and assistant. Machine credentials/workflows cannot substitute that approval. Review changes only interpretation, never original content or governed terms. Ask for update fills a Chat draft and chooses no recipient; clicking it never sends.
 
 Exact replay returns the original receipt with `duplicate:true` after current source admission. REST uses 400 `invalid_input`, 403 `not_authorized`/`scope_operation_denied`, 404 `not_found` for hidden/missing sources, and 409 `conflict`/`idempotency_conflict` for stale versions or reused identities. MCP returns `isError:true` with a typed error. Retry uncertain writes using the same exact operation; stop and reload on conflict/source loss. No recurring scan, automatic retry, ownership selection or messaging authority is added. Local fixtures do not certify deployed availability or broad model quality; discover actual tools before use.
+
+
+## Protected native configuration
+
+When a deployed module protects native CRM fields, pipeline, stage and field
+configuration retains the same current native member, assistant, field, source and
+reference limits as the module. Owner/admin status or an integration configure grant
+alone does not replace those limits. Native confirmed commands use the same typed
+review/apply boundary as native management; role/configuration changes invalidate
+stale reviews, and failed audit or validation rolls the whole change back.
+Unprotected CRM configuration retains its existing command and integration contracts.
+Application runtime qualification and real app grant/key issuance remain unavailable.
+
+
+## Canonical import business authority
+
+Company imports retain explicit import/row identity, including distinct same-name
+mapped rows. Ordinary single-record native creation retains admitted name-upsert
+behavior. Canonical business lookups check every consumed field before matching
+an import key or trusted email. Hidden predicates refuse; failed row work commits
+no partial business changes or result evidence.
+
+Import business transactions use a non-owner data role and the current human or
+verified credential issuer restriction, retaining the integration-key audit actor,
+current key grants and immutable input ceiling. Missing current issuers refuse
+with `not_authorized`; storage attribution never grants access. Persistent import
+jobs, source bytes, resumed/background use and copied evidence still require their
+separate downstream consumer qualification. Runtime qualification and real
+application issuance remain unavailable.
+
+Enumerable import schema options still require an admitted current configuration.
+A held configuration refuses before dry-run samples. Inventory metadata updates
+accept only exact current derived counts and revisions; raw counter changes are
+rejected. Broader operational and background consumers remain unqualified.

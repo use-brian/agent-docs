@@ -209,3 +209,25 @@ Validation errors are typed: `task_executor_invalid` (an assistant you cannot se
 When a person assigns a task to an assistant, Brian plans it against the sources it can read and that assistant's actual tools, and starts it only when the next step is ready; otherwise the task records the smallest missing thing (a missing capability, account, input or source). Work keeps its progress across restarts and shares one allowance with any sub-work. People admitted to the task's Project can pause it, steer it with an instruction, or continue it; only a person's steer or continue renews the allowance. Read it with `getTaskExecution`.
 
 An external coding session can report progress on a task with `bindExternalTaskExecution` and `reportTaskProgress` (see [Brain MCP](../mcp/brain-mcp.md#reporting-progress-from-a-coding-session)). Reports are shown as reported work with their freshness; they never change who executes the task or complete it.
+
+
+## Canonical application task references
+
+Application task references use one stable logical ID across edits. Native task
+storage still creates physical history rows; existing task tools and legacy DTOs
+keep physical IDs and forward-resolution behavior. Current legacy parent IDs name
+the live physical parent, while historical DTOs retain the parent from that version.
+Application parent references use logical IDs.
+
+The deployed native module declares `create_task`, `patch_task`, `get` and `query`
+with a task type. Use its enumerated typed input schema and expected source version;
+unsupported keys and values refuse. Mutations return resource references. A write
+grant does not permit reading a full task DTO: use a separately authorized read.
+Retries use the original idempotency key and reauthorize current returned references.
+Current field, issuer, source and relation-anchor rights apply to legacy operations
+as well. Hidden fields cannot be used for filtering or ordering. A historical
+version remains subject to its original scope and current history/field rights. A history collection also retains the logical lineage observation, so a later edit invalidates the collection while an individually authorized old version can remain usable. History requires its explicit action and current read fields; a resource query grant does not substitute for history authority. Unknown application history refuses when no current source can establish that authority.
+
+These contracts remain behind runtime qualification. They do not authorize real
+application credential issuance or activation, and do not certify downstream
+persistent or background consumers.
