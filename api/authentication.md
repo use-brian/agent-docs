@@ -761,3 +761,15 @@ remain required. Native callers without an application host retain their actual
 non-owner transaction path. No wire shape or SDK source changes, and qualification
 and issuance remain false. Complete native operation, legacy reader, governance
 and final acceptance closure remain in progress.
+
+
+Compiled generic/native queries retain their genuine application host lease across
+all domain, candidate, aggregate, page and projection SQL statements. Empty results
+and validation/SQL errors also check the live host. An expired invocation returns
+access_unavailable before later-principal values can affect parsing, predicates,
+ordering, totals or errors. A currently authorized caller retains ordinary empty
+results, validation errors and independently admitted fields. Native nested query
+frames and generic evaluation use the same internal lease guard; SQL permissions
+and immutable source evidence remain authoritative. No wire or SDK shape changes,
+and qualification/issuance remain false. Other R2 native operations, legacy-path
+and governance closure remain in progress.
