@@ -695,3 +695,17 @@ Admitted historical null tags/external references keep legacy empty-container
 defaults only after full field admission. Source rows, immutable observations,
 codec revisions and policy epochs are unchanged. Legacy lists/full R2 DTOs/search/
 reports/history, operations and governance remain uncertified; qualification stays false.
+
+
+Native query evidence binds the original private-user release domain and assistant
+visibility ceiling, including empty results. Independently authorized readers must
+prove current access to that whole original data domain. Already admitted finite
+points reuse canonical point source/version/consumed-field obligations; remaining
+absent or unbounded domains retain their original visibility constraints. Pure
+public finite points have the same source identity across independent readers even
+when unused grants, issuers or assistant ceilings differ. Native observations that
+lack the complete versioned visibility shape hold without rewriting. Older native
+cursors refuse after the compiled query format changes. Point values, source
+versions, field codecs and metadata epochs remain unchanged. Remaining legacy
+query/write/history and governance adoption is uncertified; qualification and
+actual issuance remain false.
