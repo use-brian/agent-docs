@@ -177,3 +177,12 @@ A stale revision or unknown/inaccessible cursor returns `access_history_changed`
 become visible merely because the actor requested access for another beneficiary.
 Old-request confirmation uses a direct authorized lookup rather than the overview
 window. Mutation confirmation and application retain their saved-review contract.
+
+### Native manual capture outcomes
+
+Capture availability depends on the current surface and its governing capture
+rule or workflow. A source or field holding response is not proof of an empty
+knowledge base. When the native manual-capture path reports that a create may have
+committed, do not repeat it. Inspect the existing entry through a current
+authorized read before deciding whether another write is needed. This guidance
+does not enable a runtime profile that remains unqualified.
