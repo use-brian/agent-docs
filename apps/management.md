@@ -7,8 +7,8 @@ canonical: https://usebrian.ai/docs/apps
 
 # Native application management
 
-Local R5b implementation is in progress; it is not a deployment or qualification
-receipt. Studio Mini apps manages registration and schema previews. Programmatic
+R5b management and local browser acceptance are verified; final shared regression
+acceptance is tracked separately. This is not a deployment or qualification receipt. Studio Mini apps manages registration and schema previews. Programmatic
 access manages exact grants, named service identities and credential reviews.
 Connectors shows source availability. People/access manages module roles and
 configuration. Protected issuance and activation remain unavailable until R6.
