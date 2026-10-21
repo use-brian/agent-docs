@@ -208,7 +208,7 @@ automatically after an uncertain write or send; resending creates a new operatio
 
 ### Pending: room text and memory capture repairs
 
-These follow-up repairs are implemented in [OSS PR #435](https://github.com/use-brian/use-brian/pull/435) and [hosted PR #453](https://github.com/use-brian/brian-platform/pull/453), awaiting review and deployment:
+These follow-up repairs are implemented in [OSS PR #435](https://github.com/use-brian/use-brian/pull/435) and [hosted PR #453](https://github.com/use-brian/brian-platform/pull/453), merged to develop and awaiting deployment:
 
 - Passive and addressed copies share one provider message row. Repeated webhook
   deliveries can start each addressed bot's turn only once; a passive copy does
@@ -222,6 +222,27 @@ These follow-up repairs are implemented in [OSS PR #435](https://github.com/use-
 - The original shared room and Telegram topic ownership remain. Existing
   history is preserved; these changes do not clean up old duplicate rows or
   rename the room's original assistant heading.
+
+### Pending: cross-workspace Telegram admission
+
+Follow-up [OSS PR #436](https://github.com/use-brian/use-brian/pull/436) and
+[hosted PR #454](https://github.com/use-brian/brian-platform/pull/454) repair the
+remaining gaps after #435/#453. They require conversation ownership
+before ambient Telegram content can reach workflows, discussion snapshots,
+shared rooms or file/recording intake. They preserve #432's topic exclusions,
+same-workspace shared context, group clearance limits and deduplicated receipts.
+
+Only active installations in the receiving workspace can establish ownership
+through configured chat/topic scopes, exact surface routing or current
+owner/admin group approval. Membership in the Telegram group, equal clearance,
+a sender's linked account, seen-chat inventory and existing rooms are insufficient.
+Self-mentions, self-qualified commands, own replies and valid scoped callbacks
+admit only that interaction; bare commands grant no foreign-workspace access.
+Quoted discussion roots require conversation ownership. The official shared bot
+drops unaddressed group media before resolving the sender's workspace.
+
+Status: implemented and verified locally; deployment pending. Existing copied
+records are preserved and require separate supported recovery.
 
 ## Notes for agents
 
