@@ -348,3 +348,11 @@ completed assistant step alone does not prove delivery.
 Messaging approval notices use fixed text and link to the authenticated review
 page. They omit workflow names, tool names and arguments. Read the authorized
 approval record before deciding; the notice alone is not the operation review.
+
+### Workflow failure notices
+
+A workflow failure or timeout notification contains fixed text and an opaque run
+reference. Read the run through its authenticated, currently authorized API or
+web detail surface for names, failed steps, reasons and result counts. A channel
+notice does not grant access to those details or authorize repeating an uncertain
+effect. Existing destination and audience checks still apply.
