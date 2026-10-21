@@ -527,3 +527,11 @@ SSE, adapter and JSON sinks, protected source delivery additionally needs a fres
 The final sink checks again. Unsupported identity/retention lanes still refuse.
 These local boundaries do not qualify recordings, background work, other retained
 consumers or protected issuance.
+
+## Browser extension assistant chat
+
+The Chromium extension has a persistent assistant side panel. Keep a signed-in Brian workspace tab open and pair the installed extension to a Local browser profile. The panel uses the existing authenticated chat API with the selected workspace assistant, so Brain access, tool availability, usage limits and action approvals retain their normal checks. Account tokens stay inside the signed-in app tab. Closing that tab interrupts the panel; sends are never automatically replayed.
+
+Use Share current page to explicitly add a previewed, bounded excerpt to your next message. Sharing uses the existing browser consent gate, excludes editable field values and editable subtrees, and treats website text as untrusted evidence. A tab/URL change or a five-minute expiry requires sharing again. No background page collection occurs. Browser work is directed to the paired local profile and uses the existing consent, scope and Stop controls. Review consequential actions in the full chat; the panel does not auto-approve them.
+
+This first implementation is typed Chromium chat. Firefox browser control remains available; voice, Firefox chat and operational rollout need separate acceptance.
