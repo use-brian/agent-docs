@@ -17,7 +17,7 @@ Sent on the discovery calls and on every tool call, once the connector owner has
 |---|---|
 | `X-UseBrian-Actor-Channel` | The channel the message came from: `web`, `whatsapp`, `telegram`, `slack`, `feishu`, or `api`. |
 | `X-UseBrian-Actor-Id` | The channel-native id of the sender: email on web, phone on WhatsApp, `@handle` on Telegram, user id on Slack, or `open_id` on Feishu/Lark. On the `api` channel it is the `externalUserId` your own backend sent. |
-| `X-UseBrian-Actor-Email` | The sender's email when known, even on a channel turn. May be absent. |
+| `X-UseBrian-Actor-Email` | The registered account's email when known. Messaging-channel shadow accounts and unknown account provenance omit it, even if their cached provider profile has an email. May be absent. |
 | `X-UseBrian-Actor-Org` | The `claims.orgId` your backend attested on this request. `api` channel only, and only when you sent one. |
 | `X-UseBrian-User-Id` | The stable Use Brian user id. Use this as the durable key; the channel-native id above can change. |
 
