@@ -73,7 +73,13 @@ Rules an authoring agent must respect:
 
 ## Per-step timeout
 
-An `assistant_call` step's wall-clock limit is `depth.timeoutMs` (milliseconds): default 90000, deep research 300000, clamped to 1000-900000. Values above 300000 must be set explicitly per step. When the limit is hit the run terminates with status `timeout` (distinct from `failed`) and the step's partial output is preserved on its step run.
+Standard and deep `assistant_call` steps have no default wall-clock limit;
+turn/tool budgets and the progress watchdog bound execution. An explicit
+`depth.timeoutMs` (milliseconds) sets a wall-clock limit, clamped to 1000-900000.
+A deadline or progress stall produces status `timeout`. Its optional
+`partialOutput` contains only eligible finalized terminal text, sanitized before
+storage. Unfinished streaming text, tool-call narration and suppressed/retracted
+drafts are absent; no eligible text means no partial output.
 
 ## Triggers
 
