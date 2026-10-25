@@ -183,8 +183,10 @@ window. Mutation confirmation and application retain their saved-review contract
 
 Capture availability depends on the current surface and its governing capture
 rule or workflow. A source or field holding response is not proof of an empty
-knowledge base. When the native manual-capture path reports that a create may have
-committed, do not repeat it. Inspect the existing entry through a current
+knowledge base. Missing original execution authority holds a model-authored
+manual update; it cannot fall back to human-authored admission. When the native
+manual-capture path reports that a create or body replacement may have committed,
+do not repeat it. Inspect the existing entry through a current
 authorized read before deciding whether another write is needed. This guidance
 does not enable a runtime profile that remains unqualified.
 
