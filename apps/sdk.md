@@ -144,6 +144,29 @@ provider QA and independent-source adoption remain owed.
 Cancellation while consuming an effect response remains uncertain. Already-aborted
 schema operations never invoke their injected deployment port.
 
+## Registered operation names
+
+Only explicitly registered own operation keys are callable. An unknown query,
+command or reconciliation key returns `operation_not_available` when the caller
+passes the existing outer authentication, module and action-admission checks; the
+application HTTP transport maps that code to 404. Otherwise the existing access
+refusal takes precedence. Prototype-property names do not become operations through JavaScript
+object inheritance. This refusal has no business effect; choose a key from the
+current authorized catalog instead of retrying an unknown name.
+
+### Command retries and normalized input
+
+Reuse the same idempotency key with the same JSON input and expected version.
+Object key ordering does not matter; array ordering and different supplied values
+do matter, even if validation normalizes them to the same value. Correlation keys
+can change without creating a new business command. A changed request returns
+`record_version_conflict` after current admission checks.
+
+Receipts created before wire-input fingerprinting cannot always prove which input
+ran. Their command retries return `outcome_uncertain`; reconciliation returns
+`uncertain`. They do not run the command again. Keep the original key and use the
+application's existing recovery path; a new key is not proof that retrying is safe.
+
 ### Existing lifecycle identity
 
 A deployed module can add its application operations to a lifecycle-only entry in
@@ -151,3 +174,25 @@ the supplied registry. Keep the same key and default state; omit the existing
 blocker compatibility mapping to inherit it, or supply the exact same mapping.
 Conflicting metadata and a second application registration are rejected. Existing
 persisted state and the lifecycle blocker adapter remain authoritative.
+
+### Explicit command reconciliation
+
+`client.reconcile(commandKey, originalCommand, options?)` posts the exact original
+command input, idempotency key and expected version to
+`POST /api/applications/:appId/commands/:commandKey/reconcile`. This is a read-only
+lookup under the current actor/app/module/input/result authority; it never executes
+the command handler. `{ state: 'applied', receipt }` identifies the admitted saved
+receipt; `{ state: 'uncertain' }` proves no safe retry. Missing receipts never imply
+`not_applied`. The SDK performs no automatic retry. Keep the original envelope for a later
+recovery check; an uncertain result does not authorize a new write.
+
+App/service/Home MCP offers the same lookup as `applicationReconcile`. Native
+members use `POST /api/applications/workspaces/:workspaceId/modules/reconcile`
+with `{ moduleKey, commandKey, command, assistantId? }`, or `nativeModuleReconcile`
+on the native module MCP profile. Both retain the original command envelope and
+current authority, never execute the handler, and keep the existing read-only
+surface refusal. The app SDK helper does not authenticate the native audience.
+Lifecycle refusals preserve `module_draining` or `module_disabled` over HTTP409,
+MCP and `ApplicationSdkError`, with effect `none` and `retrySafe: false`; refresh
+state before deciding what to do. An interrupted effectful COMMIT remains
+`outcome_uncertain`, regardless of any later lifecycle-looking error.
