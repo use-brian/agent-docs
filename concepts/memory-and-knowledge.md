@@ -198,3 +198,20 @@ Source-backed assistant writes require the original initiating execution and com
 Repository updates preserve original observations through an immutable revision before changing the mirror head. A confirmed source write followed by failed mirror publication still requires reconciliation before any retry.
 
 Automatic repository refresh can reconcile native-only published ancestry under current source-worker authority, bounded by the source binding and current member/field/query rights. Every original immutable observation remains attached. Refresh preserves those exact identities and versions in the canonical publication evidence. Prior-version capture validation completes before the mutable mirror head advances. Unsupported or external-protected ancestry stays held; refreshing never fabricates the initiating editor or authorizes blind retry after an uncertain repository effect.
+
+### Original-authority Memory writes
+
+Attended Memory create, successor updates and explicit Memory-to-Memory links
+retain the original caller execution and complete current field/source evidence.
+An update creates a new immutable successor; stale versions or withdrawn rights
+refuse without a partial successor. A primary save may succeed while a requested
+relationship is refused or uncertain. Follow the returned outcome, check an
+uncertain relationship, and never repeat the primary save to retry its edge.
+Background producers and other graph or collection paths need separate proof.
+
+### Native correction uncertainty
+
+An attended Memory retraction uses the original current authority and complete
+reason evidence. If the correction may have committed but confirmation is
+unavailable, do not repeat it. The acknowledgement does not grant access to the
+invalidated Memory body or to a historical correction receipt.
