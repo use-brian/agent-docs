@@ -233,3 +233,43 @@ recovery views require the current original creator and assistant; application
 credentials cannot substitute. View has no mutation effect. An uncertain apply or
 cancel must be reloaded by ID under current authority; never regenerate its hash,
 substitute a native scope review, or automatically retry.
+
+## Independent source contract and retained recovery
+
+The independent source owns persisted identity mappings, field/record/action ACL,
+request replay consumption and effect receipts. SDK assertion verification binds
+issuer, audience, workspace, connector instance, actor and executing assistant;
+identity alone grants no source access. Source UI/API and sidecar paths use the
+same current source authorization function. HTTP reads return the canonical `{data,envelope}` shape. Model use is disabled by default; it requires explicit `model: true` on current grants covering every selected field (and current context rights), or on the exact released snapshot. Combining field grants never lends model permission to an uncovered field. Released snapshots require a persisted
+explicit audience and expiry. Ephemeral capability at this source does not qualify
+a Brian retention lane. Source command uncertainty reconciles against its saved
+idempotency receipt without automatic retries. Second-module/source conformance
+uses the public SDK contract and does not import the purchase module.
+
+Source release decisions additionally carry `release: { id, expiresAt }` exactly
+when `retentionMode` is `released_snapshot`. The release identity/expiry are bound
+into the source decision digest. Governed decisions keep their existing shape.
+The source must match the requested ID and exact expiry for the initiator and
+every recipient; another valid release cannot substitute. Initial unbound source
+reads may select an eligible release and emit its exact tuple for later checks.
+Client-supplied release identity alone never grants retention or qualification.
+
+### Optional source command binding
+
+The Node connector/source protocol may advertise `capabilities.effectBinding: 'command_v1'`. A mutate authorization then carries `effect: { tool, input, idempotencyKey }`; the canonical decision digest binds the exact outbound command. Exact finite JSON input rejects sparse arrays, including nested missing own indices, while dense values keep their existing digest bytes. The source independently checks the real record, fields, expected version, idempotency key, and current mutation rights before dispatch. Reconciliation with an `effectDigest` includes the original complete authorization envelope and checks the actor-bound source receipt without dispatching again. Missing, mismatched, or unknown evidence remains uncertain. Existing read and governed authorization digests retain their prior shape. These locally proved protocol additions do not qualify a deployed source mutation profile or claim it is available to users.
+
+### Independent source recovery after host retirement
+
+Normal host profile review rejects every `effectBinding` key. Pending command
+setups cannot apply; consumed setup replay retains the original qualified profile
+ID under current checks. New command grants/keys, host `sourceEffect` and
+`sourceReconcile` tools, and the private ephemeral source route are unavailable.
+Governed/released reads and ordinary ephemeral refusal remain.
+
+The connector SDK retains independent command-bound codecs and signed read-only
+receipt reconciliation. Supply the original complete authorization, key and exact
+effect digest when present. Current source/native authority remains required;
+unavailable, malformed or mismatched evidence stays uncertain; authoritative
+source-owned absence retains `not_applied`. Neither permits host dispatch or retry. Base
+receipts without effect fields retain their original recovery shape. Passive
+profile identity and existing credential generations remain unchanged.
