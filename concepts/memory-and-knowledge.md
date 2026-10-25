@@ -25,6 +25,8 @@ Memory is per (user, assistant). The assistant extracts patterns from what you s
 
 Every memory is editable. Settings -> Privacy -> Memories shows all stored memories: search, edit, or delete one-by-one or wholesale. Asking the assistant "forget that" works too.
 
+Canonical person reads may expose read-only `profile.*` values as `{value: originalJsonValue}` or null when absent. The separate `profile.extra` field contains only disjoint additional attributes and requires its own current field permission. Display name remains distinct from the stored profile name. These codecs add no create/patch permission or new authority; old observations stay immutable and are held when their codec revision is no longer current.
+
 ## Knowledge base
 
 The KB is per-workspace, not per-user. Use it for facts the assistant should know (proposal voting rules, product specs, FAQ answers). The assistant has `searchKnowledge`, `browseKnowledge`, `readKnowledgeEntry`, and `addKnowledgeEntry` tools to retrieve and append. Connect a GitHub repo from Studio -> Knowledge to sync markdown docs automatically.
