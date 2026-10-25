@@ -70,7 +70,8 @@ local bridges. Wait for the startup URLs before starting another instance.
 
 ### 3. Connect the provider
 
-For ChatGPT, open the workspace menu, then **Settings → Models → Providers**.
+For ChatGPT, open the workspace avatar at the top of the left rail, then
+**Settings → Models → Providers**.
 Complete **Sign in with ChatGPT** or **Use device code**. This backend is Beta
 and depends on the subscription's quota and availability. A Gemini key entered
 in the launcher is used directly. Vertex AI and DashScope use `.env` settings;
@@ -86,9 +87,26 @@ browser does not open, visit:
 http://localhost:3003/api/auth/local-session
 ```
 
-The local owner flow does not need hosted Google or email sign-in. Open Chat,
-send a short request, and verify that Brian replies. A loaded page or listening
-port alone does not prove that the provider works.
+The local owner flow does not need hosted Google or email sign-in. Choose Home
+to open Chat, then New chat. The Chat/Work heading selects Personal/Workspace;
+phones and collapsed sidebars use the compact top-bar chooser. Review Department
+and Project before the first message. Existing conversations keep their original
+audience and context; opening the chooser creates no conversation.
+
+Assistant and Effort are separate controls. On phones the assistant is an
+avatar and attachments/recording options are in the plus menu. Your work below
+the fresh composer opens requests and follow-ups needing attention. Send a short
+request and verify that Brian replies. A loaded page or listening port alone
+does not prove that the provider works.
+
+The More apps ellipsis shows workspace-selected apps; Explore more opens
+Studio → Mini apps for authorized workspace configuration. Personal menu order
+and up to two extra rail pins do not enable apps or grant access. The toolbar
+button collapses the sidebar, its right divider resizes it, and Search workspace
+includes Conversations. Inbox is beside the app heading; theme and connection
+status are at the rail foot. The phone drawer reaches the same destinations
+and closes after choosing an app. See the
+[workspace navigation guide](https://usebrian.ai/docs/open-source#workspace-navigation).
 
 ### 5. Add tools when needed
 

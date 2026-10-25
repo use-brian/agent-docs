@@ -17,7 +17,7 @@ These are illustrative, step-by-step examples. They are not claims that a run, s
 
 Give Brian access to an account you use for work.
 
-1. Open Studio → Connectors and choose the service you want to connect.
+1. Open Studio → Connectors. Use Add connector → Browse directory to find a new service, or select one already listed.
 2. Complete its sign-in or credential setup and check the account and permissions being granted.
 3. Return to Brian and try a small read-only request from that service. If it is unavailable, check the connection and the assistant's tool permissions.
 
@@ -48,7 +48,7 @@ Run an assistant request at a chosen time and destination.
 
 ## Everyday workflow
 
-1. **Connect a service.** Open Studio → Connectors, choose a service, and complete its connection setup.
+1. **Connect a service.** Open Studio → Connectors. For a new service, use Add connector → Browse directory, then complete its connection setup.
 2. **Choose what Brian can do.** Use the assistant's Tools tab to control access. Set each action to allow, ask, or block.
 3. **Schedule recurring work.** Ask for a recurring job and check its schedule. Use workspace Tasks for commitments you want to track.
 

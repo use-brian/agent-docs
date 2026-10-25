@@ -48,6 +48,16 @@ roll back the reset. A successful response reports `ok`, per-table `deleted`
 counts and `total`; cascade-deleted children are not separately counted.
 Off-database file cleanup and external-provider erasure are separate facilities.
 
+## Workspace navigation
+
+Open the workspace avatar at the top of the left rail to confirm or switch the
+active workspace, invite members, create another workspace, or open Settings.
+Home always opens Chat; the Chat/Work heading selects Personal/Workspace for
+new conversations. More apps shows selected apps, while Explore more opens
+Studio's authorized app configuration. Personal ordering and two optional pins
+do not grant access or enable apps. The phone drawer reaches the same areas.
+See [the current navigation and Chat guide](https://usebrian.ai/docs/quickstart#workspace-navigation).
+
 ## Roles
 
 | Role | What it can do |

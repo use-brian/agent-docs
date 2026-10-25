@@ -42,6 +42,15 @@ scope with a tool input.
 
 Memory is scoped per-assistant, so a single assistant ends up confused if you mix client-facing and internal contexts. The clean pattern is one assistant for internal ops, one for sales, and one per public-facing project (for example a community Q&A bot).
 
+## Create and choose an assistant
+
+Open Studio → Assistants to create an assistant, name its role, and configure
+the tools it may use. Start with the default assistant and add separate roles
+when needed. In Chat, choose an available assistant from its control beside
+Effort; on phones this control uses the assistant's avatar. The separate
+Chat/Work heading selects conversation audience, not the assistant. Existing
+conversation bindings and tool permissions still apply.
+
 ## Solo vs. workspace-shared
 
 Every assistant belongs to a workspace: your company brain from day 1, even when you are the only member. Invite teammates and the same assistant becomes shared. Everyone talks to the same memory and knowledge base. See Workspaces & sharing.

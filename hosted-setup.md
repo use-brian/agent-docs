@@ -25,16 +25,42 @@ does not arrive, check spam and the address; request a new link or code if expir
 
 Give the workspace a recognizable name and describe its purpose during
 onboarding. Teammate invitations can be completed now or skipped until later.
-An app-specific entry can add connection or plan steps. Verify the correct
-workspace name appears in the upper-left corner. Existing users can open that
-workspace menu to switch workspace or choose Add workspace.
+An app-specific entry can add connection or plan steps. Open the workspace
+avatar at the top of the left rail to verify the active workspace, switch
+workspaces, invite members, choose Add workspace, or open Settings.
+
+## Find your way around
+
+- Home always opens Chat. Projects, Brain and Live are fixed rail destinations;
+  Studio and Account remain near the bottom.
+- The More apps ellipsis shows workspace-selected apps. Explore more opens
+  Studio → Mini apps, where authorized owners/admins manage availability.
+  Reorder menu changes only the person's order; up to two extra apps can be
+  pinned. Neither preference enables an app or grants access.
+- The sidebar button beside Back/Forward collapses the contextual panel; its
+  right divider resizes it. Search workspace includes a Conversations filter.
+- Inbox beside the app heading shows assistant replies and mentions. Theme and
+  connection status are at the rail foot. Your work below a fresh composer
+  opens requests and follow-ups needing attention.
+- On phones, open the header drawer for the same destinations. App selection
+  closes it. Audience and context controls remain available in the compact UI.
 
 ## 3. Start a conversation
 
-Open Chat in the sidebar. Start a new chat, check Personal or Workspace scope,
-and send one concrete request, such as “Help me plan the first week of our next
+Choose Home, then New chat. The Chat heading for personal conversations and
+Work heading for workspace conversations open the Personal/Workspace menu.
+Use the compact top-bar heading on phones or with the sidebar collapsed.
+Opening a menu creates no chat. Review Department and Project before the first
+message; existing conversations retain their original audience and context.
+
+When multiple assistants are available, the assistant control beside Effort
+chooses who answers. Effort directly opens tier choices. On phones the
+assistant uses an avatar and the plus menu contains attachments and recording
+options. These are separate controls, not a nested Chat options sheet.
+
+Send one concrete request, such as “Help me plan the first week of our next
 project.” Verify that Brian replies, then continue in the same conversation.
-Ask anything opens the chat dock from other screens.
+Ask anything opens the chat dock from other app screens.
 
 ## 4. Add an assistant when needed
 
@@ -44,8 +70,9 @@ and configure permitted tools. See [assistants](concepts/assistants.md).
 
 ## 5. Connect tools (optional)
 
-Open Studio → Connectors, choose a service, select Connect, and complete its
-authorization flow. Then follow the Assistant Connectors tab link to review
+Open Studio → Connectors. If the service is not listed, choose Add connector →
+Browse directory and find it there. Select the service, choose Connect, and
+complete its authorization or credential setup. Follow the Assistant Connectors tab link to review
 allowed tools and approval requirements. An account connection and permission
 to use its tools are separate. Verify the connection status and try a small read
 request. See [tools and connectors](concepts/tools-and-connectors.md).
