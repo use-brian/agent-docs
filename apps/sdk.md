@@ -220,3 +220,16 @@ same app and workspace. Authority intersects both complete current grant chains
 and issuance maxima. Caller-supplied user or actor fields grant no authority; loss
 of either credential, OAuth binding, parent, issuer or activation refuses access.
 This profile does not activate source mutations or certify application rollout.
+
+## Retained application review recovery
+
+Saved application review recovery uses native authenticated
+`POST /api/applications/workspaces/:workspaceId/management/commands` and the
+`applicationManage` tool at the matching `/management/mcp` endpoint: `legacy.view` takes the original
+`reviewId` (and optional visible `assistantId`); `legacy.apply` and `legacy.cancel`
+also require the exact returned decimal-string `expectedVersion` and `payloadHash`.
+New `legacy.inventory`/`legacy.preview` authoring is retired. These metadata-only
+recovery views require the current original creator and assistant; application
+credentials cannot substitute. View has no mutation effect. An uncertain apply or
+cancel must be reloaded by ID under current authority; never regenerate its hash,
+substitute a native scope review, or automatically retry.
