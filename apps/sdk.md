@@ -273,3 +273,14 @@ unavailable, malformed or mismatched evidence stays uncertain; authoritative
 source-owned absence retains `not_applied`. Neither permits host dispatch or retry. Base
 receipts without effect fields retain their original recovery shape. Passive
 profile identity and existing credential generations remain unchanged.
+
+### Generic record relationship selectors
+
+The reviewed canonical records service may select a declared generic relation
+using its registered `relation.<SHA-256-of-canonical-property-name>` resolver and
+an independently readable anchor. Include the relation property in the grant's
+read fields. Current and issued predicates must each retain that field after all
+field masks, including title-only, empty and aggregate queries. Moving a record
+out of the relationship or revoking anchor access removes access; a relationship
+key does not gain an alternative child ID grant. Custom native relationship
+selectors and global qualification remain closed.
