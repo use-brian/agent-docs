@@ -536,3 +536,15 @@ The Chromium extension has a persistent assistant side panel. Keep a signed-in B
 Use Share current page to explicitly add a previewed, bounded excerpt to your next message. Sharing uses the existing browser consent gate, excludes editable field values and editable subtrees, and treats website text as untrusted evidence. A tab/URL change or a five-minute expiry requires sharing again. No background page collection occurs. Browser work is directed to the paired local profile and uses the existing consent, scope and Stop controls. Review consequential actions in the full chat; the panel does not auto-approve them.
 
 This first implementation is typed Chromium chat. Firefox browser control remains available; voice, Firefox chat and operational rollout need separate acceptance.
+
+
+## Search filter inputs (pending deployment)
+
+The pushed `webSearch` contract accepts optional `dateRange`, `country`,
+`language`, `location`, `includeDomains`, `excludeDomains` and `safeSearch`.
+Support depends on the selected provider. Unsupported fields or combinations
+return an explicit error; a filter is never silently discarded or widened.
+Country and language are provider preferences, not universal content guarantees.
+Domain restrictions differ from `trackDomains`, which only measures ranking.
+All queries in an exact-provider panel receive the same filters. These additions
+are pending deployment; inspect the current runtime tool schema before using them.
