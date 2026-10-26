@@ -362,3 +362,47 @@ reference. Read the run through its authenticated, currently authorized API or
 web detail surface for names, failed steps, reasons and result counts. A channel
 notice does not grant access to those details or authorize repeating an uncertain
 effect. Existing destination and audience checks still apply.
+
+
+## Scoped service workflow HTTP and scheduler lifecycle
+
+For an app-scoped source workflow, native authoring still uses the existing
+authenticated workflow route and canonical authoring authority. A manual start
+first checks current native owner/admin configuration rights and the real matching
+service binding. The existing executor resolves that service as the actual actor;
+the configuring human remains audit attribution. Other workspace IDs, revoked or
+missing service authority and stale definitions refuse before a run is created.
+
+If run/step history is held, a legitimate scoped start returns only HTTP202 with
+`accepted:true`, `effect:committed`, its newly created `runId` and
+`outputUnavailable:true`. This acknowledges creation, not execution success. It
+contains no branch status, error, protected output or counts. Ordinary readable
+workflow responses and held-history RLS remain unchanged. Never blindly repeat
+a committed or uncertain start.
+
+The boot pause and wake-up callbacks share one maintained lifecycle adapter. It
+persists the existing one-shot scheduled job, completes the wait step on dispatch,
+then enters the existing executor at its successor frontier. The executor performs
+the same current service/source checks before resumed reads; permission withdrawal
+fails the run rather than falling back to the author. This extraction introduces
+no new scheduler or queue.
+
+
+### Runnable reference operations client
+
+The OSS reference at scripts/application-platform/reference-operations.mjs drives
+supported native management, SDK, registered application MCP and workflow HTTP
+routes. It keeps delivered credentials in memory and revokes its native demo key.
+The source phase requires the independent source operator to approve the actual
+prepared service principal before it issues the replacement key and binding.
+It never creates source-side permissions or deployment trust keys.
+
+Use a fresh workspace in its supported default (legacy access-policy setup) mode
+for the wait example. The existing wait-job writer refuses ready-mode workspaces
+with operational_authoring_proof_required; reviewed ready-mode scheduled triggers
+do not yet provide wait-step inheritance. Do not downgrade an existing workspace.
+A running maintained scheduler, active deployment Ed25519 issuer/key, configured
+connector instance and independently trusted source are prerequisites. The CLI
+README lists exact setup and invocation. HTTP202 effect:committed means only local
+run creation/start acceptance. It does not certify completion or remote effects;
+outputUnavailable is never permission to automatically repeat a start.

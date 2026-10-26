@@ -528,6 +528,7 @@ The final sink checks again. Unsupported identity/retention lanes still refuse.
 These local boundaries do not qualify recordings, background work, other retained
 consumers or protected issuance.
 
+
 ## Browser extension assistant chat
 
 The Chromium extension has a persistent assistant side panel. Keep a signed-in Brian workspace tab open and pair the installed extension to a Local browser profile. The panel uses the existing authenticated chat API with the selected workspace assistant, so Brain access, tool availability, usage limits and action approvals retain their normal checks. Account tokens stay inside the signed-in app tab. Closing that tab interrupts the panel; sends are never automatically replayed.

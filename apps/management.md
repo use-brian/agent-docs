@@ -37,6 +37,12 @@ Do not repeat the mutation. Start a fresh native invocation and read current
 management metadata to reconcile the result. Network-uncertain effects also
 require a read before taking further action.
 
+Schema and native governance previews save review records. A lost commit
+acknowledgement is uncertain; access loss after a successful preview reports
+`effect:"committed"` and `retrySafe:false`. Reconcile the saved review through a
+fresh native invocation before taking further action. A refused preflight has
+no effect; a catalog read does not create a review.
+
 Brian never receives plaintext credentials or private source keys. Credential
 delivery returns a native human review link; only the human session can receive
 one-time material. Never persist material in chat, logs or cached projections.
@@ -58,3 +64,177 @@ module governance is explicit and is never an empty authorized role catalog.
 The catalog has the same actor/workspace lifetime as the overview. After an
 uncertain mutation, keep further writes disabled until a fresh authorized
 overview succeeds. A failed reconciliation is not evidence to retry a write.
+
+### Reviewed service source binding
+
+The management command vocabulary includes `source.binding.review` with `appId` and `input` (`profileId`, `credentialId`, optional `workflowId`, and `expiresAt`), and `source.binding.apply` with `appId` and `reviewId`. These are native governance operations. Review creates a pending server-owned reference; apply independently rechecks the named service at the source and still requires existing runtime qualification. Configuration attribution never replaces the executing service.
+
+External grant review/apply uses a fresh independent source decision for the named service and actual assistant. Grant revision changes invalidate earlier credentials/bindings. Obtain a freshly reviewed credential under the resulting maxima, revoke the old binding, and review/apply a new binding. A copied or stale review, source denial, or absent qualification cannot activate execution. The selected deterministic workflow source caller exposes read-only source tools; source mutations and human first-party tools remain unavailable.
+
+An unavailable or denied protected-source review uses the existing application-management `access_unavailable` error with no effect. Source wire errors are translated at this management boundary. A lost commit acknowledgement still requires reconciliation; do not blindly retry it.
+
+
+## Scoped service activation (accepted 2026-10-23)
+
+The owner may activate the deployed `canonical_service_v1` profile for one native
+API-client application after an actor-bound review of its current metadata. This
+revises the earlier all-consumer-before-any-issuance rule for this exact capability;
+the global qualification gate stays closed. It does not qualify portals, Home,
+OAuth, delegated users, arbitrary modules or other retained consumers. The complete
+original platform scope and its remaining acceptance remain tracked in the roadmap.
+
+The profile admits named service credentials and canonical company/deal operations
+only. The deployed field/action vocabulary and exact grants remain independent
+ceilings. Issuance and each actual execution revalidate the profile, app revision,
+configured assistant, issuer and current canonical grant paths. Native field,
+department, Project, private-owner and source-ancestry rules continue to decide data
+access. An activation review cannot release legacy content or forge source receipts.
+Changed app metadata requires a new review; revocation stops existing credentials.
+Unsupported principals, resources, fields and commands refuse at issuance and use.
+Credentials remain human-delivered once through the existing native management
+command; Brian receives only the native delivery link.
+
+The selected independent-source extension requires its own actual setup/approval
+and enforcing workflow proof. Until that extension passes, the scoped native
+profile does not authorize protected connector setup, retention or source grants.
+
+
+### Scoped independent-source setup and workflow
+
+A native owner reviews one existing authenticated connector instance for the
+activated app. Setup uses deployment-owned issuer/signing-key ports and the
+instance's current credentials and exact MCP origin; it never accepts an issuer
+key or substitutes a person's identity for service execution. The setup probe is
+a signed read-only source HTTP read as the actual configuring owner, independently
+admitted by that source. It saves observation metadata, never the protected payload.
+Apply repeats the probe and checks current owner, assistant, app and instance.
+Missing deployment keys or source permissions deny.
+
+The resulting qualified source profile is app-scoped. Ordinary attended connector
+readers cannot use it. A pending binding over a genuinely issued native service
+credential permits independent prospective source grant review. Fresh external
+release approval, credential reissue and a new binding precede workflow activation.
+Only governed read/context/derive/retain operations on explicit IDs and fields
+are supported; source mutation, export, delivery and other retention modes deny.
+The actual source still grants the named service and executing assistant separately.
+The selected workflow retains output and evidence in its canonical run/step stores;
+unsupported first-party tools and step types deny. Native history without current
+source admission remains held by restrictive run/step policies. Revocation or changed
+credentials/profile/app/grants/assistant/source rights stops execution and resume.
+
+
+## Scoped service workflow HTTP and scheduler lifecycle
+
+For an app-scoped source workflow, native authoring still uses the existing
+authenticated workflow route and canonical authoring authority. A manual start
+first checks current native owner/admin configuration rights and the real matching
+service binding. The existing executor resolves that service as the actual actor;
+the configuring human remains audit attribution. Other workspace IDs, revoked or
+missing service authority and stale definitions refuse before a run is created.
+
+If run/step history is held, a legitimate scoped start returns only HTTP202 with
+`accepted:true`, `effect:committed`, its newly created `runId` and
+`outputUnavailable:true`. This acknowledges creation, not execution success. It
+contains no branch status, error, protected output or counts. Ordinary readable
+workflow responses and held-history RLS remain unchanged. Never blindly repeat
+a committed or uncertain start.
+
+The boot pause and wake-up callbacks share one maintained lifecycle adapter. It
+persists the existing one-shot scheduled job, completes the wait step on dispatch,
+then enters the existing executor at its successor frontier. The executor performs
+the same current service/source checks before resumed reads; permission withdrawal
+fails the run rather than falling back to the author. This extraction introduces
+no new scheduler or queue.
+
+
+### Runnable reference operations client
+
+The OSS reference at scripts/application-platform/reference-operations.mjs drives
+supported native management, SDK, registered application MCP and workflow HTTP
+routes. It keeps delivered credentials in memory and revokes its native demo key.
+The source phase requires the independent source operator to approve the actual
+prepared service principal before it issues the replacement key and binding.
+It never creates source-side permissions or deployment trust keys.
+
+Use a fresh workspace in its supported default (legacy access-policy setup) mode
+for the wait example. The existing wait-job writer refuses ready-mode workspaces
+with operational_authoring_proof_required; reviewed ready-mode scheduled triggers
+do not yet provide wait-step inheritance. Do not downgrade an existing workspace.
+A running maintained scheduler, active deployment Ed25519 issuer/key, configured
+connector instance and independently trusted source are prerequisites. The CLI
+README lists exact setup and invocation. HTTP202 effect:committed means only local
+run creation/start acceptance. It does not certify completion or remote effects;
+outputUnavailable is never permission to automatically repeat a start.
+
+## Deployed generic record and semantic module profiles
+
+The general `records` service profile uses declared schema resources and the same
+canonical CRUD/query/history/bounded batch commands. Additional versioned modules
+register through the deployment's `applicationModules` composition port and their
+normal migration-owned capability/field policy metadata. Activation, grant review,
+service role assignment and credential delivery remain explicit product operations.
+Missing or stale deployed contracts and current grants refuse. Semantic module
+schemas hold direct legacy mutations and expose their registered business commands.
+
+Native session members may invoke the same handlers through
+`POST /api/applications/workspaces/:workspaceId/modules/query` with
+`{moduleKey, queryKey, input, assistantId?}` or `/modules/command` with
+`{moduleKey, commandKey, command: {idempotencyKey, expectedVersion?, input}, assistantId?}`.
+The `/modules/mcp?moduleKey=...&assistantId=...` POST transport exposes
+`nativeModuleQuery` and `nativeModuleCommand` under that native member session.
+A native session, current actual membership, assistant ceiling, registered roles
+and field/source policies are required; app-data and legacy credentials do not
+become member credentials. Check an uncertain/committed operation's receipt before
+retrying. This local completion candidate remains subject to combined acceptance;
+portal/OAuth/Home, independent source effects and retention modes require their
+separate implemented and verified capability profiles.
+
+### Reviewed frontend OAuth and initial module configuration
+
+The local completion candidate now includes two explicit frontend profiles.
+`canonical_records_frontend_v1` admits reviewed generic grants for actual members
+and verified nonmember Brian identities. `canonical_module_frontend_v1` admits
+current workspace members to a registered semantic module's owned schemas and
+declared business commands. Login grants no data. Owners review/apply exact
+resource, field, operation and selector grants; users complete the existing PKCE
+consent protocol. Browser frontends keep app OAuth tokens in memory and receive
+no service key. Unsupported profiles and nonmember semantic-role provisioning
+remain held.
+
+Activation generation is part of signed consent review, atomic code issuance and
+the OAuth binding. Revoke/reactivate cannot revive an old access token, refresh
+token or held consent review. Fresh consent under current grants is required.
+Missing, foreign or principal-mismatched bindings provide no authority. Current
+role, native membership, assistant, parent, field and source checks remain in the
+canonical transaction.
+
+Before a semantic module owns schemas, a current workspace owner can explicitly
+review/apply an initial registered role assignment to themself through the existing
+`assign_role` operation, only if that workspace/module/role has no assignment
+history. Normal assignment still needs current same-role issuer authority and its
+expiry horizon. Owner schema binding then uses the same governance review/apply.
+A module may register private revision and typed configuration handlers through
+normal deployment SQL; the purchase reference uses `set_schemas` with three exact
+canonical schema IDs, strict property/relation checks and a monotonic revision.
+Native/MCP and app handlers read this configuration in their current transaction.
+There is no runtime executable upload or inferred schema-name mapping.
+
+These focused paths do not certify global runtime readiness, Home/delegated keys,
+all source retention/effect modes, legacy repair or a browser rollout. Actual
+maintained-rig browser proof and combined acceptance gates are separately required.
+
+### OSS application OAuth consent surface
+
+The OSS app serves `/oauth/authorize?req=...&application=...` for application
+OAuth. This client surface uses the existing native `authFetch` session and the
+exact app-bound consent GET/POST protocol. It renders the server-selected
+workspace, app and current resource/action/field review. Allow submits that exact
+opaque signed review with the requested scope; Deny uses the same request. It
+never constructs permissions, accepts a claimed user or stores app/service keys.
+Responses must match the UUID application and one workspace; missing or held
+metadata refuses. Request changes, hidden-page invalidation and errors clear the
+review; superseded responses cannot restore it. No write retries are automatic.
+The backend still decides current membership/role/parent/generation and returns
+the registered redirect. This application page does not impersonate Brain OAuth
+or introduce an alternate sign-in flow. Genuine nonmember browser sign-in still
+requires an actual configured verified identity provider/mail transport.

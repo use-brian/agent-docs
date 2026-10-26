@@ -32,6 +32,7 @@ Canonical person reads may expose read-only `profile.*` values as `{value: origi
 The KB is per-workspace, not per-user. Use it for facts the assistant should know (proposal voting rules, product specs, FAQ answers). The assistant has `searchKnowledge`, `browseKnowledge`, `readKnowledgeEntry`, and `addKnowledgeEntry` tools to retrieve and append. Connect a GitHub repo from Studio -> Knowledge to sync markdown docs automatically.
 
 Repository write errors after dispatch can carry `retrySafe: false` and `operationMayHaveExecuted: true` in tool-result metadata. Do not retry these writes blindly. Check the source first: the write may have landed, or a confirmed source write may still be missing from the local search mirror. A failed mirror does not undo a repository commit.
+
 ### Sensitivity tiers
 
 Each KB entry is tagged `public`, `internal`, or `confidential`. A synced entry takes its tier from an explicit `sensitivity:` frontmatter key when one is present; otherwise it gets the source's configured default (Studio -> Knowledge -> Clearance; `internal` unless changed). Explicit frontmatter always wins, so if you author markdown in a synced KB repo, stamp `sensitivity:` yourself whenever the source default is not what you mean. Changing a source's default re-syncs the whole source and re-stamps only the entries without an explicit tier.
@@ -198,6 +199,21 @@ Source-backed assistant writes require the original initiating execution and com
 Repository updates preserve original observations through an immutable revision before changing the mirror head. A confirmed source write followed by failed mirror publication still requires reconciliation before any retry.
 
 Automatic repository refresh can reconcile native-only published ancestry under current source-worker authority, bounded by the source binding and current member/field/query rights. Every original immutable observation remains attached. Refresh preserves those exact identities and versions in the canonical publication evidence. Prior-version capture validation completes before the mutable mirror head advances. Unsupported or external-protected ancestry stays held; refreshing never fabricates the initiating editor or authorizes blind retry after an uncertain repository effect.
+
+### Source-backed Memory reads and relationship holds
+
+Supported native member Memory point, search and index reads check current source
+and field permission before returning results. An explicit released snapshot can
+remain readable after ordinary source access is withdrawn, while its original
+audience, release lifetime and revocation checks still apply. Do not treat an
+earlier result or an empty search as lasting permission.
+
+A protected Memory save can succeed while relationship links are held. Follow
+the returned relationship status: an unlinked save does not establish a graph
+edge. A protected CRM note anchor can be unavailable even when an ordinary
+unlinked Memory save is supported. These paths do not certify source-backed
+updates, background learning, graph propagation or recovery of unknown legacy
+ancestry; do not bypass an unavailable path by copying its identifiers elsewhere.
 
 ### Original-authority Memory writes
 

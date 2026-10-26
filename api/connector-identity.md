@@ -86,3 +86,24 @@ Beyond identity, a connector owner can attach fixed preflight headers (for tenan
 - [Authentication](authentication.md)
 - [Send messages](messages.md)
 - [Identity & memory](identity.md)
+
+## Protected service-source work
+
+A background source binding names the existing application service, credential and
+parent path, source profile and actual assistant. The source must independently
+approve that service's resource, field and action scope. The configuring person is
+audit attribution, not the actor. Review/apply, execution and resume revalidate
+current authority. A copied descriptor cannot establish identity. Context permission
+is not derive/retain or delivery permission, and an uncertain effect must be
+reconciled under the same service before retry. Availability remains qualification-
+gated; do not assume this contract activates a live deployment.
+
+Service source actions use the existing named-command grant vocabulary:
+`read` bounds source reads/context, while `command:source.derive`,
+`command:source.retain`, `command:source.deliver` and `command:source.export`
+are independent Brian ceilings for those source actions. The source separately
+approves every action. The first workflow caller exposes read-only tools and
+refuses source mutations. Native management uses `source.binding.review` and
+`source.binding.apply`; the pending review is inert and its creation rolls back
+with the native transaction. Apply independently rechecks source rights and
+retains the existing qualification barrier.
