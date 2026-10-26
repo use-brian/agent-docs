@@ -215,3 +215,10 @@ An attended Memory retraction uses the original current authority and complete
 reason evidence. If the correction may have committed but confirmation is
 unavailable, do not repeat it. The acknowledgement does not grant access to the
 invalidated Memory body or to a historical correction receipt.
+
+### Current audit history
+
+Historical Memory output is a current, permission-checked audit view. It does not
+make withdrawn facts or their old read observations current again. Independent
+source withdrawal, later holds and current field/role loss can refuse history.
+Do not treat an empty result as permission to ignore a stale original input.
