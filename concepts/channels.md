@@ -246,6 +246,36 @@ records are preserved and require separate supported recovery.
 
 ## Notes for agents
 
+### Pending: Personal Telegram recordings and Project chat groups
+
+Implemented locally on 2026-10-27; release, production migration and live
+provider acceptance remain pending. Existing hosts may still use the shared-room
+behavior above. Do not assume this recording policy is already active.
+
+Telegram BYO group recording defaults to Personal for the authenticated person
+who connected the bot. All admitted speakers are recorded with their actual
+sender attribution. Historical connections require explicit owner confirmation;
+missing or departed owners stop recording. Studio -> Channels lets that owner
+stop recording or select Work, optionally in an authorized Project. A destination
+change starts a new future-only session; earlier history keeps its audience.
+Provider replay claims survive transcript deletion.
+
+The initial path saves text and attachment-type placeholders. It bypasses legacy
+group archives, workflow events, discussion capture and automatic brain/file
+intake, including for Work destinations. Addressed attachments can be interpreted
+for the immediate reply without a durable file-cache copy. Personal group replies
+use current provider input and general knowledge, with no connected tools, private
+memory or saved-history reuse. Work replies retain existing group audience checks.
+Recording ownership never grants the group the owner's credentials or memories.
+Stopping recording does not mute an explicitly addressed reply. Deleting a chat
+removes its transcript, not separate archives, files or learned facts.
+
+Work chat navigation groups authorized conversations under expandable Projects,
+with General chats above them. New chat within a Project uses its canonical
+scope; a Project name or sidebar heading grants no additional access.
+
+### Current integration guidance
+
 - Channels are workspace-owned. Connecting a bot does not attach it to an assistant until you route the channel to one.
 - Assistant email is also workspace-owned, but its **Handled by default** assistant is required at creation. Manage default handling, access mode, sender routing, ingestion, and outbound actions on the email Channel itself.
 - Messaging platforms are bring-your-own credentials: the user owns the bot, Use Brian is the brain. Web is the only zero-setup channel.
