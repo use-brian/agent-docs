@@ -514,3 +514,21 @@ field masks, including title-only, empty and aggregate queries. Moving a record
 out of the relationship or revoking anchor access removes access; a relationship
 key does not gain an alternative child ID grant. Custom native relationship
 selectors and global qualification remain closed.
+
+## Attended source actions
+
+`ub.source.v1` capabilities may declare `attendedActions: { idempotencyMetadataKey }`
+alongside `reconciliation: true`. Upgrade Brian and the source SDK to versions
+that accept this optional capability before advertising it; older strict codecs
+reject unknown capability fields. The metadata key is a namespaced string such as
+`source/operation-key`. This promises durable source-owned replay and business
+authorization for signed attended human commands. The host places its stable
+operation key in MCP tool-call `_meta`, covered by the request-bound actor
+assertion. This is independent of retired service `command_v1` authoring.
+
+The source must reserve each key under the verified human, assistant and
+connection before applying the business effect, reject conflicting reuse, and
+reconcile that key under current permissions. Protected mutation results carry
+the same reserved source evidence as reads. Missing evidence releases no business
+payload. See [native management](management.md#attended-company-connectors) for
+reviewed setup and the attended operation envelope.
