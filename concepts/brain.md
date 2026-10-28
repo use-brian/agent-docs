@@ -70,6 +70,17 @@ The v2 classifier does not decide once. Pipeline B's emissions are scored agains
 
 Chat sees the brain through a 7-tool surface: `getEntity` (entity rollup with summary + edges + recent episodes), `search` (hybrid FTS + vector + graph + recency, RRF-fused), `recentEpisodes`, `provenance` (one-level walk for any row), `markUseful` (boosts a row's retrieval rank), `aggregate` (typed measures over typed columns or JSONB attributes), and `getRowHistory` (the supersession-audit chain).
 
+## Merged identities
+
+Entity rollups follow visible merge chains by default. The existing authenticated
+Brain UI HTTP projection accepts `X-Strict-Identity: true` to refuse an authorized
+superseded identity with `410` and a generic `superseded` error. Missing or hidden
+identities remain opaque 404s; no target identifier is included in the refusal.
+A future-effective merge remains current until its effective time; strict HTTP
+uses the same precise resolution and current visibility rules as normal reads.
+The endpoint retains its flat web response shape. This is not an additional
+public REST or MCP method.
+
 ## Brain vs memory
 
 Memory is one primitive in the brain: the layer that holds inferred behavioral facts about people. Entities, edges, tasks, deals, and files are the rest. The acid test for the boundary: "if the source disappeared, does this row stay?" Yes for memory, typically no for KB chunks (which are re-importable from the source repo or docs).
