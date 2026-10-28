@@ -71,6 +71,11 @@ tool schema and the returned capability errors. Users can also refine work in
 the native editor. View, Comment, and Edit roles, comments, document
 suggestions, history, and restore support team review under workspace access.
 
+Invalid commands and batches refuse before changing shared content or Undo history.
+A Presentation reading order must include every object exactly once; it may
+differ from visual stacking order. Resolve the reported invalid target or value
+before retrying rather than treating a rejected command as an applied edit.
+
 ## Supported file exchange
 
 DOCX, PPTX, and XLSX support is a defined subset. Unsupported constructs fail
