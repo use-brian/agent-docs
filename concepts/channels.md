@@ -9,6 +9,12 @@ canonical: https://usebrian.ai/docs/channels
 
 Channels are where the assistant can be reached. They are owned by the workspace, not by individual assistants. You create or connect them in Studio -> Channels and assign each one to a workspace assistant. Web is always available; messaging platforms are opt-in and assistant email is provisioned as an inbox.
 
+## Sender identity and recovery
+
+Slack, Discord, Microsoft Teams, Feishu/Lark and custom bridges require a resolved sender before starting a turn, attributing passive input, or interpreting identity-dependent approvals. A missing or failed identity lookup never borrows the workspace billing owner's account. Addressed messages receive an identity-verification retry notice; unresolved passive input and reaction attribution are skipped. A resolved guest remains subject to the normal guest restrictions.
+
+Provider-authenticated Stop/cancel can still stop an existing turn in its exact conversation scope during an identity outage. Slack edits can cancel only the matching original message. These recovery actions do not approve tools or start a new turn. Room admin approval uses the same current resolved actor as the turn, rather than a rejected or stale account link.
+
 ## Channels at a glance
 
 | Channel | Setup | Groups | Voice | Auth |
