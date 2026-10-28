@@ -160,6 +160,8 @@ For a just-uploaded recording, use `listRecordings` even if `fileSearch` or tran
 
 Saved research and its artifact each require current access. Default Pages from personal web research in retained legacy workspaces stay private to the originating person instead of inheriting General. If current source authority or its recorded version cannot be proved, saving refuses with findings retained; a historical saved receipt does not grant current Page access or prove a new save. Shared Project output keeps its existing placement.
 
+Research follow-ups are captured from the authenticated member's own persisted messages. Failed captures can recover on later admitted turns without recording the same feedback twice. Recovery preserves the original research result and assistant attribution, and rechecks current source, session and assistant access. A temporarily unavailable source or original assistant leaves that attempt pending; it does not transfer the feedback to a different result. Explicitly selecting an unavailable result never falls back to another result in the chat. Quoted text and unrelated messages do not become feedback merely because an earlier capture failed. This recovery adds no MCP tool or credential privilege.
+
 ## Write tools
 
 Available only on `read_write` credentials.
