@@ -43,7 +43,7 @@ pass an explicit path when validating a different KB.
 
 ### Sensitivity tiers
 
-Each KB entry is tagged `public`, `internal`, or `confidential`. A synced entry takes its tier from an explicit `sensitivity:` frontmatter key when one is present; otherwise it gets the source's configured default (Studio -> Knowledge -> Clearance; `internal` unless changed). Explicit frontmatter always wins, so if you author markdown in a synced KB repo, stamp `sensitivity:` yourself whenever the source default is not what you mean. Changing a source's default re-syncs the whole source and re-stamps only the entries without an explicit tier.
+Each KB entry is tagged `public`, `internal`, or `confidential`. A synced entry takes its tier from an explicit valid `sensitivity:` frontmatter value (`public`, `internal`, or `confidential`); an absent or invalid value is not an explicit tier and gets the source's configured default (Studio -> Knowledge -> Clearance; `internal` unless changed). Explicit frontmatter always wins, so if you author markdown in a synced KB repo, stamp `sensitivity:` yourself whenever the source default is not what you mean. Changing a source's default re-syncs the whole source and re-stamps only the entries without an explicit tier.
 
 The assistant's clearance gates what it can read across every channel, including the public API. To expose only public KB to API consumers, set the assistant's clearance to public; for an internal integration, use an assistant with the matching clearance.
 
