@@ -41,6 +41,14 @@ and `--strict` to fail on warnings too. These boolean flags can appear before
 or after the directory. Omitting the directory selects the current directory;
 pass an explicit path when validating a different KB.
 
+### Frontmatter strings and line endings
+
+Single- and double-quoted scalar values stay strings, including `"true"`, `"123"`,
+`"001"` and `""`. Unquoted boolean and numeric values retain their existing type
+inference. LF and CRLF frontmatter are accepted without discarding fields, and
+extracted body line endings are preserved. This is a supported YAML subset;
+quoting does not enable full YAML syntax or escape interpolation.
+
 ### Sensitivity tiers
 
 Each KB entry is tagged `public`, `internal`, or `confidential`. A synced entry takes its tier from an explicit valid `sensitivity:` frontmatter value (`public`, `internal`, or `confidential`); an absent or invalid value is not an explicit tier and gets the source's configured default (Studio -> Knowledge -> Clearance; `internal` unless changed). Explicit frontmatter always wins, so if you author markdown in a synced KB repo, stamp `sensitivity:` yourself whenever the source default is not what you mean. Changing a source's default re-syncs the whole source and re-stamps only the entries without an explicit tier.
