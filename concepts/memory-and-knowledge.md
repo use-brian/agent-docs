@@ -33,6 +33,14 @@ The KB is per-workspace, not per-user. Use it for facts the assistant should kno
 
 Repository write errors after dispatch can carry `retrySafe: false` and `operationMayHaveExecuted: true` in tool-result metadata. Do not retry these writes blindly. Check the source first: the write may have landed, or a confirmed source write may still be missing from the local search mirror. A failed mirror does not undo a repository commit.
 
+### Validate a local knowledge base
+
+The `@use-brian/brian-kb` CLI reads a local directory without changing it.
+Use `kb lint --json ./team-kb` for JSON output, `--quiet` for errors only,
+and `--strict` to fail on warnings too. These boolean flags can appear before
+or after the directory. Omitting the directory selects the current directory;
+pass an explicit path when validating a different KB.
+
 ### Sensitivity tiers
 
 Each KB entry is tagged `public`, `internal`, or `confidential`. A synced entry takes its tier from an explicit `sensitivity:` frontmatter key when one is present; otherwise it gets the source's configured default (Studio -> Knowledge -> Clearance; `internal` unless changed). Explicit frontmatter always wins, so if you author markdown in a synced KB repo, stamp `sensitivity:` yourself whenever the source default is not what you mean. Changing a source's default re-syncs the whole source and re-stamps only the entries without an explicit tier.
