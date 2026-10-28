@@ -8,10 +8,20 @@ canonical: https://usebrian.ai/docs/apps
 # Native application management
 
 R5b management and local browser acceptance are verified; final shared regression
-acceptance is tracked separately. This is not a deployment or qualification receipt. Studio Mini apps manages registration and schema previews. Programmatic
-access manages exact grants, named service identities and credential reviews.
-Connectors shows source availability. People/access manages module roles and
-configuration. Protected issuance and activation remain unavailable until R6.
+acceptance is tracked separately. This is not a deployment or qualification receipt.
+
+Pending rollout: application administration is consolidated at
+`/w/[workspaceId]/studio/programmatic-access/applications`, reached through
+Studio > Programmatic access > Application management. That page combines
+registration, schemas, exact grants, named service credentials and module
+roles/configuration. Connectors, Mini apps and People/access retain their own
+workflows without repeated application-management panels. Deployed versions may
+still show the earlier panels on those four surfaces; do not assume the child
+route is live until the deployment includes this change. Operational errors,
+exact reviews, receipts and one-time credentials remain visible; generic
+qualification and actor/source/legacy explanations stay in engineering docs.
+Protected issuance and activation remain subject to the qualification and
+scoped-profile limits below.
 
 The native-session routes are rooted at
 `/api/applications/workspaces/:workspaceId/management`: GET reads a bounded
