@@ -9,6 +9,17 @@ canonical: https://usebrian.ai/docs/doc
 
 Doc is a Notion-style page surface where chat assembles renderable views over your workspace primitives. It is the inbound counterpart to the outbound Feed surface: Doc marshals tasks, CRM rows, files, deals, and research findings into pages you can drag, save, and revisit. The whole app lives at `app.usebrian.ai` under a separate deployable.
 
+## Page edit authority
+
+Readable Pages can still be view-only or comment-only. Metadata and persisted
+content changes require the current effective edit/full role as well as current
+clearance and container authority. A multi-page move or reorder is atomic: it
+refuses if any changed row is not editable. Missing or hidden Pages do not gain
+a default role. Read capabilities guide controls; writes recheck authority.
+Detail and list reads include effectiveRole and canEdit. Create/mutation replies
+omit these advisory fields; refresh the canonical read before relying on
+changed controls. Auto-title skips known noneditable Pages before generation.
+
 ## Brief Pages
 
 A Brief Page is the governed working direction of a shared Project or a
