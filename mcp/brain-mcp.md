@@ -158,6 +158,8 @@ Available on both `read` and `read_write` credentials.
 
 For a just-uploaded recording, use `listRecordings` even if `fileSearch` or transcript search has no hit. The catalog exists before transcription; `status` distinguishes `awaiting_upload`, `queued`, `processing`, `processed`, and `failed`. `awaiting_upload` reserves an identity but does not prove that uploaded media exists. Report queued/processing status while waiting for transcript content. The `/recordings` transcript file and transcript segments are created later, so their absence is not evidence that the recording is missing. Recording discovery observes the credential's workspace, visibility, clearance, Team and Project access.
 
+Saved research and its artifact each require current access. Default Pages from personal web research in retained legacy workspaces stay private to the originating person instead of inheriting General. If current source authority or its recorded version cannot be proved, saving refuses with findings retained; a historical saved receipt does not grant current Page access or prove a new save. Shared Project output keeps its existing placement.
+
 ## Write tools
 
 Available only on `read_write` credentials.
