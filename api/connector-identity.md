@@ -107,3 +107,21 @@ refuses source mutations. Native management uses `source.binding.review` and
 `source.binding.apply`; the pending review is inert and its creation rolls back
 with the native transaction. Apply independently rechecks source rights and
 retains the existing qualification barrier.
+
+## Identity-aware company connections
+
+For a source that implements Brian's governed source protocol, the workspace
+owner can configure a shared custom connector in Studio: save its company bearer
+credential, prepare the signing identity, review the source tenant/audience/base
+URL and read-only probe, then verify and enable the exact reviewed connection.
+Public issuer/JWKS and workspace, connector, assistant and configuring-user IDs
+are provided for independent source approval. Private signing keys and bearer
+credentials are never returned in that review.
+
+The source must verify the signed request assertion and explicitly bind each Brian
+user UUID to an existing source account. A transport bearer authenticates the
+company connection; it does not authorize every member as the owner. Unmapped
+users fail closed, and current source permissions apply separately to each person.
+Legacy informational actor headers alone are not a substitute for verification.
+A pending profile blocks protected dispatch until apply succeeds. The enabled
+status describes the connection, not proof that every member has source access.
