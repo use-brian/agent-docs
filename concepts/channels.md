@@ -305,3 +305,8 @@ This protection lasts for that worker process. Restart or multiple-worker
 reconciliation is still pending. An expired outbox lease or a missing
 acknowledgement does not prove that nothing was delivered; check the destination
 before initiating another send.
+
+## Quiet room setup
+
+Creating or hydrating a shared channel room does not announce itself or add a
+setup notice to the reply. Capture and sharing controls remain in the web app.

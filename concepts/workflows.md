@@ -81,6 +81,14 @@ A deadline or progress stall produces status `timeout`. Its optional
 storage. Unfinished streaming text, tool-call narration and suppressed/retracted
 drafts are absent; no eligible text means no partial output.
 
+## Failure review
+
+Failed and timed-out runs keep their status, errors and audit records in the
+authorized web run view. They do not send automatic channel failure notices or
+retry reminders. The retired `failureDelivery` field is ignored in existing
+workflows and removed on saves. Explicit step `deliver` outputs and requested
+scheduled messages retain their normal authorization and delivery rules.
+
 ## Triggers
 
 Four ways to fire a workflow. Every trigger feeds the same runtime.
