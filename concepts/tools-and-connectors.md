@@ -75,6 +75,18 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 | Computer Use | Built-in primitive; a controlled browser (the user's own Chrome via the Use Brian extension for account-sensitive sites, or a cloud browser for public ones). Sends require approval. |
 | Google Cloud Storage | Bring-your-own storage via a service-account key; exposes no assistant tools. |
 
+### Google Calendar result pages
+
+`googleCalendarListEvents` returns a projected event array for a complete initial
+page. Partial or continuation pages return an object with `events`,
+`complete: false`, the effective `calendarId` and `timeMin`, optional `timeMax`
+and `query`, and `nextPageToken` when more results remain. Continue by passing
+that token as `pageToken` with the same scope. A short or empty page can still
+have more results; never infer completeness from its length. Continuation
+requires the original `timeMin`, so the lower bound cannot drift to a new now.
+Omitting `timeMax` means no upper bound, not seven days. Calendar selection
+within an account remains separate from selecting a connected account's tool.
+
 ### Google Maps location intelligence
 
 Google Maps is a deployment-keyed first-party read capability, not a user connector and not an OAuth account. When the deployment sets `GOOGLE_MAPS_SERVER_API_KEY`, Brian can discover three canonical tools on demand:
