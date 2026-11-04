@@ -254,3 +254,42 @@ Historical Memory output is a current, permission-checked audit view. It does no
 make withdrawn facts or their old read observations current again. Independent
 source withdrawal, later holds and current field/role loss can refuse history.
 Do not treat an empty result as permission to ignore a stale original input.
+
+
+### Gradual learning (gated rollout)
+
+Deployments with `BRIAN_MEMORY_LEARNING_V1=1` distinguish tentative candidates from
+established memory. New admission is off by default pending qualification; once
+metadata exists, disabling admission does not disable eligibility checks.
+Existing unassessed memories keep their compatibility behavior.
+
+A one-off request belongs in the current conversation. A source-verified durable
+personal instruction can establish immediately. An inferred personal preference
+requires at least three distinct observations across two independent source
+groups within 30 days, without unresolved contradictions, or explicit human
+confirmation. Retrieval and useful recalls do not count as evidence.
+
+Use the tool schema available on that deployment. When `saveMemory` exposes
+`learning`, it accepts intent, the actual current-user quote, bounded applicability
+and optional validity timestamps. Message identity, speaker and evidence receipts
+are supplied and checked by the host. External/machine text cannot impersonate a
+human observation. `memory_source_mismatch` refuses unsupported attribution;
+`memory_evidence_replayed` refuses resurrection of a forgotten observation.
+
+Candidates are inspectable in Brain review and through `getMemory` with `review`
+where that schema is available. Review does not bypass access checks or confirm
+a preference. Ordinary retrieval excludes tentative, retired, expired and
+nonmatching memories. Missing context does not satisfy a Project, task, operation
+or activity constraint. Summaries retain source restrictions and evidence floors.
+
+For learned-memory corrections, use the supported Brain review/confirmation path
+or an available confirmed `updateBrainEntry` operation. Its `memoryLearning` patch
+can change applicability and explicit UTC validity; it cannot grant visibility.
+Do not retry a refused ordinary update as a duplicate create. Use successor IDs
+returned by successful versioned edits. Semantic expiry is separate from version
+history and stops applying at its exclusive upper timestamp.
+
+Qualification is incomplete: the ordinary chat path following a memory-index
+read can still be refused with `scope_source_changed`. This also reproduces on
+the pre-change writer. Keep admission disabled until the source-publication
+contract and complete live journey are qualified; do not work around the refusal.
