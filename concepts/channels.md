@@ -43,6 +43,15 @@ Chat in the app at `app.usebrian.ai`. Always on, no setup. Streaming responses, 
 
 If you do not want to manage your own bot, the official @use_brian_bot works for the default assistant. It does Mini App OAuth and links your account automatically. BYO is required for custom branding or non-default assistants.
 
+Telegram group replies follow the configured mention/topic policy even when
+Brian-side conversation saving is unavailable. Missing recording ownership does
+not require reconnecting the bot. Where retained authenticated connection records
+identify the original connector for this exact bot/workspace, ownership recovers
+automatically while that person remains a member. Existing owners and stopped
+recording choices are preserved. Unattributed legacy connections keep saving
+paused; their replies use current message text and general knowledge, without
+connected tools, private memory or saved-history access.
+
 ## Slack (BYO bot)
 
 1. Go to api.slack.com/apps -> Create New App -> From an app manifest. Copy the manifest from Studio -> Channels -> Slack.
