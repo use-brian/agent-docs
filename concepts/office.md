@@ -290,3 +290,54 @@ conflicts. If no template is available, ask the user to upload, review and publi
 one in Office > Templates. Free-text steering does not choose a template.
 Workspaces whose admission requires unsupported source provenance refuse this
 recovery; it does not bypass department or sensitivity checks.
+
+### Exact Office edits and job control
+
+Use `getOfficeArtifact` with up to 50 `targetIds` to inspect exact canonical
+selected content. Preserve the returned text runs, styles, formulas and layout
+when building typed edits. `selection.missingTargetIds` and
+`selection.oversizedTargetIds` report targets omitted from the bounded 32 KiB
+response; select smaller descendants rather than assuming their content is empty.
+Binary resource locations and signature payloads are not included.
+
+`applyOfficeCommands` accepts the command vocabulary in its discovered schema,
+explicit `targetIds`, `expectedVersion` and an `idempotencyKey`. The native worker
+validates the submitted operations without asking another model to rewrite them.
+Template locks, selected-target authority, rendering checks and proposal handling
+remain in effect. Submission returns a job, not proof of an applied edit.
+
+`getOfficeHistory`, `getOfficeComments` and `getOfficeSuggestions` expose native
+review data in pages of up to 50 entries. Follow `nextOffset`;
+`windowLimitReached` reports the native bounded history window. These are read
+operations, not suggestion acceptance or comment editing.
+
+`cancelOfficeJob` takes the artifact and job IDs. Queued and input-waiting jobs
+become cancelled; running jobs stop cooperatively. Poll the artifact for the
+terminal state. Jobs whose retained connection loses authority are retired with
+`workspace_access_changed`; they do not continue under a broader worker identity.
+
+For precise Document edits, `applyOfficeCommands` accepts `replaceTextRange`: a selected text-container ID, UTF-16 `from`/`to` offsets, replacement runs and `preimageHash` (SHA-256 of the exact selected text encoded as UTF-8). Changed text is rejected; unaffected text keeps its formatting.
+
+`changeOfficeLifecycle` archives, unarchives, trashes, restores or purges an admitted artifact using the native lifecycle service. Trash and purge require verified human review; a tool argument cannot approve them. Legal holds and native restore/purge roles still apply.
+
+Use `exportOfficeArtifact` with the current artifact version and `native` or `pdf`
+format to produce a validated workspace file. It returns release/file IDs or the
+native validation receipt. Warning acknowledgements require the authenticated
+human review continuation; they cannot be self-approved by an MCP client.
+
+Office history is a native assistant workflow. `getOfficeArtifact` accepts an
+optional saved `versionId` discovered through `getOfficeHistory`; semantic
+selection and pagination apply to that immutable snapshot, while current artifact
+access and retained Office observation checks still govern disclosure. The reply
+separates the selected saved version from the current head. Missing or mismatched
+versions are unavailable without an existence leak.
+
+`restoreOfficeVersion` restores an explicitly selected saved version into a new
+head through the editor's canonical restore transaction. It requires Edit access,
+an active durable artifact, an expected current head and current execution
+authority. It preserves historical snapshots and the full artifact source floor,
+updates the live collaboration document, and broadcasts the canonical replacement.
+The new version records the actual assistant author (no synthetic human author)
+and a fixed restoration summary. Stale heads return a conflict; MCP operation
+receipts prevent an identical retry from restoring twice. The operation changes
+content and follows the native Office allow/ask/block policy.

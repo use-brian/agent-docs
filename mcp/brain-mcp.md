@@ -289,6 +289,30 @@ verdict as permission only when it is exactly `allowed`.
 submission route. Brain MCP rejects it. See
 [CRM operations API](../api/crm-operations.md).
 
+## Native execution and approvals
+
+Core-tool calls use Brian's native capability, write-ceiling and confirmation
+checks. Discovery omits operations unavailable to the bound assistant; access is
+checked again at invocation and before releasing results. A tool result may carry
+`structuredContent.status` (`succeeded`, `failed`, or `waiting_approval`) with
+native `data` or an `approvalId`. A pending approval means the effect has not
+completed. An Ask operation without an available approval path refuses rather
+than performing the effect. Never infer authorization from a tool name or a
+previous discovery result.
+
+The Assistant MCP endpoint, `POST /api/v1/assistants/{assistantId}/mcp`, accepts
+that assistant's `sk_live_` key with `scope: agent`. It acts as the recorded key
+issuer within the assistant's authority. Membership loss refuses the key;
+only historical keys without a recorded issuer retain owner binding. The
+existing configure-gated control-plane envelope remains unchanged. Neither
+endpoint currently promises full workspace parity or a universal durable Brian
+runtime through MCP.
+
+Native operation discovery preserves discriminated-union branches, required fields
+and strict object rules. Invalid arguments return a compact tool error; correct the
+named fields before retrying. Discovery and execution apply the same native schema,
+including refinements that JSON Schema cannot fully express.
+
 ## Errors
 
 Every HTTP-level refusal carries a `message` beside the `error` slug, so an agent can act on it without a docs lookup:
@@ -296,7 +320,7 @@ Every HTTP-level refusal carries a `message` beside the `error` slug, so an agen
 | HTTP | `error` | What the `message` tells you |
 |---|---|---|
 | 401 | `invalid_brain_key` | One uniform body for every authentication failure (missing header, malformed token, unknown key, revoked key, expired or revoked access token — deliberately not distinguished): send `Authorization: Bearer sk_brain_<keyId>_<secret>` or `Bearer oat_<authorizationId>_<secret>`; an `oat_` access token expires after 10 minutes and is renewed with `grant_type=refresh_token`; API keys are issued in Studio → Programmatic access. Retrying the same credential will fail the same way. |
-| 500 | `brain_mcp_error` | Authentication already succeeded — do not go looking at your credential. Transient; retry once, then stop. |
+| 500 | `brain_mcp_error` | `retrySafe: false`. Check the operation outcome before retrying a write. A missing response does not prove that no effect occurred. |
 
 Inside a tool call, a failure is a normal MCP tool result with `isError` and a text body that states what failed on which target, why, the next step (which sibling tool discovers a valid id, or "ask the user"), and whether the same input can ever succeed. Argument validation failures arrive as compact `path: message` lines, not a JSON blob. A workspace-less credential is refused with the remedy (a workspace admin re-issues or re-scopes the key) — no argument change helps.
 
@@ -408,11 +432,11 @@ The `engineeringHistory` tool and authenticated `/api/workspaces/:workspaceId/en
 
 Read-only keys discover only read actions on this tool. HTTP uses actual web-user authentication; admitted nonadmin collaborators can read history independently of the admin configuration gate. List/search/excerpts/counts/cursors/read/export honor current workspace, Department, shared Project, credential/source and private restrictions. Owner oversight does not release restricted originals. Cursors are bound to viewer, workspace and query. Annotation/deletion retries must reuse the same command identity and expected versions; changed commands conflict. Errors are nonrevealing (`history_not_available`, `history_write_denied`, `history_cursor_invalid`, `history_version_conflict`, `history_command_conflict`, `history_storage_unavailable`).
 
-HTTP routes are `GET /`, static `GET /export`, `GET /:eventId`, `POST /:eventId/annotations`, `POST /:eventId/exclude`, `DELETE /:eventId`. JSONL HTTP responses expose `X-Brian-Export-Status`, optional `X-Brian-Next-Cursor` and `X-Brian-Export-Error`. Each selected event is bounded at 256 KiB. Exact export pages have at most 100 events. Search uses a bounded lexical projection; exact reads/export resolve native File bytes. Missing or revoked rows are withheld before projection. Ordinary Files discovery/general retrieval excludes archive purpose.
+HTTP routes are `GET /`, static `GET /export`, `GET /:eventId`, `POST /:eventId/annotations`, `POST /:eventId/exclude`, `DELETE /:eventId`. JSONL HTTP responses expose `X-Brian-Export-Status`, optional `X-Brian-Next-Cursor` and `X-Brian-Export-Error`. Each selected event is bounded at 32 KiB. Exact export pages have at most 100 events. Search uses a bounded lexical projection; exact reads/export resolve native File bytes. Missing or revoked rows are withheld before projection. Ordinary Files discovery/general retrieval excludes archive purpose.
 
 The OSS `@use-brian/engineering-capture` source package provides `brian-capture setup|hook|worker|flush|status`. Setup emits inspectable plans and preserves unrelated hooks/trust; it installs nothing. Hook adapters select only documented `UserPromptSubmit.prompt` / `Stop.last_assistant_message` fields for Codex and Claude Code, return neutral output, queue owner-only state outside repositories and wake a leased MCP worker. System/tool/reasoning/subagent/transcript/attachment content is excluded. Missing final output, interruptions and unsupported schema are coverage gaps. Codex turn identity is used when supplied; without a documented immutable provider identity, distinct submissions receive distinct durable local IDs. Text alone never deduplicates them. Secrets are resolved only from an environment-variable reference.
 
-Local defaults are 1000 pending events, 64 MiB pending bytes, 256 KiB selected text, 12 failed delivery attempts, backoff up to 5 minutes, a 30-second lease and a 10-second tool-call timeout. Offline/transient/uncertain failures retain WIP and stable identity; permanent authentication/configuration/source denial suspends. Explicit `flush --resume --accept-configuration` follows inspected configuration changes and does not substitute credentials/destination. Local status reports historical observed receipts and emitter diagnostics separately from server index availability; no capture is not proof of no engineering work.
+Local defaults are 1000 pending events, 64 MiB pending bytes, 32 KiB selected text, 12 failed delivery attempts, backoff up to 5 minutes, a 30-second lease and a 10-second tool-call timeout. Offline/transient/uncertain failures retain WIP and stable identity; permanent authentication/configuration/source denial suspends. Explicit `flush --resume --accept-configuration` follows inspected configuration changes and does not substitute credentials/destination. Local status reports historical observed receipts and emitter diagnostics separately from server index availability; no capture is not proof of no engineering work.
 
 Package publication, actual opted-in hook installation/trust, production migrations/deployment and installed Codex desktop/CLI/Claude Code interruption/offline/privacy acceptance remain live operations. Offline goal setting, benchmark construction/runs and coding control are outside this feature.
 
@@ -448,3 +472,209 @@ to this profile; app-data tokens do not authenticate to the existing Brain profi
 A Home application binding uses the existing bridge budget and rechecks the viewer
 and consent on every request. Full consumer/source acceptance and deployment remain
 pending; discover the actual installed tools before relying on this profile.
+
+## Explicit workspace connection profile
+
+Deployments with the workspace MCP profile offer `workspaceAccess: true` when a
+native workspace administrator issues a Brain key or assistant agent key. Old
+keys keep their existing envelope. The new key is pinned to the issuing member,
+assistant, context, finite operation catalog, connector accounts and expiry
+(default 30 days, maximum 90). It does not impersonate a human or grant private
+personal data access. Assistant workspace keys use only the assistant MCP endpoint;
+the older public-chat endpoint does not accept this profile.
+
+Always discover the admitted tools. `tools/list` is paginated at 100 entries;
+continue with `nextCursor` until absent. Catalog changes invalidate the cursor:
+restart discovery without a cursor. Do not infer authority from cached schemas.
+
+For an idempotent direct operation, supply a UUID in MCP request params
+`_meta["usebrian.ai/operation-id"]`. Identical retries return the saved receipt;
+reusing that UUID with different arguments conflicts. Inspect the returned
+`structuredContent.status`, `operationId`, `approvalId` and `retrySafe` fields.
+`getWorkspaceOperation` fetches the connection's receipt without executing again.
+An uncertain outcome must be reconciled with native history before submitting a
+new operation. A JSON-RPC request ID alone does not deduplicate effects.
+
+An action waiting for approval has not executed. The assigned human reviews the
+frozen action in the native Approvals inbox. The original key, context, source
+access and connector bindings still constrain execution after review. A model's
+claim of approval is not human authorization. Poll the same operation receipt
+for the resulting status; do not submit another copy of the action.
+
+Server-observed source restrictions persist across requests. Revocation, expiry,
+rotation or loss of source access may invalidate retained work. Reconnecting does
+not erase its evidence. The profile is being qualified for full workspace parity;
+new runtime and client support must be checked against the deployment's actual
+discovery and published support status.
+
+### Native runtime runs
+
+New explicit workspace key profiles support `runBrian`, `getBrianRun`,
+`getBrianRunResult`, `cancelBrianRun`, and `continueBrianRun` on both endpoints.
+`runBrian` queues work and returns a durable run ID. Reconnect with that ID;
+do not submit the same work again. For idempotent submissions send a UUID in
+`_meta["usebrian.ai/operation-id"]` on `tools/call` and reuse it with the same
+arguments on retry.
+
+Status inspection exposes lifecycle references. Final-result reads recheck
+current source access and return persisted terminal replies, excluding tool
+narration and reasoning. Native workspace chat lists the connection's shared
+conversation, preserving machine attribution. Human tool reviews remain native
+human decisions; an MCP answer only answers an ordinary question and grants no
+permissions. Completed native reviews and answers wake the original run under
+its original parent. `continueBrianRun` can supply an ordinary `answer` or an
+optional follow-up `message`.
+
+Cancellation is cooperative and does not undo committed effects. A crashed
+claimed turn is `uncertain`, never automatically replayed. Revoked, expired or
+changed parent credentials cannot resume old work. Existing legacy keys and
+OAuth grants retain their previous operation envelopes. This implementation is
+still undergoing full parity and client qualification; it is not a claim that
+all workspace UI operations or all client features are available.
+
+## Logical work contexts and skills
+
+Explicit workspace credentials support `createWorkspaceContext` for a fresh
+conversation within their admitted Department/Project. Pass its `contextId` in
+`params._meta["usebrian.ai/context-id"]` on subsequent discovery and calls.
+`getWorkspaceContext` returns the current binding. Handles are bound to the
+credential and do not expand its consent. Runs, receipts, source evidence and
+skill activation stay with that context.
+
+Use `listAvailableSkills` to inspect governed skill metadata, then `useSkill`
+before reading its resources. Availability and source access are checked again
+on each request. Workspace MCP also composes native Page reads and the
+`delegateDocEdit` gateway; existing targets must be pinned in the conversation.
+Full artifact-selection and bulk-transfer qualification is still in progress.
+
+### Workspace OAuth and delegated execution
+
+New workspace OAuth consent is explicit and expires after 30 days. Existing Brain
+OAuth grants keep their existing scope. Assistant MCP uses its own resource-bound
+OAuth issuer at `/api/v1/assistants/{assistantId}`; discover metadata at
+`/.well-known/oauth-protected-resource/api/v1/assistants/{assistantId}/mcp`.
+Brain tokens cannot authenticate Assistant MCP and Assistant tokens cannot target
+another assistant or Brain MCP. PKCE is required. Refresh tokens rotate on use.
+
+A queued Brian run belongs to the authorization grant and survives access-token
+refresh. Grant revocation, replacement, expiry, or membership loss stops future
+execution. Consulted assistants inherit the originating operation and connector
+account limits. Shared Page reads and pins retain source restrictions; private
+Pages are unavailable to shared workspace connections. Skill body or bundle edits
+invalidate contexts retaining the replaced revision.
+
+These capabilities are implemented in the working source; complete workspace
+parity and deployment qualification remain in progress.
+
+### Native files, Office and detached work
+
+On deployments exposing the explicit workspace profile, discover these native
+file tools: `startFileUpload`, `getFileUploadParts`, `completeFileUpload`,
+`abortFileUpload`, and `getFileDownload`. Uploads support up to 10 GiB in 8 MiB
+parts. Transfer bytes in client code using returned signed URLs; follow manifest
+pagination and provide SHA-256 to verify assembly. A pending upload lasts up to
+24 hours, and completion is idempotent. Upload handles belong to the originating
+connection. Another connection cannot complete them. Download URLs last 60
+seconds and are bearer capabilities, not permanent artifact links.
+
+`listOfficeArtifacts` discovers active or archived documents, presentations and
+spreadsheets with up to 50 entries per page. Follow `nextCursor` even if a page
+is empty. `getOfficeArtifact` supplies semantic targets, version and current job
+state; creation and revision return durable jobs. Do not interpret a queued job
+as a completed file. Retained reads preserve Office sharing restrictions:
+revoking and later restoring access does not revive the old conversation.
+
+Workflow starts retain both the saved author's credential and the initiating
+connection, where present. Resume intersects their operation/account permissions
+and carries retained source evidence into model/tool input. Browser tasks also
+restore the original credential; reconnecting cannot bypass revocation.
+
+These paths have local integration coverage. Complete Office operations,
+Goal/research continuity and real client/edition qualification remain under
+implementation. Discover deployment capabilities; this document does not claim
+that full workspace parity is released.
+
+### Exact Office edits and job control
+
+Use `getOfficeArtifact` with up to 50 `targetIds` to inspect exact canonical
+selected content. Preserve the returned text runs, styles, formulas and layout
+when building typed edits. `selection.missingTargetIds` and
+`selection.oversizedTargetIds` report targets omitted from the bounded 32 KiB
+response; select smaller descendants rather than assuming their content is empty.
+Binary resource locations and signature payloads are not included.
+
+`applyOfficeCommands` accepts the command vocabulary in its discovered schema,
+explicit `targetIds`, `expectedVersion` and an `idempotencyKey`. The native worker
+validates the submitted operations without asking another model to rewrite them.
+Template locks, selected-target authority, rendering checks and proposal handling
+remain in effect. Submission returns a job, not proof of an applied edit.
+
+`getOfficeHistory`, `getOfficeComments` and `getOfficeSuggestions` expose native
+review data in pages of up to 50 entries. Follow `nextOffset`;
+`windowLimitReached` reports the native bounded history window. These are read
+operations, not suggestion acceptance or comment editing.
+
+`cancelOfficeJob` takes the artifact and job IDs. Queued and input-waiting jobs
+become cancelled; running jobs stop cooperatively. Poll the artifact for the
+terminal state. Jobs whose retained connection loses authority are retired with
+`workspace_access_changed`; they do not continue under a broader worker identity.
+
+### Research results and retained Goals
+
+A native research run returns activity receipts in `getBrianRunResult.research`
+with `activityId`, `status` and `saveError`. A successful reply can accompany a
+`partial` research result; never claim the Page was saved from reply success
+alone. Derived Page publication remains under implementation. Machine messages
+retain machine attribution and do not become human research feedback. Retained
+Task Goals and deterministic workflow handoff preserve the original connection,
+source evidence and permission ceilings on restart.
+
+`runBrian.workspaceFileIds` attaches admitted workspace files to the native turn, including files uploaded through bulk transfer. Use workspace file UUIDs, not storage URLs. The native attachment limit is 20 MiB per file, with up to 32 files per invocation. Revoked or changed sources must be read and attached again under current access.
+
+
+`exportOfficeArtifact` produces a native or PDF workspace file through the native
+release checks. Warning acknowledgement codes require authenticated human review.
+The returned ordinary File retains its Office source restrictions; access changes
+can invalidate the export and its operation receipt. Export does not send the file
+outside the workspace.
+
+Use `getOfficeHistory` to discover immutable version IDs, then
+`getOfficeArtifact({artifactId, versionId, targetIds})` to inspect selected saved
+content. `version` identifies that saved snapshot; `currentVersion` identifies
+the live head. `restoreOfficeVersion({artifactId, targetVersionId, expectedVersion})`
+creates a new head under current Edit authority. Reuse the same MCP operation ID
+for a retry; a stale expected version returns `version_conflict`. Restoration
+preserves history and records the assistant as the author.
+
+## Clients with tool-count limits
+
+For explicitly consented Brian or Assistant workspace MCP connections, append
+`?catalog=compact` to the endpoint URL. Discovery then advertises three helpers:
+`searchWorkspaceOperations` searches the current admitted catalog,
+`getWorkspaceOperationSchema` returns a named operation's full schema and
+`schemaRevision`, and `callWorkspaceOperation` takes `name`, `schemaRevision`
+and `arguments`. Fetch the schema before calling; refresh it if the revision
+changes. Forward `usebrian.ai/operation-id` in the MCP call metadata as usual.
+Compact and direct calls share the same target receipt and approval behavior.
+The helpers cannot broaden the credential or call operations hidden by current
+capabilities. The default URL continues exposing direct operations.
+
+Workspace context and Brian run receipts include `openPath` to the native
+conversation. Resolve this relative path against the installation’s web origin
+(the API may use a different origin). Opening it uses the person’s normal app
+login and current room permissions. Never append MCP credentials to the link.
+
+If the initial run receipt is lost, call `listBrianRuns` in the same logical
+context. Follow `nextCursor` for older status-only receipts, then use
+`getBrianRunResult` or `cancelBrianRun` with the recovered run ID.
+
+Use `getOfficeComments` to find a native thread, then `resolveOfficeComment` with
+its artifact ID, thread ID and `resolved` boolean. This requires Comment or Edit
+access and records the assistant, without impersonating a human resolver.
+
+`assignOfficeComment` updates existing thread assignment and due dates through
+the same native store as the UI. It requires `artifactId`, `threadId`,
+`assignedUserId` (member UUID or null), `assignedToBrian` (boolean) and `dueAt`
+(ISO timestamp or null). This updates assignment only; it does not launch a run.
+Current Comment/Edit access, source observation and machine-parent checks apply.
+Assignment and resolution share an atomic audit and the workspace refresh signal.

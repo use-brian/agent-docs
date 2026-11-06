@@ -84,3 +84,19 @@ Safety Stop returns only a fixed stopped acknowledgement, including after source
 Use `browserDiscardTask` in an attended chat to stop and discard an owned task without saving browser sessions or downloads. Optional `sessionId` defaults to the current chat. The command always requires confirmation and current workspace membership, even when the original profile/source is no longer readable. It cannot stop another user's task or a replacement task, undo website actions already sent, or bypass tool policy. The equivalent human Stop and discard control is available in the browser live view, including its unavailable-task state. An unconfirmed result means inspect the browser before retrying; do not claim that teardown succeeded.
 
 Browser and compute calls now retain cumulative task input protection. A narrower later turn cannot erase earlier source labels; conflicting versions of an input require a new task instead of silently substituting the latest source. This internal evidence retention does not yet complete source-aware download publication; do not treat workspace-file downloads as certified department-preserving until that adapter and its database acceptance are complete.
+
+## Workspace-profile durable work
+
+Use `runBrian` for explicit Brian execution and retain its returned run ID.
+Inspect with `getBrianRun`; obtain persisted replies with `getBrianRunResult`.
+Answer ordinary questions with `continueBrianRun`. Human approvals remain in
+the native inbox and automatically wake the original run after completion.
+Do not submit another run merely because an HTTP connection ended.
+
+For large files, discover the native chunked upload tools documented in
+[Brain MCP](brain-mcp.md#native-files-office-and-detached-work). Transfer bytes
+outside the model transcript and retain the upload ID until completion.
+For Office, list artifacts, then read the chosen artifact to obtain its current
+version and semantic targets before requesting a revision. Inspect the job
+until it completes or requests input. Tool discovery reflects actual installed
+support; complete workspace parity is still under qualification.
