@@ -319,3 +319,26 @@ before initiating another send.
 
 Creating or hydrating a shared channel room does not announce itself or add a
 setup notice to the reply. Capture and sharing controls remain in the web app.
+
+## Recovering legacy group context
+
+A legacy bot can reply without loading history or tools when its original
+recording ownership is unavailable. Confirming recording ownership by itself
+does not restore old group context: Personal recording remains a private
+transcript destination, and its group replies use the current message only.
+
+The recorded owner can use **Studio → Channels → Group recording → Review group
+context** to preview an eligible legacy shared conversation. Review the exact
+bot, conversation/topic, original audience and eligible/excluded message counts
+before restoring. Recovery creates a new Work recording epoch and releases only
+provider-id-bearing, tool-free text into that epoch. The original held session
+is retained. Private sessions, tool rounds, attachment contents and messages
+without delivery evidence are not published into the group.
+
+Future group replies use the actual linked sender and current group permissions.
+Recovery does not grant the recorder's private memories or account credentials
+to other group members. Verify a follow-up turn and the intended connected tool
+through the normal Telegram account; a successful recovery write alone does not
+prove tool access.
+
+API: authenticated `GET` and `POST /api/workspaces/:workspaceId/channels/:channelId/recordings/legacy-recovery`. Preview returns metadata and a source snapshot token. Apply requires the reviewed session/token and explicit bot-ownership/history confirmation; stale or inadmissible sources fail without a partial cutover.
