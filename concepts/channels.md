@@ -341,4 +341,10 @@ to other group members. Verify a follow-up turn and the intended connected tool
 through the normal Telegram account; a successful recovery write alone does not
 prove tool access.
 
+Typing means processing has started, not that a reply reached the model or
+Telegram. Restored Work histories retain their native source, audience and
+currentness checks. If a follow-up stalls before inference, inspect history and
+source-evidence acquisition as well as delivery; repeating recovery or clearing
+privacy holds does not repair a slow native read.
+
 API: authenticated `GET` and `POST /api/workspaces/:workspaceId/channels/:channelId/recordings/legacy-recovery`. Preview returns metadata and a source snapshot token. Apply requires the reviewed session/token and explicit bot-ownership/history confirmation; stale or inadmissible sources fail without a partial cutover.
