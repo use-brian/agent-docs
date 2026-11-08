@@ -347,4 +347,10 @@ currentness checks. If a follow-up stalls before inference, inspect history and
 source-evidence acquisition as well as delivery; repeating recovery or clearing
 privacy holds does not repair a slow native read.
 
+An access-unverified reply can also mean that source verification failed while
+the group approval remains valid. Check the internal denial diagnostic and safe
+verification phase before changing grants. A database or availability failure
+does not revoke approval, and an uncertain refusal must not invite automatic
+resending of work that may already be saved.
+
 API: authenticated `GET` and `POST /api/workspaces/:workspaceId/channels/:channelId/recordings/legacy-recovery`. Preview returns metadata and a source snapshot token. Apply requires the reviewed session/token and explicit bot-ownership/history confirmation; stale or inadmissible sources fail without a partial cutover.
