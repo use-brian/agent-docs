@@ -22,6 +22,12 @@ A selected signed-out Outpost uses its own Sign in action. **Use Brian Cloud**
 is a separate destination. OSS deployments retain their local-owner flow.
 Behind a reverse proxy, configure `AUTHED_APP_URL` to the public app origin so
 the desktop authentication bridge returns there after sign-in.
+Outpost ingress must forward the exact `/auth/desktop/exchange`, `/auth/refresh`
+and `/auth/logout` paths to the API before blocking other `/auth/*` paths. These
+endpoints retain PKCE and session-credential checks; owner/dev login and email/OIDC
+internals stay private. An application-code update does not rewrite existing
+ingress configuration. Browser sign-in succeeds before the desktop's separate
+exchange, so verify the account opens in the app as well.
 
 ## License
 
