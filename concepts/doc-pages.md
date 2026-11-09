@@ -9,6 +9,25 @@ canonical: https://usebrian.ai/docs/doc
 
 Doc is a Notion-style page surface where chat assembles renderable views over your workspace primitives. It is the inbound counterpart to the outbound Feed surface: Doc marshals tasks, CRM rows, files, deals, and research findings into pages you can drag, save, and revisit. The whole app lives at `app.usebrian.ai` under a separate deployable.
 
+## Chat under a Page
+
+A Page comment is saved independently of Brian's reply. Shared threads bound
+context to their audience before model use: private or unverifiable optional
+context is omitted. The current Page must pass its own source proof. Replies
+retain Page ancestry and cannot be copied into another Page's thread merely
+because their labels match. Transcript reads require current Page access.
+
+A Page turn starts with the current Page and newest comment. Earlier discussion
+remains available through the scoped `getCommentThread` read. Read it when a
+request refers to previous comments or decisions; do not ask someone to repeat
+them. Discussion reads retain their source ancestry before model use.
+
+An explicit refusal or failed turn remains visible after the comment is saved.
+A transport interruption alone can mean Brian is still working; reconnect and
+reconcile the saved comment rather than resending it automatically. Page edits
+still require current edit authority, and a saved comment never proves an edit
+completed.
+
 ## Page edit authority
 
 Readable Pages can still be view-only or comment-only. Metadata and persisted
