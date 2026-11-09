@@ -48,15 +48,24 @@ Brian-side conversation saving is unavailable. Missing recording ownership does
 not require reconnecting the bot. Where retained authenticated connection records
 identify the original connector for this exact bot/workspace, ownership recovers
 automatically while that person remains a member. Existing owners and stopped
-recording choices are preserved. Unattributed legacy connections keep saving
-paused; their replies use current message text and general knowledge, without
-connected tools, private memory or saved-history access.
+recording choices are preserved. Unattributed legacy connections do not acquire
+a recording owner. On updated servers, explicitly bound and approved topics can
+retain shared conversation history with Brain capture off. Other contexts and
+explicit stopped policies retain current-message replies without connected tools,
+private memory or saved-history access.
 
 Telegram model replies use HTML formatting even when conversation saving is
 unavailable. Markdown headings and emphasis become bold text; pipe tables become
 vertical labelled comparisons suited to a phone screen. If Telegram rejects the
 HTML, the plain-text fallback keeps the comparison layout and literal code.
 This formatting correction requires an updated server release.
+
+Updated servers can retain one shared conversation per explicitly bound,
+audience-approved Telegram topic independently of recorder ownership. Authorized
+workspace members can read it; ordinary follow-ups use the earlier exchange,
+including after restart or same-bot reconnection. Brain capture starts off, and
+current attachment interpretation does not automatically file it. Explicit stops
+and held histories remain protected. Separate topics do not share context.
 
 ## Slack (BYO bot)
 
