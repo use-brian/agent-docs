@@ -12,6 +12,17 @@ content planning, and the doc surface. Run it on your own machine with an
 eligible ChatGPT subscription or your own model credential, or let the hosted
 service operate it for you.
 
+## Desktop connection and Outpost authentication
+
+In the desktop app, choose **Connect a server** and enter the public app URL.
+For an Outpost deployment, continue through that installation's normal browser
+sign-in. Server discovery alone does not add a saved account. The app keeps the
+current account until the destination sign-in succeeds; cancelling preserves it.
+A selected signed-out Outpost uses its own Sign in action. **Use Brian Cloud**
+is a separate destination. OSS deployments retain their local-owner flow.
+Behind a reverse proxy, configure `AUTHED_APP_URL` to the public app origin so
+the desktop authentication bridge returns there after sign-in.
+
 ## License
 
 AGPLv3, OSI- and FSF-approved open source with a network-copyleft clause: run a modified Use Brian core as a hosted service and you publish your changes. A commercial license is available for orgs that cannot accept AGPL. Every contributor signs a CLA.
