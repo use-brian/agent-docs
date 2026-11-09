@@ -52,6 +52,12 @@ recording choices are preserved. Unattributed legacy connections keep saving
 paused; their replies use current message text and general knowledge, without
 connected tools, private memory or saved-history access.
 
+Telegram model replies use HTML formatting even when conversation saving is
+unavailable. Markdown headings and emphasis become bold text; pipe tables become
+vertical labelled comparisons suited to a phone screen. If Telegram rejects the
+HTML, the plain-text fallback keeps the comparison layout and literal code.
+This formatting correction requires an updated server release.
+
 ## Slack (BYO bot)
 
 1. Go to api.slack.com/apps -> Create New App -> From an app manifest. Copy the manifest from Studio -> Channels -> Slack.
