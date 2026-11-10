@@ -532,3 +532,87 @@ reconcile that key under current permissions. Protected mutation results carry
 the same reserved source evidence as reads. Missing evidence releases no business
 payload. See [native management](management.md#attended-company-connectors) for
 reviewed setup and the attended operation envelope.
+
+
+## Separately deployed services and ERP
+
+This contract is implemented locally; production rollout and qualification of
+the separately deployed ERP remain pending. Confirm that the target Brian
+deployment exposes these endpoints before connecting a service.
+
+A separate service owns its backend and persistence. Register its OAuth client
+using a native owner/admin session:
+
+```
+POST /api/external-services/workspaces/:workspaceId
+{"name":"Example operations","redirectUris":["https://operations.example/callback"]}
+```
+
+The response is `{id,clientId}`. Native management also supports GET on that
+workspace collection, DELETE `/api/external-services/workspaces/:workspaceId/:serviceId`,
+and POST `/api/external-services/workspaces/:workspaceId/mcp` with the
+`externalServiceManagement` tool (`kind: list|register|revoke`). Redirect URIs
+must be HTTPS or loopback HTTP, without fragments or embedded credentials.
+
+Use `/api/external-services/:serviceId/oauth/authorize` with `response_type=code`,
+`client_id`, exact `redirect_uri`, `scope=read|read_write`, S256 PKCE challenge and
+client-validated random `state`. Brian handles native login and the fixed-workspace
+consent. POST form data to `/oauth/token` for authorization-code exchange or
+rotating-refresh exchange. Keep tokens server-side for a service backend.
+POST `/oauth/revoke` with `token` disconnects the exact authorization.
+These OAuth paths share the `/api/external-services/:serviceId` prefix.
+
+GET `/api/external-services/:serviceId/context` with its bearer token before every
+operation and again before committing/publishing. Version 1 returns:
+`version,serviceId,authorizationId,workspaceId,userId,scope,role,clearance,departmentRead,
+departmentNames,projectNames,departmentCompartments,compartments,mutationCompartments,
+projectIds,projectMode,revision`. Tiers are `public`, `internal`, `confidential`. `departmentRead.base`
+governs General rows, `departmentRead.departments[id]` is each department's ceiling
+and an absent department denies access. `departmentCompartments` carries actual
+keys; do not invent compartment keys from IDs. Shared Project admission uses
+`departmentRead.projects[id]`: `member` permits reads/writes, `oversight` reads
+only. Missing admission denies a shared Project. Legacy `projectIds:null` is
+unrestricted; `[]` admits none. Preserve private-owner checks separately. Network
+failures grant no authority; 401 requires renewing or reconnecting. A changed
+revision requires aborting or reauthorizing the pending operation.
+
+Canonical Brian-owned CRM and Documents remain in Brian. Use POST
+`/:serviceId/canonical/query` with `{key:"get"|"query",input}` or
+`/command` and `/reconcile` with
+`{key:"create_company"|"create_contact"|"patch_company"|"patch_contact",command}`.
+The existing native application command schema and resource field policy apply.
+`/canonical/mcp` exposes `canonicalQuery`, `canonicalCommand`, `canonicalReconcile`
+with identical envelopes. These endpoints resolve the current workspace member
+and canonical owner execution context; they do not install an ERP module.
+The member's visible primary assistant may further narrow access. Canonical
+commands and reconciliation require `read_write` consent.
+Service OAuth cannot authorize Brain, assistant, native-session or application
+endpoints, and those credentials cannot authorize the service context.
+
+After an uncertain canonical command, reconcile the same command and idempotency
+key before retrying its effect. Renewed consent for the same registered service,
+workspace and user retains canonical receipt ownership, even when the OAuth
+authorization or selected assistant changes. Current credentials and current
+membership, assistant/source and result permissions are still required. A
+different service, workspace or user cannot recover that receipt; changed
+original input conflicts with its saved fingerprint. Receipts created before
+this stable identity contract are not migrated or searched across previous
+authorizations. An unrecognized outcome remains uncertain; do not infer that
+the command had no effect.
+
+Service context additionally exports `departmentNames` and `projectNames`, keyed
+only by the already-admitted active department/Project IDs. These display labels
+are included in the context revision and never enumerate hidden scopes.
+
+Canonical query `file_candidates` accepts `{query?:string,limit?:1..100}` and
+returns `{records}` of authorized native file projections (`name`, `mimeType`,
+`sizeBytes`). Discovery uses the current canonical file predicate; every result
+is projected and revalidated by the native owner. Private/unadmitted discovery
+metadata, storage locations and file bytes are never returned by this query.
+
+Canonical query `member_candidates` accepts the same bounded query/limit and
+returns `{members:[{record,displayName}]}`. `record` is the canonical native
+`workspace_member` ID-only projection. `displayName` comes separately from the
+existing workspace roster identity owner, available to current members. Both
+current membership and the roster label are rechecked before disclosure; this
+does not add a native member business field or create an ERP staff record.

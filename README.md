@@ -22,6 +22,7 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 | Understand memory vs knowledge base | [concepts/memory-and-knowledge.md](concepts/memory-and-knowledge.md) |
 | Discover outcome-led Use Brian showcase specifications | [showcases/README.md](showcases/README.md), [showcases/catalog.json](showcases/catalog.json) |
 | Explain pricing or credit errors (429) | [operations/pricing-and-credits.md](operations/pricing-and-credits.md) |
+| Connect a separately deployed service with current workspace permissions | [apps/sdk.md](apps/sdk.md#separately-deployed-services-and-erp) |
 | Build an app that runs inside a user's workspace | [concepts/custom-home-apps.md](concepts/custom-home-apps.md) |
 | Set up a hosted workspace | [hosted-setup.md](hosted-setup.md) |
 | Self-host the open-source core | [self-hosting.md](self-hosting.md) |
