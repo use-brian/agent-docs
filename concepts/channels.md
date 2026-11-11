@@ -67,6 +67,14 @@ including after restart or same-bot reconnection. Brain capture starts off, and
 current attachment interpretation does not automatically file it. Explicit stops
 and held histories remain protected. Separate topics do not share context.
 
+Server upgrades must preserve an existing topic's messages, sender identity,
+recording choices, audience approval and authorized connected-tool access,
+including when its history contains annotations written by earlier releases.
+An access-verification failure is not evidence that the history is empty or the
+connector needs reconnecting. Preserve the conversation and investigate the
+failed boundary; do not clear its history or repeat a possibly completed action
+without checking its result.
+
 ## Slack (BYO bot)
 
 1. Go to api.slack.com/apps -> Create New App -> From an app manifest. Copy the manifest from Studio -> Channels -> Slack.
