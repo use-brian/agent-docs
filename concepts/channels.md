@@ -377,3 +377,8 @@ does not revoke approval, and an uncertain refusal must not invite automatic
 resending of work that may already be saved.
 
 API: authenticated `GET` and `POST /api/workspaces/:workspaceId/channels/:channelId/recordings/legacy-recovery`. Preview returns metadata and a source snapshot token. Apply requires the reviewed session/token and explicit bot-ownership/history confirmation; stale or inadmissible sources fail without a partial cutover.
+
+Routine mailbox synchronization and health updates preserve existing tool access.
+A genuine access-verification failure stops private output and produces a fixed
+notice; requested changes may already have happened, so check before repeating.
+A finished or stopped turn clears its temporary tool-progress message.
