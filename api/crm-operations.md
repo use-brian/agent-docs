@@ -372,13 +372,16 @@ Owners/admins may request a complete operations privacy export at
 hashes are excluded. The confirmed retention endpoint requires a caller-chosen
 cutoff; Use Brian does not invent a legal retention period for the workspace.
 
-## Association compatibility
+## Association retirement
 
-`/api/association` remains available for existing integrations. Generic
-enquiries, consent, membership/entitlement, events, and participation map to the
-same canonical records and service. Association-specific ticket inventory,
-orders, and provider reconciliation retain their commerce rules. New generic
-integrations should use CRM operations contracts and CRM contact ids.
+Association was retired on 2026-11-15. The native app, assistant tools,
+Association HTTP endpoints and commerce import adapter are unavailable.
+Migration `8270_retire_association.sql` deletes Association commerce records,
+website content, configuration and grants. Generic CRM contacts, consent,
+submissions, plans, events and independent entitlements/participation remain.
+Historical `association_*` table names are still used by shared CRM storage;
+they do not indicate that the retired module is available.
+
 
 ## Related
 

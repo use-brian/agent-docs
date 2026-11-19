@@ -9,6 +9,8 @@ canonical: https://usebrian.ai/docs/api/brain-mcp
 
 A Use Brian workspace brain is exposed as one MCP server over Streamable HTTP. An MCP client (Claude Code, Claude Desktop, ChatGPT connectors, or any custom client) authenticates with a workspace-scoped credential and receives the brain as tools: read and write memory, tasks, CRM, files, and knowledge. This is the page for an agent connecting itself to a user's brain.
 
+For memory continuity across agents and chats, see [Remember this in Brian](remember.md).
+
 ## Endpoint
 
 | Field | Value |
@@ -140,6 +142,7 @@ Available on both `read` and `read_write` credentials.
 | `searchFileContent` | `fileId` + `query`, or `fromIndex` / `toIndex` for sequential paging | Passages inside one stored document. Never returns the whole file |
 | `getEntity` | entity `id` or display name; optional `walk_depth` / `walk_edge_types` | Entity rollup: existing relationship edges, recent episodes, memory, open tasks. Use it to resolve an entity's UUID and read existing edges before a linking write. Merged UUIDs follow up to 64 visible links; hidden or invalid chains return no result. `meta.followed_supersession` identifies the final immediate predecessor and survivor. An `as_of` before retirement retains the then-valid identity |
 | `getMemory` / `getTask` / `getContact` / `getCompany` / `getDeal` | record `id` | Full record |
+| `exportMemories` | `format` (`markdown` by default, or `csv`), optional exact `workspace` name | Hosted Brain OAuth only. Returns `status`, `workspace`, `format` and `url`. Offer the link so the signed-in user can confirm the format and download the memories they can currently read in that workspace. `upgrade_required` opens the same export with plan options. |
 | `listTasks` | assignee / status / due range / tag / parent filters | Compact task projection |
 | `getTaskExecution` | `task_id` or `execution_id` | The live execution of an assistant-executed task: phase, readiness and the smallest missing thing, next step, branches, remaining allowance and lifetime use, control revision, and external sessions reporting on it with their freshness (`live`, `stale`, `disconnected`) |
 | `listResearchActivities` | optional `session_id`, `project_id`, `limit` | Saved research results the credential's issuer can see: status (`saved`, `partial`, `failed`), saved artifact, Project and date |
@@ -371,21 +374,15 @@ a new provider period, not a status reset. The same provider period is idempoten
 across transport keys, with changed business fields rejected. These tools do not
 verify an external provider webhook or prove a notification was delivered.
 
-## Native Association and catalog permissions
+## Native CRM catalog permissions
 
-Association is an opt-in native app. The primary assistant needs association
-and home_app:association:read or home_app:association:write. Contact-bearing
-tools also need crm and its matching home_app:crm set. Module enablement and
-Home selection never grant these capabilities. Read credentials cannot call
-write tools even when the assistant has a write grant. Discovery and direct
-invocation share the same gate.
+Association tools are retired and are not advertised by Brain MCP. Saved
+Association grants cannot reactivate them. Generic CRM tools retain their
+existing CRM read/write and configuration permissions.
 
-The native catalog and exact object input envelopes are described in
-[Association operations](../api/association-operations.md#native-association-tools).
-Generic saveCrmEntitlementPlan/saveCrmEvent use {plan}/{event}, need configure
-plus CRM write, and remain usable with Association disabled. No MCP tool can
-enable the module or assert a provider payment.
-
+`saveCrmEntitlementPlan` and `saveCrmEvent` accept `{plan}` and `{event}`
+and require configure and CRM write grants. Discovery and invocation use the
+same current grants and credential scope.
 
 Managed email uses native `sendCrmMessage` (CRM write set plus current mailbox
 send authority) and `getCrmDelivery` (CRM read set). Both retain the authenticated
@@ -394,7 +391,7 @@ cannot send. Exact replay returns a content-minimized receipt; an uncertain
 provider outcome must be reconciled under its original delivery id. See the
 [CRM delivery contract](../api/crm-operations.md#native-managed-delivery-tools).
 
-OAuth calls execute as the user who authorized the credential; Home-app calls execute as the authenticated viewer. Neither inherits the workspace owner’s private records or department access. A missing user identity is rejected. The workspace primary assistant and credential caps still constrain execution, while ownership remains billing/credential attribution. Brain keys retain their documented workspace-primary/owner binding.
+OAuth calls execute as the user who authorized the credential; Home-app calls execute as the authenticated viewer. Neither inherits the workspace owner’s private records or department access. A missing user identity is rejected. The workspace primary assistant and credential caps still constrain execution. Brain keys use their recorded issuer and the workspace primary assistant. Legacy keys with no recorded issuer use the workspace owner.
 
 Retained OAuth and Home-app calls revalidate their exact authentication before continuing canonical execution. OAuth token rotation, expiry, grant revocation or client revocation invalidates the retained call. Home-app token expiry or changed app grants/clearance does likewise. A Home-app token’s signed clearance cap also limits a later expanded app grant; current reductions narrow it immediately. Durable child credentials additionally require the parent binding described below.
 
@@ -402,7 +399,7 @@ Read-write OAuth clients can use `previewCrmCredentialBindings`, `listCrmCredent
 
 A retained Brain-key invocation also checks its original context and admission envelope. Replacement context, configuration-session or admitted department/Project values invalidate that invocation; a previously authenticated call cannot adopt the replacement authority.
 
-Read-write Brain keys also support the four native credential lifecycle tools under current owner/primary-assistant authority and configure/CRM write grants. The child retains the exact parent key, owner, verifier fingerprint, cap and admitted context. Parent revocation, rotation or changed authority invalidates child admission. Model input cannot choose a parent or acting owner; Unattended delegation remains unavailable.
+Read-write Brain keys also support the four native credential lifecycle tools under current issuer/primary-assistant authority and configure/CRM write grants. The child retains the exact parent key, issuer, verifier fingerprint, cap and admitted context. Parent revocation, rotation or changed authority invalidates child admission. Tool input cannot choose a parent or acting issuer. Workflow delegation uses its own exact execution source.
 
 Read-write Home-app bridge tokens support the native credential lifecycle as the authenticated viewer, subject to current owner/admin membership and primary-assistant configure/CRM write grants. Child expiry cannot exceed the exact bridge token expiry. App grant/cap changes, viewer role loss and server signing-key rotation invalidate child admission. Parent evidence is captured by authentication; callers cannot choose it, and no bridge bearer or signing secret is persisted.
 

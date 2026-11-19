@@ -201,8 +201,13 @@ Error responses use the shape `{ "error": "<slug>", "detail": "..." }`.
 | 404 | `assistant_not_found` | Key valid but the assistant no longer exists. |
 | 429 | `budget_exhausted` | The workspace has no active plan (trial ended or plan lapsed). The owner must pick a plan, or self-host. |
 | 409 | `conversation_busy` | Another request on the same conversation is still running and did not finish within about 4 minutes. This turn did not run. Requests on one conversation are serialized: a second one waits for the first. Retry after the earlier request returns. |
-| 502 | `upstream_failed` | LLM provider error after retries. Treat as transient. |
+| 409 | `authority_changed` | The original request no longer has its session, access or turn ownership. Stop processing and inspect current access/history before a deliberate new request; prior effects may already have completed. |
+| 409 | `delivery_audience_unverified` | The reply cannot be verified for this conversation's audience. No successful completion is emitted. |
+| 502 | `upstream_failed` | Provider or request execution failed. Inspect conversation history before retrying because prior actions may already have completed. |
 | 500 | `internal` | Anything else. Open a bug report. |
+
+After an SSE stream has opened, these turn failures arrive as an `error` event
+with the same slug, followed by `done`. Only `turn_complete` confirms success.
 
 ## Example: curl
 

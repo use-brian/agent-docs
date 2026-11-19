@@ -27,6 +27,13 @@ Every memory is editable. Settings -> Privacy -> Memories shows all stored memor
 
 Canonical person reads may expose read-only `profile.*` values as `{value: originalJsonValue}` or null when absent. The separate `profile.extra` field contains only disjoint additional attributes and requires its own current field permission. Display name remains distinct from the stored profile name. These codecs add no create/patch permission or new authority; old observations stay immutable and are held when their codec revision is no longer current.
 
+### Download the workspace's visible memories
+
+In a paid hosted workspace, open **Brain → Export memories** and select Markdown
+or CSV. The export includes the memories you can currently read across assistants
+and projects. A connected agent can open this dialog with the format preselected
+using the hosted OAuth `exportMemories` action. [Brain MCP](../mcp/brain-mcp.md#read-tools)
+
 ## Knowledge base
 
 The KB is per-workspace, not per-user. Use it for facts the assistant should know (proposal voting rules, product specs, FAQ answers). The assistant has `searchKnowledge`, `browseKnowledge`, `readKnowledgeEntry`, and `addKnowledgeEntry` tools to retrieve and append. Connect a GitHub repo from Studio -> Knowledge to sync markdown docs automatically.

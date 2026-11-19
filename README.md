@@ -12,10 +12,10 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 
 | You want to | Read |
 |---|---|
+| Remember this in Brian and recall a decision from another agent | [mcp/remember.md](mcp/remember.md) |
 | Connect yourself (an agent) to a user's brain over MCP | [mcp/brain-mcp.md](mcp/brain-mcp.md) |
 | Use the brain MCP tools well | [mcp/usage-patterns.md](mcp/usage-patterns.md) |
 | Embed an assistant in an app (REST) | [api/overview.md](api/overview.md), [api/messages.md](api/messages.md) |
-| Build a membership/event website on Brian records | [api/association-operations.md](api/association-operations.md) |
 | Submit external forms safely or automate CRM operations | [api/crm-operations.md](api/crm-operations.md) |
 | Install first-party campaigns or approved SMTP email | [api/campaigns.md](api/campaigns.md) |
 | Serve your own end users, each scoped to their own data | [mcp/end-user-bridge.md](mcp/end-user-bridge.md) |
@@ -63,8 +63,8 @@ A shared brain for solo founders and small teams. An assistant that remembers th
 - [api/identity.md](api/identity.md): anonymous vs identified end users, memory tiers
 - [api/connector-identity.md](api/connector-identity.md): trusted identity headers for your MCP server
 - [api/ingest-append-contract.md](api/ingest-append-contract.md): `ub.ingest.append.v1` — the idempotent endpoint an external service implements to receive a connector's normalized event stream (outbox-relayed, ack-gated cursor)
-- [api/association-operations.md](api/association-operations.md): CRM-linked enquiries, consent, memberships, events, tickets, orders, and provider reconciliation
-- [api/crm-operations.md](api/crm-operations.md): least-privilege atomic intake, idempotency, CRM operations tools, and Association compatibility
+- [api/association-operations.md](api/association-operations.md): retirement and preserved shared CRM capabilities
+- [api/crm-operations.md](api/crm-operations.md): least-privilege atomic intake, idempotency, CRM operations tools, and CRM integration authority
 - [api/campaigns.md](api/campaigns.md): first-party observations, trusted conversions, attribution, and approved SMTP broadcasts
 
 ### MCP
