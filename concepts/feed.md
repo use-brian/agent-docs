@@ -96,6 +96,8 @@ Choose a channel and New post. Add a working title and a private brief, then wri
 
 Select text to comment, suggest a change, or ask Brian about that passage. Review suggestions before accepting them, and use history and Undo when needed. Fill or remove unfinished text and image placeholders before confirming the draft. Generated content remains a candidate until you accept it.
 
+For Threads and X, open the source post in Feed or bring its URL to Feed chat to start a reply draft yourself. Incoming interactions appear in activity and Insights. Drafting a reply starts with your request, and publishing it requires your approval.
+
 ## Review the saved version
 
 Review checks the draft against the monthly plan, previous posts, its selected goal, relevant memory, and the content itself. Read both the findings and their coverage: missing sources or unavailable checks do not count as reviewed. Review is advisory; it does not edit, approve, or publish your post.
