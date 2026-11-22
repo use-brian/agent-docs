@@ -46,6 +46,8 @@ Run an assistant request at a chosen time and destination.
 
 **What to check:** A scheduled job runs an assistant turn and may consume credits. A task due date only tracks a commitment; it does not create a timer.
 
+Brian can answer a self-contained chat message immediately. For a follow-up or an action, Brian can request conversation context and discover tools during the same turn. The actor and destination determine which history and tools are available. Connector actions keep their configured approval requirements.
+
 ## Everyday workflow
 
 1. **Connect a service.** Open Studio → Connectors. For a new service, use Add connector → Browse directory, then complete its connection setup.
