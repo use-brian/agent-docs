@@ -368,7 +368,9 @@ ChatGPT-plan access uses Codex-managed OAuth and the live model catalog for the
 authenticated account. It does not treat a ChatGPT token as an OpenAI API key.
 Brian remains the agent harness and owns memory, context, tool policy,
 confirmations, execution, and persistence. ChatGPT/Codex quota and plan limits
-remain OpenAI's authority.
+remain OpenAI's authority. When the account lists them, Settings → Models
+offers GPT-6.2 Sol in Pro and Max and GPT-6.2 Astra in Research. Existing
+exact model selections keep their original version.
 
 Feed image placeholders let you draft first and generate later. Open a
 placeholder's options and choose Gemini 3.1 Flash Image or, in OSS, Codex
