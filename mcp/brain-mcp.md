@@ -539,8 +539,10 @@ credential and do not expand its consent. Runs, receipts, source evidence and
 skill activation stay with that context.
 
 Use `listAvailableSkills` to inspect governed skill metadata, then `useSkill`
-before reading its resources. Availability and source access are checked again
-on each request. Workspace MCP also composes native Page reads and the
+before reading its resources. The listing skips skills whose revisions you
+cannot access. Other available skills still appear, and pagination counts
+only visible skills. Brian checks source access again when you use a skill.
+Workspace MCP also composes native Page reads and the
 `delegateDocEdit` gateway; existing targets must be pinned in the conversation.
 Full artifact-selection and bulk-transfer qualification is still in progress.
 
