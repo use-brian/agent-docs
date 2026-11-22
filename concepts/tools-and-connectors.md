@@ -182,7 +182,7 @@ Scheduled tasks are timed jobs. They fire on a cron and run an assistant turn. W
 - If a file, office, or browser tool you expect is missing, the primitive may be switched off for that assistant. That is a configuration state, not a product limitation: the owner re-enables it on the assistant's Tools tab.
 - "Every weekday at 9am..." style requests create a scheduled task (a cron job on the assistant), which is distinct from a workspace Task.
 - `getIngestApplication` reads the durable extraction/application status for a visible Episode, including safe item outcomes and the frozen plan hash. `retryIngestApplication` requires attended confirmation and the exact returned run ID and plan hash. It resumes only unfinished writes and performs no new extraction or paid model work. These recovery tools are intentionally absent from unbound external-client surfaces; use Studio -> Events from an authenticated workspace instead.
-- In Studio Events, use **Older runs** to reach an earlier extraction attempt. **Retry unfinished** can recheck a past entity alias conflict while preserving records already saved. When Brian cannot establish which entity a name refers to, it holds the affected record and dependent relationships. Check the held count even when processing has finished.
+- In Studio Events, use **Older runs** to reach an earlier extraction attempt. **Retry unfinished** can recheck a past entity alias conflict while preserving records already saved. When Brian cannot establish which entity a name refers to, it holds the affected record and dependent relationships. Studio also explains when an update was held to preserve the source’s sharing restrictions. Check the held count even when processing has finished.
 
 ## Related
 
