@@ -38,6 +38,8 @@ using the hosted OAuth `exportMemories` action. [Brain MCP](../mcp/brain-mcp.md#
 
 The KB is per-workspace, not per-user. Use it for facts the assistant should know (proposal voting rules, product specs, FAQ answers). The assistant has `searchKnowledge`, `browseKnowledge`, `readKnowledgeEntry`, and `addKnowledgeEntry` tools to retrieve and append. Connect a GitHub repo from Studio -> Knowledge to sync markdown docs automatically.
 
+Knowledge search matches titles, summaries, tags and entry bodies. It returns short results with the entry path and an available source label. Use the entry ID to read the full article. If the search fails during verification, report the failure and leave the underlying fact unconfirmed. Only a completed search can establish that it found no matches.
+
 Each connected repository has its own paths. For example, two repositories can both contain `README.md`. Use the entry ID from search or browse to read or update the intended file. To narrow a search or browse request, pass its connected source UUID as `sourceId`, or `null` for manual entries. Manual entries can also share a path with a repository file.
 
 Repository write errors after dispatch can carry `retrySafe: false` and `operationMayHaveExecuted: true` in tool-result metadata. Do not retry these writes blindly. Check the source first: the write may have landed, or a confirmed source write may still be missing from the local search mirror. A failed mirror does not undo a repository commit.
