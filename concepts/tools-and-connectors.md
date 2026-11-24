@@ -77,6 +77,8 @@ Connect a service from Studio -> Connectors. Each connector exposes a set of too
 | Computer Use | Built-in primitive; a controlled browser (the user's own Chrome via the Use Brian extension for account-sensitive sites, or a cloud browser for public ones). Sends require approval. |
 | Google Cloud Storage | Bring-your-own storage via a service-account key; exposes no assistant tools. |
 
+For recent Company Email, call `imapSearchMessages` with `since` (and optional exclusive `before`). An authorized attended chat can search its primary mailbox before retrieving chat history. A result identified as synced includes the observation time. To check the mailbox at the provider now, set `live: true`. Search uses live IMAP automatically if the requested dates or folders lack verified coverage.
+
 ### Google Calendar result pages
 
 `googleCalendarListEvents` returns a projected event array for a complete initial
