@@ -134,6 +134,8 @@ Three modes per tool:
 
 Read tools default to Allow; write and destructive tools default to Ask. You can change the defaults per assistant.
 
+For a self-contained lookup in a member chat, Brian can use its available web search, page reader and calculator on the first step. It can request earlier messages if your question refers to them. The assistant’s tool settings still apply.
+
 The same candidate-tool, assistant capability, connector grant, scope, and
 Allow/Ask/Block binding is applied before model execution in web chat,
 messaging channels, public API turns, and assistant-to-assistant calls.
