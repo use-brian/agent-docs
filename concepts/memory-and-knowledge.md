@@ -38,7 +38,7 @@ using the hosted OAuth `exportMemories` action. [Brain MCP](../mcp/brain-mcp.md#
 
 The KB is per-workspace, not per-user. Use it for facts the assistant should know (proposal voting rules, product specs, FAQ answers). The assistant has `searchKnowledge`, `browseKnowledge`, `readKnowledgeEntry`, and `addKnowledgeEntry` tools to retrieve and append. Connect a GitHub repo from Studio -> Knowledge to sync markdown docs automatically.
 
-Knowledge search matches titles, summaries, tags and entry bodies. It returns short results with the entry path and an available source label. Use the entry ID to read the full article. If the search fails during verification, report the failure and leave the underlying fact unconfirmed. Only a completed search can establish that it found no matches.
+Knowledge search matches titles, summaries, tags and entry bodies. When a request supplies its own search terms and the tool is available, call it directly. Request conversation context when you need to resolve a reference to earlier messages. It returns short results with the entry path and an available source label. Use the entry ID to read the full article. If the search fails during verification, report the failure and leave the underlying fact unconfirmed. Only a completed search can establish that it found no matches.
 
 In an approved Telegram group, Brian can share a native search result when the current group approval covers all the evidence behind the reply. This also applies to an empty result. If Brian withholds a reply, a workspace member can ask in their linked direct message to use their individual access.
 
