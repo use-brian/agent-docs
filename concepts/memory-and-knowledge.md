@@ -40,6 +40,8 @@ The KB is per-workspace, not per-user. Use it for facts the assistant should kno
 
 Knowledge search matches titles, summaries, tags and entry bodies. It returns short results with the entry path and an available source label. Use the entry ID to read the full article. If the search fails during verification, report the failure and leave the underlying fact unconfirmed. Only a completed search can establish that it found no matches.
 
+In an approved Telegram group, Brian can share a native search result when the current group approval covers all the evidence behind the reply. This also applies to an empty result. If Brian withholds a reply, a workspace member can ask in their linked direct message to use their individual access.
+
 Each connected repository has its own paths. For example, two repositories can both contain `README.md`. Use the entry ID from search or browse to read or update the intended file. To narrow a search or browse request, pass its connected source UUID as `sourceId`, or `null` for manual entries. Manual entries can also share a path with a repository file.
 
 Repository write errors after dispatch can carry `retrySafe: false` and `operationMayHaveExecuted: true` in tool-result metadata. Do not retry these writes blindly. Check the source first: the write may have landed, or a confirmed source write may still be missing from the local search mirror. A failed mirror does not undo a repository commit.
