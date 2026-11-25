@@ -67,6 +67,18 @@ including after restart or same-bot reconnection. Brain capture starts off, and
 current attachment interpretation does not automatically file it. Explicit stops
 and held histories remain protected. Separate topics do not share context.
 
+On servers with recent-text context, simple follow-ups in approved topics with
+workspace recording can use a short window of recent text from that topic.
+Older dialogue, quoted replies and attachments can still use full permitted
+conversation context. Brian checks access again before using and sending a reply
+based on the selected text.
+
+When the self-hosted archive is enabled, a linked sender can list or search
+personal archived conversations in a direct chat with the bot without loading
+that direct chat's history first. The sender's link, assistant routing and
+permission must remain current through the reply, including delivery retries.
+[Chat message archive](../self-hosting.md#chat-message-archive)
+
 Server upgrades must preserve an existing topic's messages, sender identity,
 recording choices, audience approval and authorized connected-tool access,
 including when its history contains annotations written by earlier releases.

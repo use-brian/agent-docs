@@ -258,6 +258,13 @@ their saved contact name, plus a `media_sha256` for any attachment.
 `saveChatMedia` pulls those stored bytes into the workspace file layer, where
 `sendFile` can deliver them on a document-capable channel.
 
+On updated servers, the archive's `listChatChannels` and `searchChatHistory`
+reads are available for self-contained requests in a linked Telegram direct
+chat. Brian uses the sender's own archive and rechecks the link and assistant
+routing before each reply attempt. Approved Telegram topics with workspace
+recording can use their own permitted conversation text for recent follow-ups.
+[Telegram channels](concepts/channels.md#telegram-byo-bot)
+
 The hosted service does not run one. Chat history is a self-hosting capability,
 and the deploy scripts deliberately leave it unset.
 
