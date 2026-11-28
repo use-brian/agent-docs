@@ -67,11 +67,15 @@ including after restart or same-bot reconnection. Brain capture starts off, and
 current attachment interpretation does not automatically file it. Explicit stops
 and held histories remain protected. Separate topics do not share context.
 
-On servers with recent-text context, simple follow-ups in approved topics with
-workspace recording can use a short window of recent text from that topic.
-Older dialogue, quoted replies and attachments can still use full permitted
-conversation context. Brian checks access again before using and sending a reply
-based on the selected text.
+On servers with recent-text pagination, simple follow-ups in approved Telegram
+topics with workspace recording start with the eight sequence slots before the
+incoming message. Brian can continue through earlier pages of permitted text
+in the same turn. The context tool passes each `nextCursor` back as `cursor`
+in that turn until the result has no continuation. Quoted replies, attachments
+and additional tools can still use full permitted conversation context. Each
+page goes through the same access checks as the first before model dispatch
+and each Telegram send attempt. After Brian follows a cursor, it also checks
+that the original sender link, bot connection and turn are still current.
 
 When the self-hosted archive is enabled, a linked sender can list or search
 personal archived conversations in a direct chat with the bot without loading
